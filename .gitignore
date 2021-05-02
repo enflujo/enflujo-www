@@ -1,0 +1,17 @@
+# Carpetas de desarrollo
+node_modules
+.cache
+*.log
+docs/
+
+# Temporales
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Configuración local
+.env
+.vscode/
