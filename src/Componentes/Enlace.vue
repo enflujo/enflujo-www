@@ -32,7 +32,4 @@ export default {
 </script>
 
 <style scoped>
-.actual {
-  color: rgb(105, 106, 107);
-}
 </style>

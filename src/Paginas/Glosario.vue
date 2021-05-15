@@ -1,11 +1,21 @@
 <template>
-  <main>
-    <h1>Glosario</h1>
-
-    <article v-for="entrada in entradas" :key="entrada.id">
-      <h2>{{ entrada.concepto }}</h2>
-      <p v-html="entrada.definicion"></p>
-    </article>
+  <main class="articulo">
+    <div class="menu">
+      <span class="menu-boton">
+        <img src="../imgs/logo-peque.jpg" style="width:100%">
+      </span>
+      <span class="linea">
+      </span>
+    </div>
+    <div class="cover-articulo">
+    </div>
+    <div class="contenido">
+      <h2 class="titulo-articulo">Glosario</h2>
+      <article v-for="entrada in entradas" :key="entrada.id">
+        <h3>{{ entrada.concepto }}</h3>
+        <p v-html="entrada.definicion"></p>
+      </article>
+    </div>
   </main>
 </template>
 
@@ -29,4 +39,5 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+</style>

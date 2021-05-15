@@ -1,12 +1,28 @@
 <template>
   <main>
-    <h1>{{ general.nombre }}</h1>
-    <ul>
-      <li>
-        <enlace href="/">Inicio</enlace>
-        <enlace href="/glosario">Glosario</enlace>
-      </li>
-    </ul>
+    <div class="menu">
+      <span class="menu-boton">
+        <img src="../imgs/logo-peque.jpg" style="width:100%">
+      </span>
+      <span class="linea">
+      </span>
+    </div>
+    <div class="cover">
+    <div class="pantalla-principal">
+      <div class="pantla">
+      <div class="cuadro-logo">
+        <img src="../imgs/logo-01.png" style="width:100%">
+        </div>
+        <h1 class="portada">{{ general.nombre }}</h1>
+      </div>
+      <ul>
+        <li class="elementos-portada">
+          <enlace href="/" class="boton-inicio">Inicio</enlace>
+          <enlace href="/glosario" class="boton-inicio">Glosario</enlace>
+        </li>
+      </ul>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -33,4 +49,8 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import '../scss/_variables.scss';
+@import '../scss/estilos.scss';
+
+</style>
