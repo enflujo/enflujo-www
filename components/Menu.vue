@@ -11,11 +11,12 @@ export default {
   props: {
     colorIcono: {
       type: String,
-      required: true,
+      default: '#FFF',
     },
 
     colorFondo: {
-      style: String,
+      type: String,
+      default: '#5757f7',
     },
   },
 };
