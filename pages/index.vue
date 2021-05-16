@@ -1,69 +1,48 @@
 <template>
   <div id="inicio">
-    <section
-      id="portada"
-      :style="`background-image:url(http://159.65.232.239:8055/assets/${sistema.public_background.id}?fit=inside&width=1200)`"
-    >
-      <Logo :color="sistema.project_color" />
+    <section id="portada" :style="estiloPortada">
+      <Logo :color="general.project_color" />
       <h1 class="titulo">
         <span class="bloque">{{ general.nombre }}</span>
       </h1>
       <h2 class="subtitulo">
-        <span class="bloque" :style="`background-color:${sistema.project_color}`">{{ general.descripcion }}</span>
+        <span class="bloque" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</span>
       </h2>
     </section>
   </div>
 </template>
 
 <script>
-import { gql } from 'nuxt-graphql-request';
-
+import { urlImagen } from '../utilidades/ayudas';
 export default {
-  async asyncData({ $graphql }) {
-    const queryGeneral = gql`
-      query {
-        general {
-          nombre
-          descripcion
-        }
-      }
-    `;
-    const { general } = await $graphql.principal.request(queryGeneral);
-
-    // Datos agregados en Ajustes administrativos
-    // Tenemos que hacer un query aparte al otro endpoint de Directus /graphql/system
-    const baseQuery = gql`
-      query {
-        settings {
-          project_name
-          project_url
-          project_color
-          project_logo {
-            id
-            title
-          }
-          public_foreground {
-            id
-            title
-          }
-          public_background {
-            id
-            title
-          }
-          public_note
-        }
-      }
-    `;
-    // los : cambian el nombre
-    const { settings: sistema } = await $graphql.sistema.request(baseQuery);
-    return { general, sistema };
-  },
-
   data() {
     return {
-      titulo: '',
-      banner: null,
+      estiloPortada: null,
     };
+  },
+
+  computed: {
+    general() {
+      return this.$store.state.general.datos;
+    },
+  },
+
+  mounted() {
+    if (this.general && !this.estiloPortada) {
+      this.crearEstiloPortada();
+    }
+  },
+
+  methods: {
+    crearEstiloPortada() {
+      const urlImgPortada = urlImagen(this.general.public_background.id, {
+        fit: 'inside',
+        width: 1200,
+        quality: 60,
+      });
+
+      this.estiloPortada = `background-image:url(${urlImgPortada})`;
+    },
   },
 };
 </script>
