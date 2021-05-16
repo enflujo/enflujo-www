@@ -1,7 +1,7 @@
 <template>
   <div id="contenedor" :class="$mq">
     <div><NuxtLink to="/"></NuxtLink></div>
-    <Menu :colorIcono="colorIcono" :colorFondo="general.project_color" />
+    <Menu :colorIcono="colorIcono" :colorFondo="general.project_color" :nombreMenu="general.nombre_menu" />
     <main>
       <Nuxt />
     </main>

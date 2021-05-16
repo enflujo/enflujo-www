@@ -2,13 +2,18 @@
   <div id="menu" :style="`background-color:${colorFondo}`">
     <Icono :color="colorIcono" />
     <span class="linea"></span>
-    <span class="nombre">Menu</span>
+    <span class="nombre">{{ nombreMenu }}</span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    nombreMenu: {
+      type: String,
+      default: 'Menú',
+    },
+
     colorIcono: {
       type: String,
       default: '#FFF',

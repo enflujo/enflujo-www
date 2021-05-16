@@ -9,6 +9,7 @@ export const actions = {
         general {
           nombre
           descripcion
+          nombre_menu
         }
       }
     `;
