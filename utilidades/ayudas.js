@@ -1,7 +1,12 @@
 /**
- * La URL donde esta el API (Directus en nuestro caso)
+ * La URL donde esta el API (Directus en nuestro caso).
  */
-export const urlBase = 'http://159.65.232.239:8055';
+export const apiBase = 'http://159.65.232.239:8055';
+
+/**
+ * La URL del frontend.
+ */
+export const urlBase = 'https://enflujo.uniandes.edu.co';
 
 /**
  * Ayuda a construir la URL para pedir un archivo al API de Directus.
@@ -19,10 +24,65 @@ export const urlImagen = (id, key) => {
   // Desde Directus se pueden crear configuraciones predeterminadas para pedir imagenes en diferentes formatos usando un "key"
   // Si se usa un key, podemos devolver este endpoint sencillo
   if (typeof key === 'string') {
-    return `${urlBase}/assets/${id}?key=${key}`;
+    return `${apiBase}/assets/${id}?key=${key}`;
   }
 
   // Si no se usa un key sino que se pasan las opciones manualmente, debemos construir la URL con sus parametros.
   const query = new URLSearchParams(key).toString();
-  return `${urlBase}/assets/${id}?${query}`;
+  return `${apiBase}/assets/${id}?${query}`;
+};
+
+/**
+ * Ayuda a crear el título con estilos propios.
+ *
+ * @param {string} titulo Pasar el nombre general del sitio Ej: "EnFlujo".
+ * @param {string} subtitulo El nombre o título de la página actual, se puede dejar vacío para el Home.
+ * @returns Título para el head con estilos personalizados.
+ */
+export const crearTitulo = (titulo, subtitulo) => {
+  const cabeza = `..:: ${titulo} ::..`;
+  return subtitulo ? `${cabeza} | ${subtitulo}` : cabeza;
+};
+
+/**
+ * Crea el objeto con todos los elementos necesarios para SEO de las páginas.
+ * @example
+ * ```js
+ * // Dentro del script de la página:
+ * head() {
+ *   return crearHead(this.general.nombre, this.titulo, this.descripcion, this.banner);
+ * }
+ * ```
+ * @param {string} titulo El título principal del sitio.
+ * @param {string} subtitulo El título de la página actual.
+ * @param {string} descripcion La descripción corta de la página actual.
+ * @param {object} banner Objeto con "id" y "title" que describe la imagen en el API.
+ * @returns {object} El objeto con todas las partes de meta tags.
+ */
+export const crearHead = (titulo, subtitulo, descripcion, banner) => {
+  const title = crearTitulo(titulo, subtitulo);
+  const url = '...URL COMPLETA ...'; // TODO: sacar las urls de cada página.
+  const img = urlImagen(banner.id, 'og-banner');
+
+  return {
+    title: title,
+    meta: [
+      { hid: 'title', name: 'title', content: title },
+      { hid: 'description', name: 'description', content: descripcion },
+      // Open Graph: Facebook
+      { hid: 'og:type', property: 'og:type', content: 'website' },
+      { hid: 'og:url', property: 'og:url', content: url },
+      { hid: 'og:title', property: 'og:title', content: title },
+      { hid: 'og:description', property: 'og:description', content: descripcion },
+      { hid: 'og:image', property: 'og:image', content: img },
+      // Twitter
+      { hid: 'twitter:card', property: 'twitter:card', content: 'summary_large_image' },
+      { hid: 'twitter:site', property: 'twitter:site', content: '@labenflujo' },
+      { hid: 'twitter:url', property: 'twitter:url', content: url },
+      { hid: 'twitter:title', property: 'twitter:title', content: title },
+      { hid: 'twitter:description', property: 'twitter:description', content: descripcion },
+      { hid: 'twitter:image', property: 'twitter:image', content: img },
+      { hid: 'twitter:image:alt', property: 'twitter:image:alt', content: banner.title },
+    ],
+  };
 };

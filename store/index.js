@@ -10,6 +10,10 @@ export const actions = {
           nombre
           descripcion
           nombre_menu
+          banner {
+            id
+            title
+          }
         }
       }
     `;

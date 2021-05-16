@@ -13,12 +13,17 @@
 </template>
 
 <script>
-import { urlImagen } from '../utilidades/ayudas';
+import { urlImagen, crearHead } from '../utilidades/ayudas';
+
 export default {
   data() {
     return {
       estiloPortada: null,
     };
+  },
+
+  head() {
+    return crearHead(this.general.nombre, null, this.general.descripcion, this.general.banner);
   },
 
   computed: {

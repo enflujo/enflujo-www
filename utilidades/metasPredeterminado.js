@@ -2,19 +2,10 @@
 const colorBase = '#5757f7';
 
 export default {
-  title: 'Laboratorio EnFlujo',
   htmlAttrs: {
     lang: 'es',
   },
-  meta: [
-    { charset: 'utf-8' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    {
-      hid: 'description',
-      name: 'description',
-      content: 'Laboratorio de investigación y creación sobre el presente digital. Universidad de los Andes.',
-    },
-  ],
+  meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     { rel: 'apple-touch-icon', type: 'image/png', sizes: '180x180', href: '/apple-touch-icon.png' },

@@ -1,5 +1,5 @@
 import metasPredeterminado from './utilidades/metasPredeterminado';
-import { urlBase } from './utilidades/ayudas';
+import { apiBase } from './utilidades/ayudas';
 
 export default {
   head: metasPredeterminado,
@@ -41,7 +41,7 @@ export default {
      */
     clients: {
       principal: {
-        endpoint: `${urlBase}/graphql`,
+        endpoint: `${apiBase}/graphql`,
         /**
          * Per-client options overrides
          * See: https://github.com/prisma-labs/graphql-request#passing-more-options-to-fetch
@@ -49,7 +49,7 @@ export default {
         options: {},
       },
       sistema: {
-        endpoint: `${urlBase}/graphql/system`,
+        endpoint: `${apiBase}/graphql/system`,
       },
     },
     /**
