@@ -1,52 +1,34 @@
 {
-  "name": "enflujo-www",
-  "version": "0.0.1",
-  "main": "index.js",
-  "author": "Juan Camilo González Jiménez <j.gonzalezj@uniandes.edu.co>",
-  "license": "MIT",
+  "name": "enfujo-www",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "build": "env NODE_ENV=production webpack --config webpack.prod.js",
-    "start": "env NODE_ENV=development webpack serve --config webpack.dev.js"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/plugin-transform-runtime": "^7.13.15",
-    "@babel/preset-env": "^7.14.0",
-    "autoprefixer": "^10.2.5",
-    "babel-loader": "^8.2.2",
-    "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "css-loader": "^5.2.4",
-    "dotenv": "^8.2.0",
-    "html-webpack-plugin": "^5.3.1",
-    "mini-css-extract-plugin": "^1.6.0",
-    "postcss": "^8.2.13",
-    "postcss-loader": "^5.2.0",
-    "postcss-preset-env": "^6.7.0",
-    "sass": "^1.32.12",
-    "sass-loader": "^11.0.1",
-    "style-loader": "^2.0.0",
-    "vue-loader": "^15.9.6",
-    "vue-template-compiler": "^2.6.12",
-    "webpack": "^5.36.2",
-    "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.2",
-    "webpack-merge": "^5.7.3"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint": "yarn lint:js",
+    "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@babel/runtime": "^7.14.0",
-    "vue": "^2.6.12"
+    "@nuxt/http": "^0.6.4",
+    "core-js": "^3.12.1",
+    "nuxt": "^2.15.6",
+    "nuxt-mq": "^2.0.2"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^7.7.0",
+    "graphql": "^15.5.0",
+    "nuxt-graphql-request": "^4.0.0",
+    "prettier": "^2.3.0",
+    "sass": "^1.32.13",
+    "sass-loader": "10"
   }
 }
