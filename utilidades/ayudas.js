@@ -65,7 +65,7 @@ export const crearHead = (titulo, subtitulo, descripcion, banner) => {
   const img = urlImagen(banner.id, 'og-banner');
 
   return {
-    title: title,
+    title,
     meta: [
       { hid: 'title', name: 'title', content: title },
       { hid: 'description', name: 'description', content: descripcion },
