@@ -50,18 +50,19 @@ export const crearTitulo = (titulo, subtitulo) => {
  * ```js
  * // Dentro del script de la página:
  * head() {
- *   return crearHead(this.general.nombre, this.titulo, this.descripcion, this.banner);
+ *   return crearHead(this.general.nombre, this.titulo, this.descripcion, this.banner, this.$nuxt.$route.path);
  * }
  * ```
  * @param {string} titulo El título principal del sitio.
  * @param {string} subtitulo El título de la página actual.
  * @param {string} descripcion La descripción corta de la página actual.
  * @param {object} banner Objeto con "id" y "title" que describe la imagen en el API.
+ * @param {string} ruta Ruta de la página actual, se puede sacar con `this.$nuxt.$route.path`.
  * @returns {object} El objeto con todas las partes de meta tags.
  */
-export const crearHead = (titulo, subtitulo, descripcion, banner) => {
+export const crearHead = (titulo, subtitulo, descripcion, banner, ruta) => {
   const title = crearTitulo(titulo, subtitulo);
-  const url = '...URL COMPLETA ...'; // TODO: sacar las urls de cada página.
+  const url = urlBase + ruta;
   const img = urlImagen(banner.id, 'og-banner');
 
   return {

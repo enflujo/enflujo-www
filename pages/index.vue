@@ -23,7 +23,7 @@ export default {
   },
 
   head() {
-    return crearHead(this.general.nombre, null, this.general.descripcion, this.general.banner);
+    return crearHead(this.general.nombre, null, this.general.descripcion, this.general.banner, this.$nuxt.$route.path);
   },
 
   computed: {
