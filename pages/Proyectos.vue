@@ -6,9 +6,7 @@
 // import { crearHead } from '../utilidades/ayudas';
 
 export default {
-  async fetch() {
-    
-  },
+  async fetch() {},
 
   // head() {
   //   return crearHead(
