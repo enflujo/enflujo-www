@@ -1,6 +1,8 @@
 <template>
   <div id="contenedor" :class="$mq">
-    <div><NuxtLink to="/"></NuxtLink></div>
+    <div>
+      <NuxtLink v-for="pagina in paginas" :key="pagina.slug" :to="`/${pagina.slug}`">{{ pagina.titulo }}</NuxtLink>
+    </div>
     <Menu :colorIcono="colorIcono" :colorFondo="general.project_color" :nombreMenu="general.nombre_menu" />
     <main>
       <Nuxt />
@@ -21,29 +23,15 @@ export default {
     general() {
       return this.$store.state.general.datos;
     },
+
+    paginas() {
+      return this.$store.state.general.paginas;
+    },
   },
 };
 </script>
 
-<style lang="scss">
-html {
-  font-family: ibm-plex-mono, 'Courier New', Courier, monospace;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-  margin: 0;
-}
-
+<style lang="scss" scoped>
 #contenedor {
   display: flex;
   min-height: 100vh;
