@@ -33,7 +33,7 @@ export default {
   },
 
   mounted() {
-    if (this.general && !this.estiloPortada) {
+    if (!this.estiloPortada) {
       this.crearEstiloPortada();
     }
   },
@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 section {
   min-height: 50vh;
 }
