@@ -1,5 +1,7 @@
 # Sitio principal del Laboratorio EnFlujo
 
+![CI workflow](https://github.com/enflujo/enflujo-www/actions/workflows/ci.yml/badge.svg)
+
 Creado con [Nuxt.js](https://nuxtjs.org) (Vue con _Server-Side-Rendering_)
 
 ## Instalación
