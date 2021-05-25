@@ -1,7 +1,7 @@
 // Headers Globales: https://go.nuxtjs.dev/config-head
-const colorBase = '#5757f7';
+import { colorBase } from './general';
 
-export default {
+export const head = {
   htmlAttrs: {
     lang: 'es',
   },
