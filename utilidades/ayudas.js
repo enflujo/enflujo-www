@@ -1,4 +1,4 @@
-import { apiBase, urlBase } from '../config/general';
+import { apiBase, urlBase, nombre } from '../config/general';
 
 /**
  * Ayuda a construir la URL para pedir un archivo al API de Directus.
@@ -55,7 +55,14 @@ export const crearTitulo = (titulo, subtitulo) => {
 export const crearHead = (titulo, subtitulo, descripcion, banner, ruta) => {
   const title = crearTitulo(titulo, subtitulo);
   const url = urlBase + ruta;
-  const img = urlImagen(banner.id, 'og-banner');
+  let img;
+
+  if (banner && banner.id) {
+    img = urlImagen(banner.id, 'og-banner');
+  } else {
+    img = `${urlBase}/imgs/og-EnFlujo-predeterminado.jpg`;
+    banner = { title: nombre };
+  }
 
   return {
     title,
