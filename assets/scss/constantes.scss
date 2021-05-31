@@ -1,9 +1,12 @@
 $fuentePrincipal: 'ibm-plex-mono', 'Courier New', Courier, monospace;
-$fuentePrincipalPeso: 100;
-$fuentePrincipalBold: 400;
-$colorPrincipal: '#5757F7';
-$colorOscuro: '#000';
+$fuentePrincipalPeso: 400;
+$fuentePrincipalBold: 700;
+$colorPrincipal: #5757f7;
+$colorOscuro: #000;
+$anchoMenu: 60px;
 
-h1 {
-  color: '#000';
-}
+// Tamaños Pantallas
+$minCelular: 576px;
+$minTablet: 768px;
+$minPantalla: 992px;
+$minPantallaGrande: 1200px;

@@ -3,5 +3,5 @@
  * https://github.com/nuxt-community/style-resources-module
  */
 export const styleResources = {
-  scss: ['~/assets/scss/contantes.scss', '~/assets/scss/mixins.scss'],
+  scss: ['~assets/scss/constantes.scss', '~assets/scss/mixins.scss'],
 };

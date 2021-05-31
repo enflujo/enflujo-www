@@ -1,11 +1,9 @@
 <template>
-  <div id="contenedor" :class="$mq">
-    <div>
-      <NuxtLink v-for="pagina in paginas" :key="pagina.slug" :to="`/${pagina.slug}`">{{ pagina.titulo }}</NuxtLink>
-    </div>
-    <Menu :colorIcono="colorIcono" :colorFondo="general.project_color" :nombreMenu="general.nombre_menu" />
-    <main>
-      <Nuxt />
+  <div id="contenedor">
+    <Navegacion :colorIcono="colorIcono" @cerrarMenu="cerrarMenu" />
+    <Menu :colorFondo="general.project_color" :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" />
+    <main role="main">
+      <Nuxt keepAlive />
     </main>
     <Footer />
   </div>
@@ -16,6 +14,7 @@ export default {
   data() {
     return {
       colorIcono: '#FFF',
+      menuAbierto: false,
     };
   },
 
@@ -23,23 +22,58 @@ export default {
     general() {
       return this.$store.state.general.datos;
     },
+  },
 
-    paginas() {
-      return this.$store.state.general.paginas;
+  methods: {
+    /**
+     * Intercambia el estado del menú: si esta abierto lo cierra, si esta cerrado lo abre.
+     */
+    resolverMenu() {
+      this.menuAbierto = !this.menuAbierto;
+    },
+
+    /**
+     * Cierra el menú, lo usamos en navegación si el menú esta abierto.
+     */
+    cerrarMenu() {
+      if (this.menuAbierto) {
+        this.menuAbierto = false;
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
 #contenedor {
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
-  width: calc(100vw - 60px);
+  margin-top: $anchoMenu;
   flex-grow: 1;
+  // background-color: color.scale($colorPrincipal, $lightness: 90%);
+}
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+}
+
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+  main {
+    width: calc(100vw - #{$anchoMenu});
+  }
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
 }
 </style>
