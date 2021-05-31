@@ -1,5 +1,12 @@
 <template>
-  <svg class="enflujoIcono" viewBox="0 0 34.58 40" :fill="color" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    class="enflujoIcono"
+    viewBox="0 0 34.58 40"
+    :fill="color"
+    xmlns="http://www.w3.org/2000/svg"
+    :style="`background-color:${fondo}`"
+  >
+    <title id="titulo" lang="es">Icono de EnFlujo</title>
     <path d="M17.29,7.48a.78.78,0,0,1-.79-.79V1a.79.79,0,1,1,1.58,0V6.69A.79.79,0,0,1,17.29,7.48Z" />
     <path d="M17.29,26.18a.78.78,0,0,1-.79-.79V14.29a.79.79,0,0,1,1.58,0v11.1A.79.79,0,0,1,17.29,26.18Z" />
     <path d="M17.29,39.81A.78.78,0,0,1,16.5,39V33.31a.79.79,0,0,1,1.58,0V39A.79.79,0,0,1,17.29,39.81Z" />
@@ -44,6 +51,11 @@ export default {
     color: {
       type: String,
       required: true,
+    },
+
+    fondo: {
+      type: String,
+      default: 'transparent',
     },
   },
 };

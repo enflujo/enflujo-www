@@ -1,5 +1,6 @@
 <template>
   <svg class="enflujoLogo" :fill="color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.74 392.86">
+    <title id="titulo" lang="es">Logo de EnFlujo</title>
     <path
       d="M144,262a1.73,1.73,0,0,1-1.69-1.76V248.07a1.61,1.61,0,0,1,1.69-1.63h0a1.62,1.62,0,0,1,1.7,1.63v12.29A1.71,1.71,0,0,1,144,262Z"
     />
