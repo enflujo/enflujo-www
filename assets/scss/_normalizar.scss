@@ -1,6 +1,7 @@
+@use "sass:color";
+
 html {
   box-sizing: border-box;
-  font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -28,8 +29,16 @@ h4,
 h5,
 h6,
 p,
-pre {
+pre,
+time {
   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: $fuentePrincipalBold;
 }
 
 button {
@@ -64,4 +73,19 @@ img,
 video {
   max-width: 100%;
   height: auto;
+}
+
+body {
+  font-family: $fuentePrincipal;
+  font-weight: $fuentePrincipalPeso;
+}
+
+a,
+a:link {
+  text-decoration: none;
+}
+
+::selection {
+  background-color: color.scale($colorPrincipal, $lightness: 50%);
+  color: black;
 }

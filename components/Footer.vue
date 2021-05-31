@@ -40,8 +40,10 @@ export default {
 </script>
 
 <style lang="scss">
+@use "sass:color";
+
 footer {
-  background-color: #f1f1f1;
+  background-color: color.scale($colorPrincipal, $lightness: 90%);
   color: #95989a;
   text-align: center;
 
