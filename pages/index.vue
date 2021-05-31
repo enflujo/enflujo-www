@@ -1,13 +1,10 @@
 <template>
   <div id="inicio">
-    <section id="portada" :style="estiloPortada">
+    <section id="portada" ref="seccionPortada" :style="estiloPortada">
       <Logo :color="general.project_color" />
-      <h1 class="titulo">
-        <span class="bloque">{{ general.nombre }}</span>
-      </h1>
-      <h2 class="subtitulo">
-        <span class="bloque" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</span>
-      </h2>
+      <h1 class="titulo">{{ general.nombre }}</h1>
+      <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>
+      <canvas ref="lienzo" class="lienzo"></canvas>
     </section>
   </div>
 </template>
@@ -19,6 +16,8 @@ export default {
   data() {
     return {
       estiloPortada: null,
+      ctx: null,
+      animReq: null,
     };
   },
 
@@ -32,13 +31,39 @@ export default {
     },
   },
 
+  beforeMount() {
+    window.addEventListener('resize', this.actualizar);
+    //
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.actualizar);
+    window.cancelAnimationFrame(this.animReq);
+  },
+
   mounted() {
-    if (!this.estiloPortada) {
-      this.crearEstiloPortada();
+    if (!this.ctx) {
+      this.crearContexto();
     }
+    this.actualizar();
+    this.animReq = requestAnimationFrame(this.animar);
   },
 
   methods: {
+    actualizar() {
+      const { lienzo, seccionPortada } = this.$refs;
+      const ctx = this.ctx;
+      const dims = seccionPortada.getBoundingClientRect();
+      lienzo.width = dims.width;
+      lienzo.height = dims.height;
+      ctx.globalAlpha = 0.5;
+    },
+
+    animar() {
+      // TODO: animar un dondo liquido
+      // this.animReq = requestAnimationFrame(this.animar.bind(this));
+    },
+
     crearEstiloPortada() {
       const urlImgPortada = urlImagen(this.general.public_background.id, {
         fit: 'inside',
@@ -48,6 +73,11 @@ export default {
 
       this.estiloPortada = `background-image:url(${urlImgPortada})`;
     },
+
+    crearContexto() {
+      this.ctx = this.$refs.lienzo.getContext('2d');
+      this.actualizar();
+    },
   },
 };
 </script>
@@ -55,46 +85,58 @@ export default {
 <style lang="scss" scoped>
 section {
   min-height: 50vh;
+  position: relative;
+  z-index: 1;
 }
 
 #portada {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  padding: 3em 5em;
+}
+
+.lienzo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  vertical-align: top;
+  pointer-events: none;
 }
 
 .enflujoLogo {
-  width: 130px;
-  background-color: white;
-  padding: 20px;
+  width: 100px;
+  margin-top: 10px;
+  display: block;
 }
 
 .titulo {
   font-size: 3em;
   margin: 0;
-  padding: 0.5em 0;
-
-  .bloque {
-    background-color: white;
-    padding: 0.5em;
-  }
 }
 
 .subtitulo {
-  font-size: 1em;
+  font-size: 0.9em;
   color: white;
-  font-weight: 100;
+  font-weight: $fuentePrincipalPeso;
+  padding: 0.5em;
+  margin: 0.5em;
 }
 
-.celular {
-  .titulo {
-    font-size: 2em;
-    padding: 0.2em 0;
-    width: 90vw;
-  }
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+}
 
-  .subtitulo {
-    font-size: 0.85em;
-  }
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
 }
 </style>
