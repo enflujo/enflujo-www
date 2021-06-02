@@ -10,7 +10,7 @@
 
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>
-      <p>{{ $route.path }}</p>
+      <p>{{ pagina.contenido }}</p>
     </template>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   async fetch() {
     const query = gql`
       query {
-        paginas(filter: { slug: { _eq: "${this.$route.params.pagina}" } }, limit: 1) {
+        paginas(filter: { slug: { _eq: "proyectos" } }, limit: 1) {
           titulo
           slug
           descripcion
