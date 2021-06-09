@@ -10,7 +10,7 @@
 
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>
-      <p>{{ $route.path }}</p>
+      <p>{{ pagina.contenido }}</p>
     </template>
   </div>
 </template>
@@ -27,9 +27,11 @@ export default {
   },
 
   async fetch() {
+    const pagina = this.$route.params.pagina;
+
     const query = gql`
       query {
-        paginas(filter: { slug: { _eq: "${this.$route.params.pagina}" } }, limit: 1) {
+        proyectos(filter: { slug: { _eq: "${this.$route.params.slug}" }, status: {_eq: "published"} }, limit: 1) {
           titulo
           slug
           descripcion
@@ -42,10 +44,10 @@ export default {
       }
     `;
 
-    const { paginas } = await this.$graphql.principal.request(query);
+    const res = await this.$graphql.principal.request(query);
 
-    if (paginas.length && paginas[0].slug) {
-      this.pagina = paginas[0];
+    if (res && res[pagina] && res[pagina].length) {
+      this.pagina = res[pagina][0];
     } else {
       if (process.server) {
         this.$nuxt.context.res.statusCode = 404;
@@ -65,5 +67,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
