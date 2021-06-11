@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ mater ]
+    branches: [mater]
 
 jobs:
   actualizar:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Probando conexión SSH con el servidor
+      name: 🐯 Obtener código del repositorio
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
