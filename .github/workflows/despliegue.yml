@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      name: 🐯 Obtener código del repositorio
+      - name: 🐯 Obtener código del repositorio
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
