@@ -1,3 +1,5 @@
+name: Despliegue
+
 on:
   push:
     branches: [master]
