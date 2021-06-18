@@ -6,7 +6,7 @@ export const apiBase = 'http://159.65.232.239:8055';
 /**
  * La URL del frontend.
  */
-export const urlBase = 'https://enflujo.uniandes.edu.co';
+export const urlBase = 'https://enflujo.com';
 
 /**
  * El color principal de identidad.
