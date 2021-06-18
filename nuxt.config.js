@@ -10,13 +10,8 @@ const server = {
   port: isDev ? 3000 : 4004,
 };
 
-const router = {
-  base: isDev ? '/' : '/enflujo/',
-};
-
 export default {
   server,
-  router,
   // Importa automáticamente los components: https://go.nuxtjs.dev/config-components
   components: true,
   // https://go.nuxtjs.dev/config-modules
