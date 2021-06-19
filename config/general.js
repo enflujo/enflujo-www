@@ -1,7 +1,7 @@
 /**
  * La URL donde esta el API (Directus en nuestro caso).
  */
-export const apiBase = 'http://159.65.232.239:8055';
+export const apiBase = 'https://api.enflujo.com';
 
 /**
  * La URL del frontend.
