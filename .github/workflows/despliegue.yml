@@ -13,11 +13,12 @@ jobs:
       - name: 🐯 Obtener código del repositorio
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.DOMINIO }}
           username: ${{ secrets.USUARIO }}
-          key: ${{ secrets.SSH_SECRET }}
-          port: 22
+          password: ${{ secrets.CLAVE }}
           script: |
-            cd apps/enflujo-www/
-            git pull origin master
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd ${{ secrets.RUTA }}
+            git pull origin main
             git status
