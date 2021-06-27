@@ -44,7 +44,6 @@ a:link {
 
 .navegacion {
   display: none;
-  font-family: $fuentePrincipal;
   z-index: 999;
 }
 

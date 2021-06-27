@@ -1,5 +1,7 @@
-$fuentePrincipal: Andale Mono, AndaleMono, monospace; //'ibm-plex-mono', 'Courier New', Courier, monospace;
-$fuenteSansSerif: Tahoma, Segoe, Verdana, sans-serif;
+// Stacks de fuentes nativas a los diferentes sistemas para no cargar fuentes externas
+$fuentePrincipal: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+  'Helvetica Neue', sans-serif;
+$fuenteMono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 $fuentePrincipalPeso: 400;
 $fuentePrincipalBold: 700;
 $colorPrincipal: #5757f7;
