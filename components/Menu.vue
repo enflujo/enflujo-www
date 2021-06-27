@@ -15,7 +15,7 @@
     </nav>
 
     <nav class="menuRedes">
-      <a v-for="obj in redes" :key="obj.red" :href="obj.url" target="_blank">
+      <a v-for="obj in redes" :key="obj.red" :href="obj.url" target="_blank" rel="noopener">
         <SvgRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
       </a>
     </nav>
@@ -70,7 +70,7 @@ $menuRayaEspacio: 8px;
 $menuRayaColor: rgb(36, 36, 36);
 
 .menuPrincipal {
-  font-family: $fuentePrincipal;
+  font-family: $fuenteMono;
   z-index: 9999;
 
   &.abierto {
