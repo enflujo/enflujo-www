@@ -1,12 +1,7 @@
 <template>
   <div>
-    <template v-if="$fetchState.pending">
-      <h1>Pendiente...</h1>
-    </template>
-
-    <template v-else-if="$fetchState.error">
-      <h1 class="error">{{ $fetchState.error.message }}</h1>
-    </template>
+    <PaginaCargando v-if="$fetchState.pending" />
+    <Error v-else-if="$fetchState.error" />
 
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>

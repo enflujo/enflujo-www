@@ -1,16 +1,12 @@
 <template>
   <div>
-    <template v-if="$fetchState.pending">
-      <h1>Pendiente...</h1>
-    </template>
-
-    <template v-else-if="$fetchState.error">
-      <h1 class="error">{{ $fetchState.error.message }}</h1>
-    </template>
+    <PaginaCargando v-if="$fetchState.pending" />
+    <Error v-else-if="$fetchState.error" />
 
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>
       <p>{{ pagina.contenido }}</p>
+      <h2 v-for="proyecto in proyectos" :key="proyecto.id">{{ proyecto.titulo }}</h2>
     </template>
   </div>
 </template>
@@ -23,13 +19,14 @@ export default {
   data() {
     return {
       pagina: {},
+      proyectos: [],
     };
   },
 
   async fetch() {
     const query = gql`
       query {
-        paginas(filter: { slug: { _eq: "proyectos" } }, limit: 1) {
+        paginas(filter: { slug: { _eq: "proyectos" }, status: { _eq: "published" } }, limit: 1) {
           titulo
           slug
           descripcion
@@ -39,10 +36,19 @@ export default {
             title
           }
         }
+        proyectos(filter: { status: { _eq: "published" } }) {
+          id
+          titulo
+          slug
+          fecha_publicacion
+          banner {
+            id
+          }
+        }
       }
     `;
 
-    const { paginas } = await this.$graphql.principal.request(query);
+    const { paginas, proyectos } = await this.$graphql.principal.request(query);
 
     if (paginas.length && paginas[0].slug) {
       this.pagina = paginas[0];
@@ -51,6 +57,10 @@ export default {
         this.$nuxt.context.res.statusCode = 404;
       }
       throw new Error('La página no existe');
+    }
+
+    if (proyectos && proyectos.length) {
+      this.proyectos = proyectos;
     }
   },
 

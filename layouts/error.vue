@@ -1,9 +1,3 @@
 <template>
-  <h1>ERROR 404</h1>
+  <Error :error="error" />
 </template>
-
-<script>
-export default {};
-</script>
-
-<style lang="scss" scoped></style>

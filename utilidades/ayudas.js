@@ -42,7 +42,7 @@ export const crearTitulo = (titulo, subtitulo) => {
  * ```js
  * // Dentro del script de la página:
  * head() {
- *   return crearHead(this.general.nombre, this.titulo, this.descripcion, this.banner, this.$nuxt.$route.path);
+ *   return crearHead(titulo, subtitulo, descripcion, banner, ruta);
  * }
  * ```
  * @param {string} titulo El título principal del sitio.
