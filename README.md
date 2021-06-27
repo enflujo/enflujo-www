@@ -43,3 +43,7 @@ yarn lint
 ```bash
 yarn lint:fix
 ```
+
+## Saltarse los procesos de Github Actions
+
+En el mensaje del push incluir `[skip ci]`. [Explicación](https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/)
