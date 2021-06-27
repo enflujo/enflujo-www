@@ -12,6 +12,8 @@ export const actions = {
         general {
           nombre
           descripcion
+          redes
+          contenido
           banner {
             id
             title

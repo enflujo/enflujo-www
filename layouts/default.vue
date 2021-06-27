@@ -1,7 +1,7 @@
 <template>
   <div id="contenedor">
-    <Navegacion :colorIcono="colorIcono" @cerrarMenu="cerrarMenu" />
-    <Menu :colorFondo="general.project_color" :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" />
+    <Navegacion :colorIcono="colorIcono" />
+    <Menu :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" @cerrarMenu="cerrarMenu" />
     <main role="main">
       <Nuxt keepAlive />
     </main>
@@ -56,24 +56,5 @@ main {
   margin-top: $anchoMenu;
   flex-grow: 1;
   // background-color: color.scale($colorPrincipal, $lightness: 90%);
-}
-
-// Teléfonos horizontal
-@media (min-width: $minCelular) {
-}
-
-// Pantallas medianas (Tablets)
-@media (min-width: $minTablet) {
-  main {
-    width: calc(100vw - #{$anchoMenu});
-  }
-}
-
-// Dispositivos grandes y pantallas medianas
-@media (min-width: $minPantalla) {
-}
-
-// Pantallas grandes
-@media (min-width: $minPantallaGrande) {
 }
 </style>

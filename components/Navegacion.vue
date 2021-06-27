@@ -1,16 +1,10 @@
 <template>
   <nav class="navegacion">
     <NuxtLink to="/" class="logoBtn">
-      <Icono :color="colorIcono" :fondo="colorFondo" @click.native="cerrarMenu" />
+      <SvgIcono :color="colorIcono" :fondo="colorFondo" />
     </NuxtLink>
 
-    <NuxtLink
-      v-for="pagina in paginas"
-      :key="pagina.slug"
-      :to="`/${pagina.slug}`"
-      class="navBtn"
-      @click.native="cerrarMenu"
-    >
+    <NuxtLink v-for="pagina in paginas" :key="pagina.slug" :to="`/${pagina.slug}`" class="navBtn">
       {{ pagina.titulo }}
     </NuxtLink>
   </nav>
@@ -35,12 +29,6 @@ export default {
       return this.$store.state.general.menus.navegacion;
     },
   },
-
-  methods: {
-    cerrarMenu() {
-      this.$emit('cerrarMenu');
-    },
-  },
 };
 </script>
 
@@ -56,6 +44,8 @@ a:link {
 
 .navegacion {
   display: none;
+  font-family: $fuentePrincipal;
+  z-index: 999;
 }
 
 .enflujoIcono {
@@ -81,7 +71,7 @@ a:link {
     display: flex;
     align-items: center;
     flex-direction: row;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
   }
 
   .navBtn {

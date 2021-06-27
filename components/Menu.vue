@@ -1,6 +1,7 @@
 <template>
-  <div :class="`menuPrincipal ${menuAbierto ? 'abierto' : 'cerrado'}`">
+  <div ref="menu" v-click-outside="cerrarMenu" :class="`menuPrincipal ${menuAbierto ? 'abierto' : 'cerrado'}`">
     <nav class="menuContenido" :style="`background-color:${colorFondo}`">
+      <NuxtLink to="/" class="navBtn" @click.native="resolverMenu">Inicio</NuxtLink>
       <NuxtLink
         v-for="pagina in paginas"
         :key="pagina.slug"
@@ -10,11 +11,17 @@
       >
         {{ pagina.titulo }}
       </NuxtLink>
+      <span class="lineaVertical"></span>
+    </nav>
+
+    <nav class="menuRedes">
+      <a v-for="obj in redes" :key="obj.red" :href="obj.url" target="_blank">
+        <SvgRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
+      </a>
     </nav>
 
     <div class="menuBtn" :style="`background-color:${colorFondo}`" @click="resolverMenu">
-      <div class="botonMenu"><span class="menuRaya"></span></div>
-      <span class="lineaVertical"></span>
+      <span class="menuRaya"></span>
     </div>
   </div>
 </template>
@@ -22,11 +29,6 @@
 <script>
 export default {
   props: {
-    colorFondo: {
-      type: String,
-      default: '#5757f7',
-    },
-
     menuAbierto: {
       type: Boolean,
       default: false,
@@ -37,11 +39,23 @@ export default {
     paginas() {
       return this.$store.state.general.menus.principal;
     },
+
+    colorFondo() {
+      return this.$store.state.general.datos.project_color;
+    },
+
+    redes() {
+      return this.$store.state.general.datos.redes;
+    },
   },
 
   methods: {
     resolverMenu() {
       this.$emit('resolverMenu');
+    },
+
+    cerrarMenu() {
+      this.$emit('cerrarMenu');
     },
   },
 };
@@ -53,20 +67,34 @@ $menuRayaAncho: 30px;
 $menuRayaAlto: 2px;
 $menuRayaRadio: 2px;
 $menuRayaEspacio: 8px;
-$menuRayaColor: #fff;
+$menuRayaColor: rgb(36, 36, 36);
 
 .menuPrincipal {
+  font-family: $fuentePrincipal;
   z-index: 9999;
+
+  &.abierto {
+    .menuBtn {
+      background-color: initial !important;
+      color: white;
+    }
+
+    .menuRaya {
+      background-color: white;
+
+      &::before,
+      &::after {
+        background-color: white;
+      }
+    }
+  }
 }
 
 .menuBtn {
   position: fixed;
-}
-
-.botonMenu {
+  background-color: white !important;
   width: $anchoMenu;
   height: $anchoMenu;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +104,7 @@ $menuRayaColor: #fff;
 .menuContenido {
   height: 0;
   width: 0;
-  position: absolute;
+  position: fixed;
   right: 0;
   padding: 0;
   top: 0;
@@ -93,14 +121,14 @@ $menuRayaColor: #fff;
     color: white;
     padding: 0.3em 1em 0.7em 0.3em;
     margin-bottom: 0.5em;
-    background-image: url(~/assets/marco.svg);
+    background-image: url(~/assets/imgs/marco.svg);
     background-repeat: no-repeat;
 
     &:hover {
       color: color.scale($colorPrincipal, $lightness: 70%);
     }
 
-    &.nuxt-link-active {
+    &.nuxt-link-exact-active {
       opacity: 0.5;
     }
 
@@ -113,7 +141,7 @@ $menuRayaColor: #fff;
 }
 
 .abierto {
-  .botonMenu {
+  .menuBtn {
     .menuRaya {
       height: 0;
       width: 0;
@@ -163,6 +191,29 @@ $menuRayaColor: #fff;
   }
 }
 
+.menuRedes {
+  display: flex;
+  margin: 15px;
+  z-index: 9999;
+  position: fixed;
+  right: 0;
+
+  a {
+    width: 15px;
+    height: 15px;
+    margin: 5px;
+
+    &:hover {
+      opacity: 0.5;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
 }
@@ -171,26 +222,28 @@ $menuRayaColor: #fff;
 @media (min-width: $minTablet) {
   .menuBtn {
     width: $anchoMenu;
-    height: 100vh;
     right: 0;
     top: 0;
     cursor: pointer;
-
-    .lineaVertical {
-      width: 2px;
-      height: calc(100vh - #{$anchoMenu});
-      top: $anchoMenu;
-      left: 30px;
-      background-color: white;
-      position: absolute;
-    }
   }
 
   .abierto {
     .menuContenido {
       width: 50vw;
-      right: $anchoMenu;
     }
+
+    .lineaVertical {
+      width: 2px;
+      height: calc(100vh - #{$anchoMenu});
+      top: $anchoMenu;
+      right: 30px;
+      background-color: white;
+      position: absolute;
+    }
+  }
+
+  .menuRedes {
+    right: 80px;
   }
 }
 
@@ -201,6 +254,9 @@ $menuRayaColor: #fff;
       width: 400px;
     }
   }
+  .menuRedes {
+    right: 124px;
+  }
 }
 
 // Pantallas grandes
@@ -208,7 +264,6 @@ $menuRayaColor: #fff;
   .abierto {
     .menuContenido {
       width: 600px;
-      font-size: 1.5em;
     }
   }
 }
