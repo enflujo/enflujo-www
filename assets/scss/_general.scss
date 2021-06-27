@@ -1,0 +1,27 @@
+.contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+
+  @include elementosTexto(90vw);
+}
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+}
+
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
+  .contenido {
+    @include elementosTexto(50vw);
+  }
+}

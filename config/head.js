@@ -15,9 +15,5 @@ export const head = {
     { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: colorBase },
     { name: 'msapplication-TileColor', content: colorBase },
     { name: 'theme-color', content: colorBase },
-    {
-      rel: 'stylesheet',
-      href: 'https://use.typekit.net/ksv6tvg.css',
-    },
   ],
 };

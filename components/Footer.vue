@@ -1,8 +1,10 @@
 <template>
   <footer>
-    <Icono :color="color" />
-    <p class="copy">EnFlujo</p>
-    <p class="copy fecha">{{ fecha }}</p>
+    <div class="flujo">
+      <p class="copy">EnFlujo</p>
+      <p class="copy fecha">{{ fecha }}</p>
+    </div>
+    <SvgIcono :color="color" />
   </footer>
 </template>
 
@@ -10,7 +12,7 @@
 export default {
   data() {
     return {
-      color: '#95989a',
+      color: '#2d2d2e',
       fecha: '',
     };
   },
@@ -39,22 +41,29 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "sass:color";
+$margen: 15px;
 
 footer {
-  background-color: color.scale($colorPrincipal, $lightness: 90%);
-  color: #95989a;
-  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin: 4em 0 1em 0;
+}
 
-  .enflujoIcono {
-    width: 60px;
-    padding: 10px;
-  }
+.flujo {
+  font-size: 0.6em;
+  margin: $margen;
+  text-align: right;
 
-  .copy {
-    font-size: 0.6em;
-    padding-bottom: 2em;
+  p {
+    margin: 0;
   }
+}
+
+.enflujoIcono {
+  width: 25px;
+  margin: $margen;
 }
 </style>

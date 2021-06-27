@@ -37,7 +37,10 @@ time {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
+  font-family: $fuentePrincipal;
   font-weight: $fuentePrincipalBold;
 }
 
@@ -76,7 +79,7 @@ video {
 }
 
 body {
-  font-family: $fuentePrincipal;
+  font-family: $fuenteSansSerif;
   font-weight: $fuentePrincipalPeso;
 }
 
@@ -88,4 +91,9 @@ a:link {
 ::selection {
   background-color: color.scale($colorPrincipal, $lightness: 50%);
   color: black;
+}
+
+p {
+  line-height: 1.6;
+  margin: 1.5em 0;
 }
