@@ -1,7 +1,6 @@
 import { head } from './config/head';
-import { css } from './config/css';
-import { styleResources } from './config/styleResources';
 import { graphql } from './config/graphql';
+import { colorBase } from './config/general';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -24,7 +23,22 @@ export default {
     '@nuxtjs/style-resources',
   ],
   head,
-  css,
   graphql,
-  styleResources,
+  loading: {
+    color: colorBase,
+    height: '1px',
+    continuous: true,
+    throttle: 50,
+  },
+  plugins: ['~/plugins/clickOutside.js'],
+  styleResources: {
+    scss: ['~assets/scss/constantes.scss', '~assets/scss/mixins.scss'],
+    hoistUseStatements: true,
+  },
+  // CSS Global: https://go.nuxtjs.dev/config-css
+  css: ['~/assets/scss/_normalizar.scss', '~/assets/scss/_general.scss'],
+  modules: ['@nuxtjs/markdownit'],
+  markdownit: {
+    runtime: true, // Se puede usar en los templates con `$md()`
+  },
 };

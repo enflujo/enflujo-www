@@ -1,11 +1,15 @@
 <template>
   <div id="inicio">
     <section id="portada" ref="seccionPortada" :style="estiloPortada">
-      <Logo :color="general.project_color" />
-      <h1 class="titulo">{{ general.nombre }}</h1>
-      <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>
+      <SvgLogo :color="general.project_color" />
+      <div class="nombrePortada">
+        <h1 class="titulo">{{ general.nombre }}</h1>
+        <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>
+      </div>
       <canvas ref="lienzo" class="lienzo"></canvas>
     </section>
+
+    <section class="contenido" v-html="$md.render(general.contenido)"></section>
   </div>
 </template>
 
@@ -51,12 +55,12 @@ export default {
 
   methods: {
     actualizar() {
-      const { lienzo, seccionPortada } = this.$refs;
-      const ctx = this.ctx;
-      const dims = seccionPortada.getBoundingClientRect();
-      lienzo.width = dims.width;
-      lienzo.height = dims.height;
-      ctx.globalAlpha = 0.5;
+      // const { lienzo, seccionPortada } = this.$refs;
+      // const ctx = this.ctx;
+      // const dims = seccionPortada.getBoundingClientRect();
+      // lienzo.width = dims.width;
+      // lienzo.height = dims.height;
+      // ctx.globalAlpha = 0.5;
     },
 
     animar() {
@@ -84,16 +88,24 @@ export default {
 
 <style lang="scss" scoped>
 section {
-  min-height: 50vh;
   position: relative;
   z-index: 1;
+  margin: 3em 0;
 }
 
 #portada {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  padding: 3em 5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nombrePortada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .lienzo {
@@ -120,8 +132,8 @@ section {
   font-size: 0.9em;
   color: white;
   font-weight: $fuentePrincipalPeso;
-  padding: 0.5em;
-  margin: 0.5em;
+  padding: 1em;
+  margin: 1em 0;
 }
 
 // Teléfonos horizontal
@@ -130,6 +142,24 @@ section {
 
 // Pantallas medianas (Tablets)
 @media (min-width: $minTablet) {
+  #portada {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .enflujoLogo {
+    width: 120px;
+  }
+
+  .nombrePortada {
+    align-items: flex-start;
+    margin-left: 30px;
+  }
+
+  .subtitulo {
+    font-size: 0.85em;
+  }
 }
 
 // Dispositivos grandes y pantallas medianas
