@@ -123,6 +123,7 @@ $menuRayaColor: rgb(36, 36, 36);
     margin-bottom: 0.5em;
     background-image: url(~/assets/imgs/marco.svg);
     background-repeat: no-repeat;
+    background-size: 100% 100%;
 
     &:hover {
       color: color.scale($colorPrincipal, $lightness: 70%);
