@@ -22,6 +22,7 @@ export const head = {
       async: true,
       'data-website-id': '569a36fc-18d4-4ee4-a40c-7c7a9a35b3a1',
       src: 'https://analitica.enflujo.com/umami.js',
+      'data-domains': 'enlujo.com',
     },
   ],
 };
