@@ -9,7 +9,10 @@
       <canvas ref="lienzo" class="lienzo"></canvas>
     </section>
 
-    <section class="contenido" v-html="$md.render(general.contenido)"></section>
+    <section v-for="definicion in general.definiciones" :key="definicion.titulo" class="contenido">
+      <h2>{{ definicion.titulo }}</h2>
+      <div v-html="$md.render(definicion.definicion)"></div>
+    </section>
   </div>
 </template>
 

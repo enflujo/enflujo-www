@@ -6,7 +6,12 @@
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>
       <p>{{ pagina.contenido }}</p>
-      <h2 v-for="proyecto in proyectos" :key="proyecto.id">{{ proyecto.titulo }}</h2>
+
+      <div class="contenedorProyectos">
+        <NuxtLink v-for="proyecto in proyectos" :key="proyecto.id" :to="`/proyectos/${proyecto.slug}`">
+          {{ proyecto.titulo }}
+        </NuxtLink>
+      </div>
     </template>
   </div>
 </template>

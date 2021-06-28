@@ -22,8 +22,6 @@ export default {
   },
 
   async fetch() {
-    const pagina = this.$route.params.pagina;
-
     const query = gql`
       query {
         proyectos(filter: { slug: { _eq: "${this.$route.params.slug}" }, status: {_eq: "published"} }, limit: 1) {
@@ -31,6 +29,7 @@ export default {
           slug
           descripcion
           contenido
+          fecha_publicacion
           banner {
             id
             title
@@ -39,10 +38,10 @@ export default {
       }
     `;
 
-    const res = await this.$graphql.principal.request(query);
+    const { proyectos } = await this.$graphql.principal.request(query);
 
-    if (res && res[pagina] && res[pagina].length) {
-      this.pagina = res[pagina][0];
+    if (proyectos && proyectos.length) {
+      this.pagina = proyectos[0];
     } else {
       if (process.server) {
         this.$nuxt.context.res.statusCode = 404;
