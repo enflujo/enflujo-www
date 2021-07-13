@@ -17,6 +17,7 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
+    "chokidar": "^3.5.2",
     "core-js": "^3.14.0",
     "nuxt": "^2.13.3",
     "standard": "^16.0.3"

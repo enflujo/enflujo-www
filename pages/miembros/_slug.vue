@@ -25,15 +25,13 @@ export default {
     const query = gql`
       query {
         miembros(filter: { slug: { _eq: "${this.$route.params.slug}" }, status: {_eq: "published"} }, limit: 1) {
-          titulo
-          slug
-          descripcion
-          contenido
-          fecha_publicacion
-          banner {
-            id
-            title
-          }
+          id
+          foto
+          rol
+          descripcion_personal
+          sitioweb
+          redessociales
+          proyectos
         }
       }
     `;

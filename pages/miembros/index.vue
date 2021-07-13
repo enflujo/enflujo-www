@@ -43,12 +43,12 @@ export default {
         }
         miembros(filter: { status: { _eq: "published" } }) {
           id
-          titulo
-          slug
-          fecha_publicacion
-          banner {
-            id
-          }
+          foto
+          rol
+          descripcion_personal
+          sitioweb
+          redessociales
+          proyectos
         }
       }
     `;
