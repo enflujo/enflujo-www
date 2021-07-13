@@ -121,7 +121,7 @@ $menuRayaColor: rgb(36, 36, 36);
     color: white;
     padding: 0.3em 1em 0.7em 0.3em;
     margin-bottom: 0.5em;
-    background-image: url(~/assets/imgs/marco.svg);
+    background-image: url(../assets/imgs/marco.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
