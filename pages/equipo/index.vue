@@ -8,14 +8,15 @@
       <p>{{ pagina.contenido }}</p>
 
       <div class="contenedorEquipo">
-        <NuxtLink v-for="equipos in equipo" :key="equipos.id" :to="`/equipo/${equipos.slug}`">
-          {{ equipos.titulo }}
-          <h1>Nombre: {{ equipos.nombre }}</h1>
-          <div class="fotoEquipo">
-            <img v-bind:src="equipos.foto" />
-          </div>
-          <h1>Rol: {{ equipos.rol }}</h1>
-        </NuxtLink>
+        <div v-for="miembro in equipo" :key="miembro.id" class="miembro">
+          <NuxtLink class="foto" :to="`/equipo/${miembro.slug}`">
+            <img :src="img(miembro.foto.id)" :alt="miembro.foto.title" />
+          </NuxtLink>
+          <p class="nombre">
+            <NuxtLink :to="`/equipo/${miembro.slug}`">{{ miembro.nombre }}</NuxtLink>
+          </p>
+          <p class="rol">{{ miembro.rol }}</p>
+        </div>
       </div>
     </template>
   </div>
@@ -23,7 +24,7 @@
 
 <script>
 import { gql } from 'nuxt-graphql-request';
-import { crearHead } from '../../utilidades/ayudas';
+import { crearHead, urlImagen } from '../../utilidades/ayudas';
 
 export default {
   data() {
@@ -49,6 +50,7 @@ export default {
         equipo {
           id
           nombre
+          slug
           foto {
             id
             title
@@ -87,7 +89,41 @@ export default {
       this.$nuxt.$route.path
     );
   },
+
+  methods: {
+    img(fotoId) {
+      return urlImagen(fotoId, {
+        width: 300,
+        height: 300,
+        quality: 70,
+      });
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.contenedorEquipo {
+  display: flex;
+}
+
+.miembro {
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+
+  .foto {
+    line-height: 0;
+  }
+
+  .nombre {
+    font-size: 1.2em;
+  }
+
+  .rol {
+    font-style: italic;
+  }
+}
+</style>
