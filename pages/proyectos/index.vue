@@ -8,7 +8,7 @@
       <p>{{ pagina.contenido }}</p>
 
       <div class="contenedorProyectos">
-        <div class="proyecto" v-for="proyecto in proyectos" :key="proyecto.id">
+        <div v-for="proyecto in proyectos" :key="proyecto.id" class="proyecto">
           <NuxtLink :to="`/proyectos/${proyecto.slug}`">
             <img :src="img(proyecto.banner.id)" :alt="proyecto.banner.title" />
           </NuxtLink>
