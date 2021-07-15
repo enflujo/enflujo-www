@@ -6,12 +6,6 @@
     <template v-else>
       <h1>{{ pagina.titulo }}</h1>
       <p>{{ pagina.contenido }}</p>
-
-      <div class="contenedorMiembros">
-        <NuxtLink v-for="miembro in miembros" :key="miembro.id" :to="`/miembros/${miembro.slug}`">
-          {{ miembro.titulo }}
-        </NuxtLink>
-      </div>
     </template>
   </div>
 </template>
@@ -24,48 +18,37 @@ export default {
   data() {
     return {
       pagina: {},
-      miembros: [],
     };
   },
 
   async fetch() {
     const query = gql`
       query {
-        paginas(filter: { slug: { _eq: "miembros" }, status: { _eq: "published" } }, limit: 1) {
-          titulo
-          slug
-          descripcion
-          contenido
-          banner {
+        equipo(filter: { slug: { _eq: "${this.$route.params.slug}" }, status: {_eq: "published"} }, limit: 1) {
+          id
+          nombre
+          foto {
             id
             title
           }
-        }
-        miembros(filter: { status: { _eq: "published" } }) {
-          id
-          foto
           rol
-          descripcion_personal
-          sitioweb
-          redessociales
+          descripcion
+          sitio_web
+          redes_sociales
           proyectos
         }
       }
     `;
 
-    const { paginas, miembros } = await this.$graphql.principal.request(query);
+    const { equipo } = await this.$graphql.principal.request(query);
 
-    if (paginas.length && paginas[0].slug) {
-      this.pagina = paginas[0];
+    if (equipo && equipo.length) {
+      this.pagina = equipo[0];
     } else {
       if (process.server) {
         this.$nuxt.context.res.statusCode = 404;
       }
       throw new Error('La página no existe');
-    }
-
-    if (miembros && miembros.length) {
-      this.miembros = miembros;
     }
   },
 
@@ -80,5 +63,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
