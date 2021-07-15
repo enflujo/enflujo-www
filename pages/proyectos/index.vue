@@ -8,9 +8,17 @@
       <p>{{ pagina.contenido }}</p>
 
       <div class="contenedorProyectos">
-        <NuxtLink v-for="proyecto in proyectos" :key="proyecto.id" :to="`/proyectos/${proyecto.slug}`">
-          {{ proyecto.titulo }}
-        </NuxtLink>
+        <div class="proyecto" v-for="proyecto in proyectos" :key="proyecto.id">
+          <NuxtLink :to="`/proyectos/${proyecto.slug}`">
+            <img :src="img(proyecto.banner.id)" :alt="proyecto.banner.title" />
+          </NuxtLink>
+
+          <p class="nombre">
+            <NuxtLink :to="`/proyectos/${proyecto.slug}`">
+              {{ proyecto.titulo }}
+            </NuxtLink>
+          </p>
+        </div>
       </div>
     </template>
   </div>
@@ -18,7 +26,7 @@
 
 <script>
 import { gql } from 'nuxt-graphql-request';
-import { crearHead } from '../../utilidades/ayudas';
+import { crearHead, urlImagen } from '../../utilidades/ayudas';
 
 export default {
   data() {
@@ -48,6 +56,7 @@ export default {
           fecha_publicacion
           banner {
             id
+            title
           }
         }
       }
@@ -77,6 +86,16 @@ export default {
       this.pagina.banner,
       this.$nuxt.$route.path
     );
+  },
+
+  methods: {
+    img(imgId) {
+      return urlImagen(imgId, {
+        width: 1200,
+        height: 630,
+        quality: 60,
+      });
+    },
   },
 };
 </script>
