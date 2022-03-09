@@ -1,4 +1,4 @@
-name: ci
+name: Estilo Código
 
 on:
   push:
