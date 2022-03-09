@@ -10,12 +10,12 @@
         <div class="contenedorImg">
           <NuxtLink class="enlaceImg" :to="`/proyectos/${proyecto.slug}`">
             <img
+              v-lazy-load
               src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 667 350'%3E%3C/svg%3E"
               :data-src="img(proyecto.banner.id)"
               :alt="proyecto.banner.title"
               width="667"
               height="350"
-              v-lazy-load
             />
           </NuxtLink>
         </div>
