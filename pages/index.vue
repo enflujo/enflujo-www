@@ -1,19 +1,19 @@
 <template>
-  <div id="inicio">
-    <section id="portada" ref="seccionPortada" :style="estiloPortada">
+  <main id="inicio">
+    <div id="portada" ref="seccionPortada" class="seccion" :style="estiloPortada">
       <SvgEnflujoLogo :color="general.project_color" />
-      <div class="nombrePortada">
+      <section class="nombrePortada">
         <h1 class="titulo">{{ general.nombre }}</h1>
         <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>
-      </div>
+      </section>
       <canvas ref="lienzo" class="lienzo"></canvas>
-    </section>
+    </div>
 
-    <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="contenido">
+    <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenido">
       <h2>{{ definicion.titulo }}</h2>
-      <div v-html="$md.render(definicion.contenido)"></div>
+      <div v-if="definicion.contenido" v-html="$md.render(definicion.contenido)"></div>
     </section>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-section {
+.seccion {
   position: relative;
   z-index: 1;
   margin: 3em 0;

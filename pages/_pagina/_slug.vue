@@ -1,13 +1,8 @@
 <template>
-  <div>
-    <PaginaCargando v-if="$fetchState.pending" />
-    <PaginaError v-else-if="$fetchState.error" />
-
-    <template v-else>
-      <h1>{{ pagina.titulo }}</h1>
-      <p>{{ pagina.contenido }}</p>
-    </template>
-  </div>
+  <main>
+    <h1>{{ pagina.titulo }}</h1>
+    <p>{{ pagina.contenido }}</p>
+  </main>
 </template>
 
 <script>

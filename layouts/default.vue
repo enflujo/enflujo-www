@@ -2,9 +2,8 @@
   <div id="contenedor">
     <MenuNavegacion :colorIcono="colorIcono" />
     <MenuPrincipal :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" @cerrarMenu="cerrarMenu" />
-    <main>
-      <Nuxt keepAlive />
-    </main>
+    <Nuxt keepAlive />
+
     <SeccionFooter />
   </div>
 </template>
