@@ -1,11 +1,11 @@
 <template>
   <div id="contenedor">
-    <Navegacion :colorIcono="colorIcono" />
-    <Menu :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" @cerrarMenu="cerrarMenu" />
-    <main role="main">
+    <MenuNavegacion :colorIcono="colorIcono" />
+    <MenuPrincipal :menuAbierto="menuAbierto" @resolverMenu="resolverMenu" @cerrarMenu="cerrarMenu" />
+    <main>
       <Nuxt keepAlive />
     </main>
-    <Footer />
+    <SeccionFooter />
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:color";
+@use 'sass:color';
 #contenedor {
   display: flex;
   flex-direction: column;

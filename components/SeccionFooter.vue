@@ -4,7 +4,7 @@
       <p class="copy">EnFlujo</p>
       <p class="copy fecha">{{ fecha }}</p>
     </div>
-    <SvgIcono :color="color" />
+    <SvgEnflujoIcono :color="color" />
   </footer>
 </template>
 
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:color";
+@use 'sass:color';
 $margen: 15px;
 
 footer {

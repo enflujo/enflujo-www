@@ -16,7 +16,7 @@
 
     <nav class="menuRedes">
       <a v-for="obj in redes" :key="obj.red" :href="obj.url" target="_blank" rel="noopener">
-        <SvgRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
+        <SvgIconosRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
       </a>
     </nav>
 
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:color";
+@use 'sass:color';
 $menuRayaAncho: 30px;
 $menuRayaAlto: 2px;
 $menuRayaRadio: 2px;
