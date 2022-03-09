@@ -1,49 +1,51 @@
 <template>
-  <div>
-    <PaginaCargando v-if="$fetchState.pending" />
-    <PaginaError v-else-if="$fetchState.error" />
+  <main>
+    <section class="contenido inicioPagina">
+      <h1 class="tituloPagina">{{ pagina.titulo }}</h1>
+      <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
+    </section>
 
-    <template v-else>
-      <section class="contenido inicioPagina">
-        <h1 class="tituloPagina">{{ pagina.titulo }}</h1>
-        <div v-html="$md.render(pagina.contenido)"></div>
-      </section>
+    <div class="contenedorProyectos">
+      <div v-for="(proyecto, i) in proyectos" :key="`proyecto${i}`" class="proyecto">
+        <div class="contenedorImg">
+          <NuxtLink class="enlaceImg" :to="`/proyectos/${proyecto.slug}`">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 667 350'%3E%3C/svg%3E"
+              :data-src="img(proyecto.banner.id)"
+              :alt="proyecto.banner.title"
+              width="667"
+              height="350"
+              v-lazy-load
+            />
+          </NuxtLink>
+        </div>
 
-      <div class="contenedorProyectos">
-        <div v-for="(proyecto, i) in proyectos" :key="`proyecto${i}`" class="proyecto">
-          <div class="contenedorImg">
-            <NuxtLink class="enlaceImg" :to="`/proyectos/${proyecto.slug}`">
-              <img :src="img(proyecto.banner.id)" :alt="proyecto.banner.title" />
+        <section class="contenedorDescripcion">
+          <h2 class="titulo">
+            <NuxtLink :to="`/proyectos/${proyecto.slug}`">
+              {{ proyecto.titulo }}
             </NuxtLink>
+          </h2>
+
+          <div class="seccionDescripcion">
+            <p>{{ proyecto.descripcion }}</p>
           </div>
 
-          <section class="contenedorDescripcion">
-            <h2 class="titulo">
-              <NuxtLink :to="`/proyectos/${proyecto.slug}`">
-                {{ proyecto.titulo }}
-              </NuxtLink>
-            </h2>
+          <div class="seccionDescripcion">
+            <a v-if="proyecto.enlace" class="enlace" :href="proyecto.enlace" target="_blank">Ver Proyecto</a>
+          </div>
 
-            <div class="seccionDescripcion">
-              <p>{{ proyecto.descripcion }}</p>
+          <div class="seccionDescripcion repos">
+            <p class="interTitulo">Código:</p>
+            <div v-for="(repo, j) in proyecto.repos" :key="`repo-${j}`" class="repo">
+              <SvgIconosRedes nombre="github" abierto="false" />
+              <a class="repoNombre" :href="repo.url" target="_blank">{{ repo.nombre }}</a>
             </div>
-
-            <div class="seccionDescripcion">
-              <a v-if="proyecto.enlace" class="enlace" :href="proyecto.enlace" target="_blank">Ver Proyecto</a>
-            </div>
-
-            <div class="seccionDescripcion repos">
-              <p class="interTitulo">Código:</p>
-              <div v-for="(repo, j) in proyecto.repos" :key="`repo-${j}`" class="repo">
-                <SvgIconosRedes nombre="github" abierto="false" />
-                <a class="repoNombre" :href="repo.url" target="_blank">{{ repo.nombre }}</a>
-              </div>
-            </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </div>
-    </template>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -110,9 +112,9 @@ export default {
   methods: {
     img(imgId) {
       return urlImagen(imgId, {
-        width: 1200,
-        height: 630,
-        quality: 60,
+        width: 667,
+        height: 350,
+        quality: 80,
       });
     },
   },
@@ -134,11 +136,14 @@ export default {
 }
 
 .contenedorImg {
+  a {
+    display: block;
+    line-height: 0;
+  }
+
   img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
-    vertical-align: top;
+    height: auto;
+    width: 100%;
   }
 }
 
@@ -251,6 +256,7 @@ export default {
 @media (min-width: $minPantallaGrande) {
   .proyecto {
     width: 70vw;
+    max-width: 1200px;
   }
 }
 </style>

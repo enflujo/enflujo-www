@@ -26,7 +26,6 @@ export default {
   graphql,
   loading: {
     color: colorBase,
-    height: '10px',
     continuous: true,
     throttle: 50,
   },
@@ -37,7 +36,7 @@ export default {
   },
   // CSS Global: https://go.nuxtjs.dev/config-css
   css: ['~/assets/scss/_normalizar.scss', '~/assets/scss/_general.scss'],
-  modules: ['@nuxtjs/markdownit', 'nuxt-lazy-load'],
+  modules: ['@nuxtjs/markdownit', ['nuxt-lazy-load', { directiveOnly: true }]],
   markdownit: {
     runtime: true, // Se puede usar en los templates con `$md()`
   },
