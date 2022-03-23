@@ -47,6 +47,7 @@
 
 <script>
 export default {
+  name: 'EnflujoIcono',
   props: {
     color: {
       type: String,

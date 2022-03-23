@@ -38,7 +38,7 @@
           <div class="seccionDescripcion repos">
             <p class="interTitulo">Código:</p>
             <div v-for="(repo, j) in proyecto.repos" :key="`repo-${j}`" class="repo">
-              <SvgIconosRedes nombre="github" abierto="false" />
+              <SvgRedes nombre="github" abierto="false" />
               <a class="repoNombre" :href="repo.url" target="_blank">{{ repo.nombre }}</a>
             </div>
           </div>

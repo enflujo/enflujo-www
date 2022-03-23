@@ -1,7 +1,7 @@
 <template>
   <nav class="navegacion">
     <NuxtLink to="/" class="logoBtn">
-      <SvgEnflujoIcono :color="colorIcono" :fondo="colorFondo" />
+      <SvgIcono :color="colorIcono" :fondo="colorFondo" />
     </NuxtLink>
 
     <NuxtLink v-for="pagina in paginas" :key="pagina.slug" :to="`/${pagina.slug}`" class="navBtn">

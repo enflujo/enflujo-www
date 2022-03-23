@@ -1,7 +1,7 @@
 <template>
   <main id="inicio">
     <div id="portada" ref="seccionPortada" class="seccion" :style="estiloPortada">
-      <SvgEnflujoLogo :color="general.project_color" />
+      <SvgLogo :color="general.project_color" />
       <section class="nombrePortada">
         <h1 class="titulo">{{ general.nombre }}</h1>
         <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>

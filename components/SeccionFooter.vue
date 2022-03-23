@@ -4,7 +4,7 @@
       <p class="copy">EnFlujo</p>
       <p class="copy fecha">{{ fecha }}</p>
     </div>
-    <SvgEnflujoIcono :color="color" />
+    <SvgIcono :color="color" />
   </footer>
 </template>
 

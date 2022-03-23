@@ -16,7 +16,7 @@
 
     <nav class="menuRedes">
       <a v-for="obj in redes" :key="obj.red" :href="obj.url" target="_blank" rel="noopener">
-        <SvgIconosRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
+        <SvgRedes :menuAbierto="menuAbierto" :nombre="obj.red" />
       </a>
     </nav>
 

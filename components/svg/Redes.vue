@@ -44,6 +44,7 @@
 
 <script>
 export default {
+  name: 'SvgRedes',
   // https://simpleicons.org/
   props: {
     menuAbierto: {

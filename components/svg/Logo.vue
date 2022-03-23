@@ -492,6 +492,7 @@
 
 <script>
 export default {
+  name: 'EnflujoLogo',
   props: {
     color: {
       type: String,
