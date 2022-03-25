@@ -67,7 +67,7 @@ export default {
     },
 
     animar() {
-      // TODO: animar un dondo liquido
+      // TODO: animar un fondo liquido
       // this.animReq = requestAnimationFrame(this.animar.bind(this));
     },
 
@@ -83,7 +83,6 @@ export default {
 
     crearContexto() {
       this.ctx = this.$refs.lienzo.getContext('2d');
-      this.actualizar();
     },
   },
 };

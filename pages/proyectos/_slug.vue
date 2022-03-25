@@ -1,7 +1,9 @@
 <template>
-  <main>
-    <h1>{{ pagina.titulo }}</h1>
-    <p>{{ pagina.contenido }}</p>
+  <main class="pagina">
+    <section class="contenido">
+      <h1>{{ pagina.titulo }}</h1>
+      <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
+    </section>
   </main>
 </template>
 

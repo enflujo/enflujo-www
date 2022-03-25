@@ -1,5 +1,5 @@
 <template>
-  <main id="archivoProyectos">
+  <main id="archivoProyectos" class="pagina">
     <section class="contenido inicioPagina">
       <h1 class="tituloPagina">{{ pagina.titulo }}</h1>
       <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
