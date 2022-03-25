@@ -48,8 +48,8 @@ a:link {
 }
 
 .enflujoIcono {
-  width: $anchoMenu;
-  height: $anchoMenu;
+  width: $altoMenu;
+  height: $altoMenu;
   padding: 12px;
 }
 

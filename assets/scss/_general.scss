@@ -7,6 +7,10 @@
   @include elementosTexto(90vw);
 }
 
+.notaEnFlujo {
+  font-family: $fuenteMono;
+}
+
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
 }

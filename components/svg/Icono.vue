@@ -51,7 +51,7 @@ export default {
   props: {
     color: {
       type: String,
-      required: true,
+      default: '#000',
     },
 
     fondo: {
