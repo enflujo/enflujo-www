@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { urlImagen, crearHead } from '../utilidades/ayudas';
+import { urlImagen, crearHead } from '~/utilidades/ayudas';
 
 export default {
   data() {

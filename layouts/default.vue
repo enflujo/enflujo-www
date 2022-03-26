@@ -54,6 +54,5 @@ export default {
 main {
   margin-top: $altoMenu;
   flex-grow: 1;
-  // background-color: color.scale($colorPrincipal, $lightness: 90%);
 }
 </style>

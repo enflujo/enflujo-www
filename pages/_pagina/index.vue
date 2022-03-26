@@ -9,7 +9,7 @@
 
 <script>
 import { gql } from 'nuxt-graphql-request';
-import { crearHead } from '../../utilidades/ayudas';
+import { crearHead } from '~/utilidades/ayudas';
 
 export default {
   data() {
