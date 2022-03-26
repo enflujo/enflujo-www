@@ -67,6 +67,7 @@ export const crearHead = (titulo, subtitulo, descripcion, banner, ruta) => {
 
   return {
     title,
+    link: [{ hid: 'canonical', rel: 'canonical', href: url }],
     meta: [
       { hid: 'title', name: 'title', content: title },
       { hid: 'description', name: 'description', content: descripcion },
