@@ -21,21 +21,23 @@
       </h2>
 
       <div class="descripcion seccionDescripcion">
-        <p class="fecha">
-          Publicado el {{ formatoFecha(proyecto.fecha_publicacion) }}
-          <span class="notaEnFlujo"><SvgIcono />hace {{ distancia(proyecto.fecha_publicacion).texto }}</span>
-        </p>
+        <ProyectoFecha
+          :fecha="proyecto.fecha_publicacion ? proyecto.fecha_publicacion : proyecto.date_created"
+          :estado="proyecto.estado"
+        />
 
         <p>{{ proyecto.descripcion }}</p>
 
-        <a v-if="proyecto.enlace" class="enlace" :href="proyecto.enlace" target="_blank">Ver Proyecto</a>
+        <a v-if="proyecto.enlace" class="enlace" :class="proyecto.estado" :href="proyecto.enlace" target="_blank"
+          >Ver Proyecto</a
+        >
       </div>
 
       <div class="repos seccionDescripcion">
         <p class="interTitulo">Código:</p>
         <div v-for="(repo, j) in proyecto.repos" :key="`repo-${j}`" class="repo">
           <SvgRedes nombre="github" abierto="false" />
-          <a class="repoNombre" :href="repo.url" target="_blank">{{ repo.nombre }}</a>
+          <a class="repoNombre" :href="repo.url" target="_blank" rel="external">{{ repo.nombre }}</a>
         </div>
       </div>
     </section>
@@ -43,18 +45,15 @@
 </template>
 
 <script>
-import { urlImagen, calcularDiferenciaFecha } from '../utilidades/ayudas';
+import { urlImagen } from '~/utilidades/ayudas';
 
 export default {
+  name: 'ProyectoResumen',
   props: {
     proyecto: {
       type: Object,
       required: true,
     },
-  },
-
-  mounted() {
-    this.distancia(new Date('2020-01-26'));
   },
 
   methods: {
@@ -64,19 +63,6 @@ export default {
         height: 350,
         quality: 80,
       });
-    },
-
-    formatoFecha(fecha) {
-      return fecha.toLocaleString('es-CO', {
-        timezone: 'America/Bogota',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-    },
-
-    distancia(fecha) {
-      return calcularDiferenciaFecha(fecha);
     },
   },
 };
@@ -110,7 +96,7 @@ export default {
 
   .titulo {
     font-size: 1.1em;
-    margin-top: 0.8em;
+    margin: 0.8em 0 1em 0;
 
     a,
     a:link {
@@ -143,17 +129,6 @@ export default {
   }
 }
 
-.notaEnFlujo {
-  font-size: 0.85em;
-  color: #757575;
-
-  .enflujoIcono {
-    vertical-align: text-top;
-    width: 1em;
-    margin-right: 0.5em;
-  }
-}
-
 .enlace {
   padding: 0.5em;
   background-color: $colorPrincipal;
@@ -163,6 +138,10 @@ export default {
 
   &:hover {
     opacity: 0.8;
+  }
+
+  &.proceso {
+    background-color: $colorOscuro2;
   }
 }
 

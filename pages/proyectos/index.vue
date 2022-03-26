@@ -28,7 +28,7 @@
 
 <script>
 import { gql } from 'nuxt-graphql-request';
-import { crearHead } from '../../utilidades/ayudas';
+import { crearHead } from '~/utilidades/ayudas';
 
 export default {
   data() {
@@ -56,12 +56,13 @@ export default {
           }
         }
 
-        proyectos(filter: { status: { _eq: "published" } }, sort: ["-fecha_publicacion"]) {
+        proyectos(filter: { status: { _eq: "published" } }, sort: ["-date_created"]) {
           id
           titulo
           slug
           descripcion
           fecha_publicacion
+          estado
           date_created
           enlace
           repos
@@ -91,7 +92,9 @@ export default {
 
     if (proyectos && proyectos.length) {
       const cache = proyectos.map((proyecto) => {
-        proyecto.fecha_publicacion = new Date(proyecto.fecha_publicacion);
+        proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
+        proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
+
         if (proyecto.temas) {
           proyecto.temas = proyecto.temas
             .map((tema) => (tema.glosario_id ? tema.glosario_id.titulo : null))
@@ -227,10 +230,7 @@ export default {
 <style lang="scss" scoped>
 #filtros {
   font-size: 0.9em;
-  // position: fixed;
   left: 0;
-  // background-color: rgba(0, 0, 0, 0.4);
-  // color: white;
 
   .intertitulo {
     font-weight: $fuentePrincipalBold;
