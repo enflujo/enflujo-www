@@ -54,7 +54,7 @@ footer {
 
 .flujo {
   font-size: 0.6em;
-  margin: $margen;
+  margin: $margen 0;
   text-align: right;
 
   p {

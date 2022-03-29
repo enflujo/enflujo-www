@@ -1,4 +1,4 @@
-@mixin elementosTexto($ancho) {
+@mixin elementosTexto($ancho, $max: null) {
   blockquote,
   dl,
   dd,
@@ -10,7 +10,10 @@
   h6,
   p,
   pre,
-  time {
+  time,
+  ul,
+  ol {
     width: $ancho;
+    max-width: $max;
   }
 }

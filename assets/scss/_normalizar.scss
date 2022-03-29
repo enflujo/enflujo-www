@@ -86,6 +86,13 @@ body {
 a,
 a:link {
   text-decoration: none;
+  color: $colorPrincipal;
+  font-weight: $fuentePrincipalBold;
+  transition: color 0.25s ease-in-out;
+
+  &:hover {
+    color: $colorOscuro2;
+  }
 }
 
 ::selection {
@@ -95,5 +102,5 @@ a:link {
 
 p {
   line-height: 1.6;
-  margin: 1.5em 0;
+  margin: 1em 0 0.3em 0;
 }
