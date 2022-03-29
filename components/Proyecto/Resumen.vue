@@ -28,18 +28,12 @@
 
         <p>{{ proyecto.descripcion }}</p>
 
-        <a v-if="proyecto.enlace" class="enlace" :class="proyecto.estado" :href="proyecto.enlace" target="_blank"
-          >Ver Proyecto</a
-        >
+        <a v-if="proyecto.enlace" class="enlace" :class="proyecto.estado" :href="proyecto.enlace" target="_blank">
+          Ver Proyecto
+        </a>
       </div>
 
-      <div class="repos seccionDescripcion">
-        <p class="interTitulo">Código:</p>
-        <div v-for="(repo, j) in proyecto.repos" :key="`repo-${j}`" class="repo">
-          <SvgRedes nombre="github" abierto="false" />
-          <a class="repoNombre" :href="repo.url" target="_blank" rel="external">{{ repo.nombre }}</a>
-        </div>
-      </div>
+      <ProyectoRepositorios class="seccionDescripcion" :repos="proyecto.repos" />
     </section>
   </div>
 </template>
@@ -146,26 +140,7 @@ export default {
 }
 
 .repos {
-  display: flex;
   align-items: flex-end;
   flex: 1;
-
-  .interTitulo {
-    margin: 0 0.5em 0 0;
-  }
-
-  .repo {
-    margin-right: 1em;
-    display: flex;
-    align-items: center;
-  }
-
-  .iconoRed {
-    width: 15px;
-  }
-
-  .repoNombre {
-    margin-left: 0.3em;
-  }
 }
 </style>

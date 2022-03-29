@@ -39,5 +39,6 @@ export default {
   modules: ['@nuxtjs/markdownit', ['nuxt-lazy-load', { directiveOnly: true }]],
   markdownit: {
     runtime: true, // Se puede usar en los templates con `$md()`
+    html: true,
   },
 };
