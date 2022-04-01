@@ -98,24 +98,19 @@ export const crearHead = (titulo, subtitulo, descripcion, banner, ruta) => {
 export const calcularDiferenciaFecha = (fecha) => {
   const ahora = new Date();
   const diferencia = new Date(ahora - fecha);
-  const partes = [diferencia.getDate(), diferencia.getMonth() + 1, diferencia.getFullYear()];
-  // reducir las fechas iniciales de UNIX
-  const dias = parseInt(Math.abs(partes[0]) - 1);
-  const meses = parseInt(Math.abs(partes[1]) - 1);
-  const años = parseInt(Math.abs(partes[2] - 1970));
+  const partes = {
+    dias: diferencia.getDate(),
+    meses: diferencia.getMonth(),
+    años: diferencia.getFullYear() - 1970,
+  };
 
   const textoA = ['año', 'años'];
   const textoM = ['mes', 'meses'];
   const textoD = ['día', 'días'];
 
-  const totalDias = años * 365 + meses * 30.417 + dias;
+  let texto = partes.años === 1 ? `1 ${textoA[0]}, ` : partes.años > 1 ? `${partes.años} ${textoA[1]}, ` : '';
+  texto += partes.meses === 1 ? `1 ${textoM[0]} y ` : partes.meses > 1 ? `${partes.meses} ${textoM[1]} y ` : '';
+  texto += partes.dias === 1 ? `1 ${textoD[0]}` : partes.dias > 1 ? `${partes.dias} ${textoD[1]}` : '';
 
-  let texto = años === 1 ? `${años} ${textoA[0]}, ` : años > 1 ? `${años} ${textoA[1]}, ` : '';
-  texto += meses === 1 ? `${meses} ${textoM[0]} ` : meses > 1 ? `${meses} ${textoM[1]} ` : '';
-  texto += dias === 1 ? `y ${dias} ${textoD[0]}` : dias > 1 ? `y ${dias} ${textoD[1]}` : '';
-
-  return {
-    dias: Math.ceil(totalDias),
-    texto,
-  };
+  return texto;
 };

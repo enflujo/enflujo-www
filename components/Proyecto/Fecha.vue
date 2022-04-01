@@ -38,14 +38,7 @@ export default {
     },
 
     alPresente() {
-      const distancia = calcularDiferenciaFecha(this.fecha);
-
-      if (distancia.dias) {
-        const cabeza = this.estado === 'terminado' ? 'hace' : 'desde';
-        return `${cabeza} ${distancia.texto}`;
-      }
-
-      return null;
+      return `hace ${calcularDiferenciaFecha(this.fecha)}`;
     },
   },
 };
