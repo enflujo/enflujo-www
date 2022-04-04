@@ -17,3 +17,10 @@
     max-width: $max;
   }
 }
+
+@mixin tituloMarco {
+  background-image: url(~/assets/imgs/marco-oscuro.svg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: max-content;
+}
