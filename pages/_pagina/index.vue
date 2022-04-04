@@ -1,6 +1,6 @@
 <template>
   <main class="pagina">
-    <section class="contenido">
+    <section class="contenedorFluido">
       <h1>{{ pagina.titulo }}</h1>
       <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
     </section>

@@ -9,8 +9,8 @@
       <canvas ref="lienzo" class="lienzo"></canvas>
     </div>
 
-    <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenido">
-      <h2>{{ definicion.titulo }}</h2>
+    <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenedorFluido">
+      <h3>{{ definicion.titulo }}</h3>
       <div v-if="definicion.contenido" v-html="$md.render(definicion.contenido)"></div>
     </section>
   </main>
@@ -92,7 +92,7 @@ export default {
 .seccion {
   position: relative;
   z-index: 1;
-  margin: 3em 0;
+  margin: 3em auto 3em auto;
 }
 
 #portada {

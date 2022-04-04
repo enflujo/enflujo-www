@@ -2,23 +2,14 @@
   <div class="proyecto">
     <div class="contenedorImg">
       <NuxtLink class="enlaceImg" :to="`/proyectos/${proyecto.slug}`">
-        <img
-          v-lazy-load
-          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 667 350'%3E%3C/svg%3E"
-          :data-src="img(proyecto.banner.id)"
-          :alt="proyecto.banner.title"
-          width="667"
-          height="350"
-        />
+        <EnflujoImagen :imgId="proyecto.banner.id" ancho="667" alto="350" :titulo="proyecto.banner.title" />
       </NuxtLink>
     </div>
 
     <section class="contenedorDescripcion">
-      <h2 class="titulo">
-        <NuxtLink :to="`/proyectos/${proyecto.slug}`">
-          {{ proyecto.titulo }}
-        </NuxtLink>
-      </h2>
+      <NuxtLink class="titulo" :to="`/proyectos/${proyecto.slug}`">
+        <h2>{{ proyecto.titulo }}</h2>
+      </NuxtLink>
 
       <div class="descripcion seccionDescripcion">
         <ProyectoFecha
@@ -39,24 +30,12 @@
 </template>
 
 <script>
-import { urlImagen } from '~/utilidades/ayudas';
-
 export default {
   name: 'ProyectoResumen',
   props: {
     proyecto: {
       type: Object,
       required: true,
-    },
-  },
-
-  methods: {
-    img(imgId) {
-      return urlImagen(imgId, {
-        width: 667,
-        height: 350,
-        quality: 80,
-      });
     },
   },
 };
@@ -66,7 +45,6 @@ export default {
 .proyecto {
   display: flex;
   flex-direction: column;
-  margin: 2em 0;
 }
 
 .contenedorImg {
@@ -88,23 +66,22 @@ export default {
   margin-top: 1em;
   border-bottom: 2px solid;
 
-  .titulo {
-    font-size: 1.1em;
-    margin: 0.8em 0 1em 0;
+  .titulo,
+  .titulo:link {
+    color: black;
+    padding: 0.8em 1.8em 0.8em 0.8em;
+    margin-bottom: 0.5em;
+    transition: 0.2s ease-in-out opacity;
+    margin-left: -1em;
+    @include tituloMarco;
 
-    a,
-    a:link {
-      color: black;
-      padding: 0.8em;
-      margin-bottom: 0.5em;
-      background-image: url(~/assets/imgs/marco-oscuro.svg);
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      transition: 0.2s ease-in-out opacity;
+    &:hover {
+      opacity: 0.6;
+    }
 
-      &:hover {
-        opacity: 0.6;
-      }
+    h2 {
+      font-size: 1.1em;
+      // margin: 0.8em 0 1em 0;
     }
   }
 
@@ -129,6 +106,7 @@ export default {
   color: white;
   width: 50%;
   text-align: center;
+  font-weight: $fuentePrincipalPeso;
 
   &:hover {
     opacity: 0.8;

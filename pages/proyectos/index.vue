@@ -1,6 +1,6 @@
 <template>
   <main id="archivoProyectos" class="pagina">
-    <section class="contenido inicioPagina">
+    <section class="inicioPagina contenedorFluido">
       <h1 class="tituloPagina">{{ pagina.titulo }}</h1>
       <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
 
@@ -57,7 +57,6 @@ export default {
         }
 
         proyectos(filter: { status: { _eq: "published" } }, sort: ["-date_created"]) {
-          id
           titulo
           slug
           descripcion
@@ -155,11 +154,8 @@ export default {
 
 <style lang="scss">
 #archivoProyectos {
-  .contenido {
-    @include elementosTexto(95vw);
-  }
-
-  .proyecto {
+  .proyecto,
+  .contenedorFluido {
     width: 95vw;
   }
 }
@@ -167,11 +163,8 @@ export default {
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
   #archivoProyectos {
-    .contenido {
-      @include elementosTexto(80vw);
-    }
-
-    .proyecto {
+    .proyecto,
+    .contenedorFluido {
       width: 80vw;
     }
   }
@@ -180,8 +173,8 @@ export default {
 // Pantallas medianas (Tablets)
 @media (min-width: $minTablet) {
   #archivoProyectos {
-    .contenido {
-      @include elementosTexto(95vw);
+    .contenedorFluido {
+      width: 95vw;
     }
 
     .proyecto {
@@ -204,11 +197,8 @@ export default {
 // Dispositivos grandes y pantallas medianas
 @media (min-width: $minPantalla) {
   #archivoProyectos {
-    .contenido {
-      @include elementosTexto(90vw);
-    }
-
-    .proyecto {
+    .proyecto,
+    .contenedorFluido {
       width: 90vw;
     }
   }
@@ -216,11 +206,8 @@ export default {
 
 // Pantallas grandes
 @media (min-width: $minPantallaGrande) {
-  .contenido {
-    @include elementosTexto(70vw, 1200px);
-  }
-
-  .proyecto {
+  .proyecto,
+  .contenedorFluido {
     width: 70vw;
     max-width: 1200px;
   }
@@ -228,6 +215,10 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.proyecto {
+  margin-bottom: 4em;
+}
+
 #filtros {
   font-size: 0.9em;
   left: 0;
