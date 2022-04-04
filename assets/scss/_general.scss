@@ -2,23 +2,20 @@ main.pagina {
   padding-top: 2em;
 }
 
+.contenedorFluido {
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .contenido {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: left;
-
-  @include elementosTexto(90vw);
-
-  h1 {
-    margin-bottom: 1em;
-  }
-
   ul {
-    margin-left: 2em;
+    margin-left: 1em;
+
     li {
       margin-bottom: 0.5em;
       line-height: 1.5;
+
       &::before {
         content: '';
         width: 0.3em;
@@ -39,6 +36,10 @@ main.pagina {
 
 h1 {
   font-size: 1.8em;
+
+  &.tituloPagina {
+    margin-bottom: 1em;
+  }
 }
 
 h2 {
@@ -51,6 +52,9 @@ h3 {
 
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
+  .contenedorFluido {
+    width: 80vw;
+  }
 }
 
 // Pantallas medianas (Tablets)
@@ -59,11 +63,15 @@ h3 {
 
 // Dispositivos grandes y pantallas medianas
 @media (min-width: $minPantalla) {
+  .contenedorFluido {
+    width: 75vw;
+  }
 }
 
 // Pantallas grandes
 @media (min-width: $minPantallaGrande) {
-  .contenido {
-    @include elementosTexto(50vw);
+  .contenedorFluido {
+    width: 60vw;
+    max-width: 1200px;
   }
 }
