@@ -37,7 +37,7 @@ export default {
 
   computed: {
     paginas() {
-      return this.$store.state.general.menus.principal;
+      return this.$store.state.general.paginas;
     },
 
     colorFondo() {
@@ -124,6 +124,7 @@ $menuRayaColor: rgb(36, 36, 36);
     background-image: url(~/assets/imgs/marco.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    font-weight: $fuentePrincipalPeso;
 
     &:hover {
       color: color.scale($colorPrincipal, $lightness: 70%);

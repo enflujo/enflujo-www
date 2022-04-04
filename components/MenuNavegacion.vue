@@ -26,7 +26,7 @@ export default {
 
   computed: {
     paginas() {
-      return this.$store.state.general.menus.navegacion;
+      return this.$store.state.general.paginas;
     },
   },
 };

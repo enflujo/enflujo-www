@@ -2,7 +2,7 @@ import { gql } from 'nuxt-graphql-request';
 
 export const state = () => ({
   datos: {},
-  menus: {},
+  paginas: [],
 });
 
 export const actions = {
@@ -20,21 +20,17 @@ export const actions = {
             title
           }
         }
-        menus {
-          nombre
-          paginas {
-            paginas_id {
-              slug
-              titulo
-            }
-          }
+
+        paginas(filter: { status: { _eq: "published" } }) {
+          slug
+          titulo
         }
       }
     `;
-    const { general, menus } = await this.$graphql.principal.request(queryGeneral);
+    const { general, paginas } = await this.$graphql.principal.request(queryGeneral);
 
     commit('actualizarDatos', general);
-    commit('actualizarMenus', menus);
+    commit('actualizarPaginas', paginas);
   },
 
   async cargarSettings({ commit }) {
@@ -68,9 +64,7 @@ export const mutations = {
     state.datos = { ...state.datos, ...datos };
   },
 
-  actualizarMenus(state, menus) {
-    menus.forEach((menu) => {
-      state.menus[menu.nombre] = menu.paginas.map((pagina) => pagina.paginas_id);
-    });
+  actualizarPaginas(state, paginas) {
+    state.paginas = paginas;
   },
 };
