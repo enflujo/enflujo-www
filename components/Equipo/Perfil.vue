@@ -1,8 +1,8 @@
 <template>
   <div class="perfil">
     <NuxtLink :to="`/equipo/${miembro.slug}`">
-      <EnflujoImagen
-        class="foto"
+      <EnflujoImagen v-if="miembro.foto && miembro.foto.id"
+        class="foto" 
         :class="!miembro.activo ? 'inactivo' : ''"
         :imgId="miembro.foto.id"
         ancho="200"
