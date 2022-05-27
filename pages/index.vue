@@ -4,15 +4,19 @@
       <SvgLogo :color="general.project_color" />
       <section class="nombrePortada">
         <h1 class="titulo">{{ general.nombre }}</h1>
-        <h2 class="subtitulo" :style="`background-color:${general.project_color}`">{{ general.descripcion }}</h2>
+        <div class="subtitulo">
+          <p></p>
+          <p></p>
+          <p><span id="ante">..:: Ante el Presente Digital ::..</span></p>
+        </div>
       </section>
       <canvas ref="lienzo" class="lienzo"></canvas>
     </div>
 
-    <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenedorFluido">
+    <!-- <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenedorFluido">
       <h3>{{ definicion.titulo }}</h3>
       <div v-if="definicion.contenido" v-html="$md.render(definicion.contenido)"></div>
-    </section>
+    </section> -->
   </main>
 </template>
 
@@ -102,6 +106,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transform: translateX(-23px);
 }
 
 .nombrePortada {
@@ -126,16 +131,20 @@ export default {
 }
 
 .titulo {
-  font-size: 3em;
+  font-size: 3.5em;
   margin: 0;
 }
 
 .subtitulo {
   font-size: 0.9em;
-  color: white;
+  font-family: $fuenteMono;
   font-weight: $fuentePrincipalPeso;
-  padding: 1em;
-  margin: 1em 0;
+  padding: 1em 0;
+  margin: 6em 0 0;
+}
+
+#ante {
+  font-weight: bold;
 }
 
 // Teléfonos horizontal
@@ -151,7 +160,8 @@ export default {
   }
 
   .enflujoLogo {
-    width: 120px;
+    width: 151px;
+    position: absolute;
   }
 
   .nombrePortada {
@@ -161,6 +171,8 @@ export default {
 
   .subtitulo {
     font-size: 0.85em;
+    width: 301px;
+    margin-left: 398px;
   }
 }
 
