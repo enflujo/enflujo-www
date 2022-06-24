@@ -1,9 +1,25 @@
 <template>
   <main id="inicio">
-    <div id="portada" ref="seccionPortada" class="seccion" :style="estiloPortada">
+    <div id="lado1" class="lado">
+      <h1 class="titulo">{{ general.nombre }}</h1>
+      <p class="descripcion">{{ general.descripcion }}</p>
       <SvgLogo :color="general.project_color" />
+    </div>
+
+    <div id="lado2" class="lado"></div>
+
+    <div id="lado3" class="lado"></div>
+
+    <div id="lado4" class="lado"></div>
+
+    <div id="lado5" class="lado"></div>
+
+    <div id="lado6" class="lado"></div>
+
+    <div id="lado7" class="lado"></div>
+
+    <!-- <div id="portada" ref="seccionPortada" class="seccion" :style="estiloPortada">
       <section class="nombrePortada">
-        <h1 class="titulo">{{ general.nombre }}</h1>
         <div class="subtitulo">
           <p></p>
           <p></p>
@@ -11,7 +27,7 @@
         </div>
       </section>
       <canvas ref="lienzo" class="lienzo"></canvas>
-    </div>
+    </div> -->
 
     <!-- <section v-for="(definicion, i) in general.definiciones" :key="`definicion${i}`" class="seccion contenedorFluido">
       <h3>{{ definicion.titulo }}</h3>
@@ -86,13 +102,21 @@ export default {
     },
 
     crearContexto() {
-      this.ctx = this.$refs.lienzo.getContext('2d');
+      // this.ctx = this.$refs.lienzo.getContext('2d');
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.lado {
+  border: 1px dotted rgba($colorPrincipal, 0.5);
+}
+
+#lado1 {
+  width: calc($anchoLado * 4);
+  padding: 5vw;
+}
 .seccion {
   position: relative;
   z-index: 1;
@@ -161,7 +185,8 @@ export default {
 
   .enflujoLogo {
     width: 151px;
-    position: absolute;
+    margin-top: 4em;
+    // position: absolute;
   }
 
   .nombrePortada {

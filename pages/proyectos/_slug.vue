@@ -44,6 +44,7 @@ export default {
           descripcion
           contenido
           fecha_publicacion
+          fecha_inicio
           date_created
           enlace
           estado
@@ -61,7 +62,9 @@ export default {
     if (proyectos && proyectos.length) {
       const pagina = proyectos[0];
       pagina.fecha_publicacion = pagina.fecha_publicacion ? new Date(pagina.fecha_publicacion) : null;
-      pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+      pagina.date_created = new Date(pagina.date_created);
+      pagina.fecha_inicio = pagina.fecha_inicio ? new Date(pagina.fecha_inicio) : pagina.date_created;
+
       this.pagina = pagina;
     } else {
       if (process.server) {

@@ -63,6 +63,7 @@ export default {
           fecha_publicacion
           estado
           date_created
+          fecha_inicio
           enlace
           repos
           temas {
@@ -92,7 +93,8 @@ export default {
     if (proyectos && proyectos.length) {
       const cache = proyectos.map((proyecto) => {
         proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
-        proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
+        proyecto.date_created = new Date(proyecto.date_created);
+        proyecto.fecha_inicio = proyecto.fecha_inicio ? new Date(proyecto.fecha_inicio) : proyecto.date_created;
 
         if (proyecto.temas) {
           proyecto.temas = proyecto.temas
@@ -110,6 +112,7 @@ export default {
           });
         }
       });
+
       this.temas = temas;
       this.proyectosCache = cache;
       this.proyectos = cache;

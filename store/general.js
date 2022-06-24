@@ -28,8 +28,10 @@ export const actions = {
       }
     `;
     const { general, paginas } = await this.$graphql.principal.request(queryGeneral);
+    const respuestaIP = await fetch('http://ip-api.com/json');
+    const usuario = await respuestaIP.json();
 
-    commit('actualizarDatos', general);
+    commit('actualizarDatos', { ...general, ...usuario });
     commit('actualizarPaginas', paginas);
   },
 

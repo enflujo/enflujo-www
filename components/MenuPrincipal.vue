@@ -93,8 +93,8 @@ $menuRayaColor: rgb(36, 36, 36);
 .menuBtn {
   position: fixed;
   background-color: white !important;
-  width: $altoMenu;
-  height: $altoMenu;
+  width: $anchoMarco;
+  height: $anchoMarco;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -223,7 +223,7 @@ $menuRayaColor: rgb(36, 36, 36);
 // Pantallas medianas (Tablets)
 @media (min-width: $minTablet) {
   .menuBtn {
-    width: $altoMenu;
+    width: $anchoMarco;
     right: 0;
     top: 0;
     cursor: pointer;
@@ -236,8 +236,8 @@ $menuRayaColor: rgb(36, 36, 36);
 
     .lineaVertical {
       width: 2px;
-      height: calc(100vh - #{$altoMenu});
-      top: $altoMenu;
+      height: calc(100vh - #{$anchoMarco});
+      top: $anchoMarco;
       right: 30px;
       background-color: white;
       position: absolute;

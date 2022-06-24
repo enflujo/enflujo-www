@@ -105,7 +105,6 @@ export default {
       return urlImagen(imgId, {
         width: 200,
         height: 200,
-        quality: 80,
       });
     },
   },

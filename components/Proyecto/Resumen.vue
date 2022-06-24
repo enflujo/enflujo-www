@@ -13,7 +13,7 @@
 
       <div class="descripcion seccionDescripcion">
         <ProyectoFecha
-          :fecha="proyecto.fecha_publicacion ? proyecto.fecha_publicacion : proyecto.date_created"
+          :fecha="proyecto.fecha_publicacion ? proyecto.fecha_publicacion : proyecto.fecha_inicio"
           :estado="proyecto.estado"
         />
 

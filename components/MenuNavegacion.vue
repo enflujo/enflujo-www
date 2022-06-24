@@ -1,7 +1,7 @@
 <template>
   <nav class="navegacion">
     <NuxtLink to="/" class="logoBtn">
-      <SvgIcono :color="colorIcono" :fondo="colorFondo" />
+      <SvgLogo :color="colorIcono" :fondo="colorFondo" />
     </NuxtLink>
 
     <NuxtLink v-for="pagina in paginas" :key="pagina.slug" :to="`/${pagina.slug}`" class="navBtn">
@@ -47,9 +47,9 @@ a:link {
   z-index: 999;
 }
 
-.enflujoIcono {
-  width: $altoMenu;
-  height: $altoMenu;
+.enflujoLogo {
+  width: $anchoMarco;
+  height: $anchoMarco;
   padding: 12px;
 }
 

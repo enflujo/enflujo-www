@@ -70,6 +70,52 @@ h3 {
 
 // Pantallas grandes
 @media (min-width: $minPantallaGrande) {
+  $estiloBorde: $anchoLinea solid $colorPrincipal;
+
+  #marco {
+    .seccionMarco {
+      position: fixed;
+      background-color: white;
+    }
+
+    #marcoSuperior {
+      border-bottom: $estiloBorde;
+      top: 0;
+      left: $anchoMarco;
+      width: calc(100vw - ($anchoMarco * 2));
+      height: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoInferior {
+      border-top: $estiloBorde;
+      bottom: 0;
+      left: $anchoMarco;
+      width: calc(100vw - ($anchoMarco * 2));
+      height: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoIzq {
+      border-right: $estiloBorde;
+      left: 0;
+      top: $anchoMarco;
+      height: calc(100vh - ($anchoMarco * 2));
+      width: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoDer {
+      border-left: $estiloBorde;
+      right: 0;
+      top: $anchoMarco;
+      height: calc(100vh - ($anchoMarco * 2));
+      width: calc($anchoMarco + $anchoLinea);
+    }
+  }
+  // border: $anchoLinea solid $colorPrincipal;
+  // margin: 0 $anchoMarco;
+  // position: fixed;
+  // top: $anchoMarco;
+  // width: calc(100vw - ($anchoMarco * 2));
+  // height: calc(100vh - ($anchoMarco * 2));
   .contenedorFluido {
     width: 60vw;
     max-width: 1200px;

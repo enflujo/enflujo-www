@@ -36,8 +36,8 @@ export default {
     },
 
     resolucion: {
-      type: Number,
-      default: 80,
+      type: String,
+      default: '90',
     },
   },
 
