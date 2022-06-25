@@ -2,7 +2,6 @@
   <main class="pagina">
     <section class="contenedorFluido">
       <h1 class="titulo">{{ pagina.titulo }}</h1>
-      
     </section>
 
     <section v-if="pagina.contenido" class="seccionProyecto contenedorFluido contenido">
@@ -26,7 +25,7 @@ export default {
   async fetch() {
     const query = gql`
       query {
-        glosario(filter: { slug: { _eq: "${this.$route.params.slug}" }, status: {_eq: "published"} }, limit: 1) {
+        glosario(filter: { status: { _eq: "published" } }, sort: ["titulo"]) {
           titulo
           slug
           descripcion
@@ -38,7 +37,7 @@ export default {
     const { glosario } = await this.$graphql.principal.request(query);
 
     if (glosario && glosario.length) {
-      const pagina = proyectos[0];
+      const pagina = glosario;
       pagina.fecha_publicacion = pagina.fecha_publicacion ? new Date(pagina.fecha_publicacion) : null;
       pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
       this.pagina = pagina;

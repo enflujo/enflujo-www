@@ -4,55 +4,40 @@
       <h1 class="tituloPagina">{{ pagina.titulo }}</h1>
       <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div>
 
-      <nav v-if="temas && temas.size" id="filtros">
-        <p class="intertitulo">Filtrar por temas:</p>
-        <ul :class="filtroActivo ? 'activo' : ''">
-          <li
-            v-for="(tema, i) in temas"
-            :key="`tema${i}`"
-            class="tema"
-            :class="temasSeleccionados.has(tema) ? 'actual' : ''"
-            @click="filtrarPorTema(tema)"
-          >
-            {{ tema }}
-          </li>
-        </ul>
-      </nav>
+      <div>
+        <Concepto :glosario="glosario" />
+      </div>
     </section>
-
-    <div class="contenedorProyectos">
-      <Concepto></Concepto>
-    </div>
   </main>
 </template>
 
 <script>
 import { gql } from 'nuxt-graphql-request';
 import { crearHead } from '~/utilidades/ayudas';
+import Concepto from '~/components/Glosario/Concepto.vue';
 
 export default {
+  components: { Concepto },
   data() {
     return {
       pagina: {},
-      proyectosCache: [],
-      proyectos: [],
+      glosarioCache: [],
+      glosario: [],
       temas: null,
       temasSeleccionados: new Set(),
-      filtroActivo: false,
     };
   },
-
   async fetch() {
     const query = gql`
       query {
-        paginas(filter: { slug: { _eq: "glosario" }, status: {_eq: "published"} }, limit: 1) {
+        paginas(filter: { slug: { _eq: "glosario" }, status: { _eq: "draft" } }, limit: 1) {
           titulo
           slug
           descripcion
           contenido
         }
 
-        glosario(filter: { status: { _eq: "published" } }) {
+        glosario(filter: { status: { _eq: "published" } }, sort: ["titulo"]) {
           titulo
           slug
           descripcion
@@ -60,9 +45,7 @@ export default {
         }
       }
     `;
-
-    const { paginas, proyectos } = await this.$graphql.principal.request(query);
-
+    const { paginas, glosario } = await this.$graphql.principal.request(query);
     if (paginas.length && paginas[0].slug) {
       this.pagina = paginas[0];
     } else {
@@ -71,34 +54,10 @@ export default {
       }
       throw new Error('La página no existe');
     }
-
-    if (proyectos && proyectos.length) {
-      const cache = proyectos.map((proyecto) => {
-        proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
-        proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
-
-        if (proyecto.temas) {
-          proyecto.temas = proyecto.temas
-            .map((tema) => (tema.glosario_id ? tema.glosario_id.titulo : null))
-            .filter(Boolean);
-        }
-        return proyecto;
-      });
-
-      const temas = new Set();
-      cache.forEach((proyecto) => {
-        if (proyecto.temas && proyecto.temas.length) {
-          proyecto.temas.forEach((tema) => {
-            temas.add(tema);
-          });
-        }
-      });
-      this.temas = temas;
-      this.proyectosCache = cache;
-      this.proyectos = cache;
+    if (glosario && glosario.length) {
+      this.glosario = glosario;
     }
   },
-
   head() {
     return crearHead(
       this.$store.state.general.datos.nombre,
@@ -108,9 +67,7 @@ export default {
       this.$nuxt.$route.path
     );
   },
-
-  methods: {
-  },
+  methods: {},
 };
 </script>
 
