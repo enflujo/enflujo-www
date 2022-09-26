@@ -1,0 +1,1 @@
+const n=document.getElementById("fecha"),t={weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"},o=()=>{setInterval(()=>{const e=new Date;n.innerText=e.toLocaleString("es-CO",t)},1e3)};o();

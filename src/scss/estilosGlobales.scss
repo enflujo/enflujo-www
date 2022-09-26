@@ -1,0 +1,127 @@
+@import './constantes';
+@import './normalizar';
+@import './mixins';
+
+main.pagina {
+  padding-top: calc($anchoMarco + 2em);
+}
+
+.contenedorFluido {
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contenido {
+  ul {
+    margin-left: 1em;
+
+    li {
+      margin-bottom: 0.5em;
+      line-height: 1.5;
+
+      &::before {
+        content: '';
+        width: 0.3em;
+        height: 0.3em;
+        background-color: var(--colorPrincipal);
+        display: block;
+        position: absolute;
+        margin-left: -0.8em;
+        margin-top: 0.6em;
+      }
+    }
+  }
+}
+
+.notaEnFlujo {
+  font-family: $fuenteMono;
+}
+
+h1 {
+  font-size: 1.8em;
+
+  &.tituloPagina {
+    margin-bottom: 1em;
+  }
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.2em;
+}
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+  .contenedorFluido {
+    width: 80vw;
+  }
+}
+
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+  .contenedorFluido {
+    width: 75vw;
+  }
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
+  $estiloBorde: $anchoLinea solid var(--colorPrincipal);
+
+  #marco {
+    .seccionMarco {
+      position: fixed;
+      background-color: white;
+    }
+
+    #marcoSuperior {
+      border-bottom: $estiloBorde;
+      top: 0;
+      left: $anchoMarco;
+      width: calc(100vw - ($anchoMarco * 2));
+      height: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoInferior {
+      border-top: $estiloBorde;
+      bottom: 0;
+      left: $anchoMarco;
+      width: calc(100vw - ($anchoMarco * 2));
+      height: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoIzq {
+      border-right: $estiloBorde;
+      left: 0;
+      top: $anchoMarco;
+      height: calc(100vh - ($anchoMarco * 2));
+      width: calc($anchoMarco + $anchoLinea);
+    }
+
+    #marcoDer {
+      border-left: $estiloBorde;
+      right: 0;
+      top: $anchoMarco;
+      height: calc(100vh - ($anchoMarco * 2));
+      width: calc($anchoMarco + $anchoLinea);
+    }
+  }
+  // border: $anchoLinea solid var(--colorPrincipal);
+  // margin: 0 $anchoMarco;
+  // position: fixed;
+  // top: $anchoMarco;
+  // width: calc(100vw - ($anchoMarco * 2));
+  // height: calc(100vh - ($anchoMarco * 2));
+  .contenedorFluido {
+    width: 60vw;
+    max-width: 1200px;
+  }
+}

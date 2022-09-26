@@ -1,0 +1,153 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import Logo from '@/componentes/svg/Logo.astro';
+
+const General = gql`
+  query {
+    general {
+      nombre
+      descripcion
+      contenido
+      color
+      banner {
+        id
+        title
+        filename_download
+        width
+        height
+      }
+    }
+  }
+`;
+
+const { general } = await obtenerDatos(General);
+const colorPrincipal = general.color;
+---
+
+<Plantilla descripcion={general.descripcion} banner={general.banner}>
+  <main id="inicio">
+    <div id="lado1" class="lado">
+      <h1 class="titulo">{general.nombre}</h1>
+      <p class="descripcion">{general.descripcion}</p>
+      <Logo clase="inicio" />
+    </div>
+
+    <div id="lado2" class="lado"></div>
+
+    <div id="lado3" class="lado"></div>
+
+    <div id="lado4" class="lado"></div>
+
+    <div id="lado5" class="lado"></div>
+
+    <div id="lado6" class="lado"></div>
+
+    <div id="lado7" class="lado"></div>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @import '../scss/_constantes.scss';
+
+  .lado {
+    border: 1px dotted rgba(var(--colorPrincipal), 0.5);
+  }
+
+  #lado1 {
+    width: calc($anchoLado * 4);
+    padding: 5vw;
+  }
+
+  .seccion {
+    position: relative;
+    z-index: 1;
+    margin: 3em auto 3em auto;
+  }
+
+  #portada {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-23px);
+  }
+
+  .nombrePortada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lienzo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    vertical-align: top;
+    pointer-events: none;
+  }
+
+  .enflujoLogo {
+    width: 100px;
+    margin-top: 10px;
+    display: block;
+  }
+
+  .titulo {
+    font-size: 3.5em;
+    margin: 0;
+  }
+
+  .subtitulo {
+    font-size: 0.9em;
+    font-family: $fuenteMono;
+    font-weight: $fuentePrincipalPeso;
+    padding: 1em 0;
+    margin: 6em 0 0;
+  }
+
+  #ante {
+    font-weight: bold;
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+    #portada {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .enflujoLogo {
+      width: 151px;
+      margin-top: 4em;
+      // position: absolute;
+    }
+
+    .nombrePortada {
+      align-items: flex-start;
+      margin-left: 30px;
+    }
+
+    .subtitulo {
+      font-size: 0.85em;
+      width: 301px;
+      margin-left: 398px;
+    }
+  }
+
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+  }
+
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+  }
+</style>

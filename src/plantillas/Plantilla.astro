@@ -1,0 +1,118 @@
+---
+import '@/scss/estilosGlobales.scss';
+import Menus from '@/componentes/Menus.astro';
+import { apiBase, crearTitulo, gql, obtenerDatos, quitarExtension } from '@/utilidades/ayudas';
+
+const { titulo, descripcion, banner } = Astro.props;
+const ruta = new URL(Astro.url.pathname, Astro.site);
+const tituloPagina = crearTitulo(titulo);
+const imagen = { url: null, titulo: '', ancho: '1200', alto: '630' };
+
+if (banner && banner.id) {
+  const nombreArchivo = quitarExtension(banner.filename_download || 'EnFlujo');
+  imagen.url = `${apiBase}/assets/${banner.id}/${nombreArchivo}.webp?key=og-banner`;
+  imagen.titulo = banner.titulo;
+} else {
+  imagen.url = `${Astro.site}/imgs/og-EnFlujo-predeterminado.jpg`;
+  imagen.titulo = titulo;
+}
+
+const General = gql`
+  query {
+    general {
+      color
+    }
+  }
+`;
+const { general } = await obtenerDatos(General);
+const colorPrincipal = general.color;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={ruta.href} />
+    <title>{tituloPagina}</title>
+    <meta name="description" content={descripcion} />
+    <!-- OpenGraph -->
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content="EnFlujo" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={ruta.href} />
+    <meta property="og:title" content={tituloPagina} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:image" content={imagen.url} />
+    <meta property="og:image:alt" content={imagen.titulo} />
+    <meta property="og:image:width" content={imagen.ancho} />
+    <meta property="og:image:height" content={imagen.alto} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@labenflujo" />
+    <meta name="twitter:creator" content="@labenflujo" />
+    <meta name="twitter:url" content={ruta.href} />
+    <meta name="twitter:title" content={tituloPagina} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagen.url} />
+    <meta name="twitter:image:alt" content={imagen.titulo} />
+  </head>
+
+  <body>
+    <Menus />
+    <slot />
+
+    <div id="marco">
+      <span id="marcoSuperior" class="seccionMarco"></span>
+      <span id="marcoInferior" class="seccionMarco"></span>
+      <span id="marcoIzq" class="seccionMarco">
+        <div class="flujo">
+          <p class="copy">EnFlujo</p>
+          <p id="fecha" class="copy fecha"></p>
+        </div>
+      </span>
+      <span id="marcoDer" class="seccionMarco"></span>
+    </div>
+
+    <script src="./programa.js"></script>
+  </body>
+</html>
+
+<style lang="scss" is:global define:vars={{ colorPrincipal }}>
+  @use 'sass:color';
+
+  :root {
+    --colorPrincipal: colorPrincipal;
+  }
+</style>
+
+<style lang="scss">
+  @use 'sass:color';
+  @import '../scss/_constantes.scss';
+
+  #contenedor {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    margin: $anchoMarco;
+    flex-grow: 1;
+  }
+
+  .flujo {
+    font-size: 0.6em;
+    width: 50vh;
+    left: 32px;
+    bottom: 49vh;
+    transform-origin: left;
+    transform: rotate(90deg);
+    position: absolute;
+    text-align: right;
+    p {
+      margin: 0;
+    }
+  }
+</style>

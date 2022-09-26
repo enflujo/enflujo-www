@@ -1,0 +1,87 @@
+---
+import Logo from '@/componentes/svg/Logo.astro';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+
+const Paginas = gql`
+  query {
+    general {
+      redes
+    }
+
+    paginas(filter: { status: { _eq: "published" } }) {
+      slug
+      titulo
+    }
+  }
+`;
+const { general, paginas } = await obtenerDatos(Paginas);
+---
+
+<nav class="navegacion">
+  <a href="/" class="logoBtn">
+    <Logo clase="menuSuperior" />
+  </a>
+  {
+    paginas.map((pagina) => (
+      <a href={`/${pagina.slug}`} class="navBtn">
+        {pagina.titulo}
+      </a>
+    ))
+  }
+</nav>
+
+<style lang="scss">
+  @import '../scss/_constantes.scss';
+  .navBtn,
+  .navBtn:link {
+    color: black;
+
+    &:hover {
+      color: var(--colorPrincipal);
+    }
+  }
+
+  .navegacion {
+    display: none;
+    z-index: 999;
+  }
+
+  .logoBtn {
+    line-height: 0;
+    margin-right: 10px;
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+    .navegacion {
+      font-weight: $fuentePrincipalBold;
+      position: fixed;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .navBtn {
+      border-bottom: 1px solid transparent;
+      padding: 0 0.5em 0.3em 0;
+      margin-right: 0.5em;
+
+      &.nuxt-link-active {
+        border-bottom: 1px solid var(--colorPrincipal);
+      }
+    }
+  }
+
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+  }
+
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+  }
+</style>

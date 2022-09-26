@@ -1,0 +1,112 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+
+export async function getStaticPaths() {
+  const Proyectos = gql`
+    query {
+      proyectos(filter: { status: { _eq: "published" } }, sort: ["-date_created"]) {
+        slug
+      }
+    }
+  `;
+  const { proyectos } = await obtenerDatos(Proyectos);
+
+  return proyectos.map(({ slug }) => {
+    return { params: { slug } };
+  });
+}
+
+const { slug } = Astro.params;
+
+const Proyecto = gql`
+  query {
+    proyectos(filter: { slug: { _eq: "${slug}" }, status: {_eq: "published"} }, limit: 1) {
+      titulo
+      slug
+      descripcion
+      contenido
+      fecha_publicacion
+      date_created
+      enlace
+      estado
+      repos
+      banner {
+        id
+        title
+      }
+    }
+  }
+`;
+
+const { proyectos } = await obtenerDatos(Proyecto);
+let pagina;
+
+if (proyectos && proyectos.length) {
+  pagina = proyectos[0];
+  pagina.fecha_publicacion = pagina.fecha_publicacion ? new Date(pagina.fecha_publicacion) : null;
+  pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+}
+---
+
+<Plantilla>
+  <main class="pagina">
+    <section class="contenedorFluido">
+      <h1 class="titulo">{pagina.titulo}</h1>
+      <div>
+        <!-- <EnflujoImagen
+          v-if="pagina.banner && pagina.banner.id"
+          :imgId="pagina.banner.id"
+          ancho="1200"
+          alto="630"
+          :titulo="pagina.banner.title"
+        /> -->
+        <!-- <a v-if="pagina.enlace" class="enlace" :class="pagina.estado" :href="pagina.enlace" target="_blank">
+          Ver Proyecto
+        </a> -->
+        <!-- <ProyectoRepositorios v-if="pagina.repos && pagina.repos.length" :repos="pagina.repos" /> -->
+      </div>
+    </section>
+
+    <!-- <section v-if="pagina.contenido" class="seccionProyecto contenedorFluido contenido">
+      <h2>Notas</h2>
+      <div v-html="$md.render(pagina.contenido)"></div>
+    </section> -->
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @import '../../scss/_constantes.scss';
+  @import '../../scss/_mixins.scss';
+
+  .titulo {
+    font-size: 1.6em;
+    padding: 0.3em 1.3em 0.5em 0.3em;
+    margin-bottom: 1em;
+    @include tituloMarco;
+  }
+
+  .seccionProyecto {
+    margin-top: 1em;
+  }
+
+  .enlace {
+    padding: 0.5em;
+    background-color: $colorPrincipal;
+    font-weight: $fuentePrincipalPeso;
+    color: white;
+    width: 50%;
+    text-align: center;
+    width: 100%;
+    margin: 1em 0;
+    display: block;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &.proceso {
+      background-color: $colorOscuro2;
+    }
+  }
+</style>
