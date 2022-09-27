@@ -53,3 +53,29 @@ export const urlImagen = (id, key = null) => {
 };
 
 export const quitarExtension = (nombreArchivo) => nombreArchivo.replace(/\.[^\/.]+$/, '');
+
+/**
+ * Calcula la diferencia entre una fecha y el presente.
+ *
+ * @param {Date} fecha Fecha inicial
+ * @returns La diferencia en texto
+ */
+export const calcularDiferenciaFecha = (fecha) => {
+  const ahora = new Date();
+  const diferencia = new Date(ahora - fecha);
+  const partes = {
+    dias: diferencia.getDate(),
+    meses: diferencia.getMonth(),
+    años: diferencia.getFullYear() - 1970,
+  };
+
+  const textoA = ['año', 'años'];
+  const textoM = ['mes', 'meses'];
+  const textoD = ['día', 'días'];
+
+  let texto = partes.años === 1 ? `1 ${textoA[0]}, ` : partes.años > 1 ? `${partes.años} ${textoA[1]}, ` : '';
+  texto += partes.meses === 1 ? `1 ${textoM[0]} y ` : partes.meses > 1 ? `${partes.meses} ${textoM[1]} y ` : '';
+  texto += partes.dias === 1 ? `1 ${textoD[0]}` : partes.dias > 1 ? `${partes.dias} ${textoD[1]}` : '';
+
+  return texto;
+};

@@ -49,7 +49,7 @@ if (datos.proyectos && datos.proyectos.length) {
   const cache = datos.proyectos.map((proyecto) => {
     proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
     proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
-    proyecto.fecha = proyecto.fecha_publicacion ? proyecto.fecha_publicacion : proyecto.fecha_inicio;
+    proyecto.fecha = proyecto.fecha_publicacion ? proyecto.fecha_publicacion : new Date(proyecto.fecha_inicio);
 
     if (proyecto.temas) {
       proyecto.temas = proyecto.temas
@@ -134,7 +134,11 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
               <div class="descripcion seccionDescripcion">
                 <div class="fecha" class={proyecto.estado}>
                   <p id="textoEstado">{texto(proyecto.estado, proyecto.fecha)}</p>
-                  <IconoEnflujo ancho="1em" />
+                  <img
+                    class="enflujoPunto"
+                    src="/imgs/EnFlujo_punto_v61.svg"
+                    alt="Icono separador entre fecha y hace cuanto se realizó el proyecto."
+                  />
                   <span class="notaEnFlujo" data-fecha={proyecto.fecha} />
                 </div>
 
@@ -168,6 +172,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 
 <script>
   import { duranteInterseccion } from '@/utilidades/observador';
+  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
 
   const imagenes = document.querySelectorAll('.perezoso');
   const cuandoEsVisible = (imagen: HTMLImageElement) => {
@@ -176,6 +181,12 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 
   imagenes.forEach((imagen: HTMLImageElement) => {
     duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
+  });
+
+  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+  fechasEnFlujo.forEach((elemento: HTMLElement) => {
+    const fechaInicio = new Date(elemento.dataset.fecha);
+    elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
   });
 </script>
 
@@ -281,8 +292,9 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     color: #757575;
   }
 
-  .enflujoIcono {
+  .enflujoPunto {
     margin: 0 0.3em;
+    width: 1em;
   }
 
   .repos {
