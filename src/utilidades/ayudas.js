@@ -79,3 +79,29 @@ export const calcularDiferenciaFecha = (fecha) => {
 
   return texto;
 };
+
+export const gradosARadianes = (grados) => grados * (Math.PI / 180);
+
+/**
+ * Calcula distancia en kilómetros entre dos puntos/coordenadas.
+ *
+ * @param {number} lat1 Latitud del punto 1.
+ * @param {number} lon1 Longitud del punto 1.
+ * @param {number} lat2 Latitud del punto 2.
+ * @param {number} lon2 Longitud del punto 2.
+ * @returns Distancia en kilómetros entre los dos puntos.
+ */
+export const distanciaEntreCoordenadas = (lat1, lon1, lat2, lon2) => {
+  // Radio del planeta en KM
+  const radio = 6371;
+  const dLat = gradosARadianes(lat2 - lat1);
+  const dLon = gradosARadianes(lon2 - lon1);
+  const centroLat = dLat / 2;
+  const centroLon = dLon / 2;
+  const a =
+    Math.sin(centroLat) * Math.sin(centroLat) +
+    Math.cos(gradosARadianes(lat1)) * Math.cos(gradosARadianes(lat2)) * Math.sin(centroLon) * Math.sin(centroLon);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return radio * c;
+};
