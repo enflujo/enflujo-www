@@ -5,12 +5,13 @@
 ![Tamaño](https://img.shields.io/github/repo-size/enflujo/enflujo-www?color=%235757f7&label=Tama%C3%B1o%20repo&logo=open-access&logoColor=white)
 ![Licencia](https://img.shields.io/github/license/enflujo/enflujo-www?label=Licencia&logo=open-source-initiative&logoColor=white)
 
-Creado con [Nuxt.js](https://nuxtjs.org) (Vue con _Server-Side-Rendering_)
+Creado con [Astro](https://astro.build/)
 
 ## Instalación
 
+Instalar dependencias:
+
 ```bash
-# Instalar dependencias
 yarn install
 ```
 
@@ -24,12 +25,10 @@ Inicia un servidor local (con hot-reloading) en [localhost:3000](http://localhos
 
 ## Construir para producción
 
-```bash
-# Exportar app
-yarn build
+Exportar aplicación:
 
-# Iniciar en modo de producción
-yarn start
+```bash
+yarn build
 ```
 
 ## Aplicar reglas de estilo al código

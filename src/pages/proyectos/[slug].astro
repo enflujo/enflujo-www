@@ -16,7 +16,7 @@ export async function getStaticPaths() {
     return { params: { slug } };
   });
 }
-
+console.log(Astro.params);
 const { slug } = Astro.params;
 
 const Proyecto = gql`

@@ -7,6 +7,7 @@ const General = gql`
   query {
     general {
       nombre
+      subtitulo
       descripcion
       contenido
       color
@@ -28,9 +29,11 @@ const colorPrincipal = general.color;
 <Plantilla descripcion={general.descripcion} banner={general.banner}>
   <main id="inicio">
     <div id="lado1" class="lado">
-      <h1 class="titulo">{general.nombre}</h1>
-      <p class="descripcion">{general.descripcion}</p>
       <Logo clase="inicio" />
+      <div>
+        <h1 class="titulo">{general.nombre}</h1>
+        <p class="subtitulo">{general.subtitulo}</p>
+      </div>
     </div>
 
     <div id="lado2" class="lado"></div>
@@ -56,7 +59,8 @@ const colorPrincipal = general.color;
 
   #lado1 {
     width: calc($anchoLado * 4);
-    padding: 5vw;
+    padding: calc($anchoMarco + 2em) 0 0 calc($anchoMarco + 2em);
+    display: flex;
   }
 
   .seccion {
@@ -90,23 +94,19 @@ const colorPrincipal = general.color;
     pointer-events: none;
   }
 
-  .enflujoLogo {
-    width: 100px;
-    margin-top: 10px;
-    display: block;
-  }
-
   .titulo {
     font-size: 3.5em;
-    margin: 0;
+    margin-top: -0.44em;
+    color: var(--colorPrincipal);
+    border-bottom: 3px solid;
+    letter-spacing: -3px;
+    padding-top: 3px;
   }
 
   .subtitulo {
     font-size: 0.9em;
-    font-family: $fuenteMono;
-    font-weight: $fuentePrincipalPeso;
-    padding: 1em 0;
-    margin: 6em 0 0;
+    font-weight: $fuentePrincipalBold;
+    color: var(--colorPrincipal);
   }
 
   #ante {
@@ -134,12 +134,6 @@ const colorPrincipal = general.color;
     .nombrePortada {
       align-items: flex-start;
       margin-left: 30px;
-    }
-
-    .subtitulo {
-      font-size: 0.85em;
-      width: 301px;
-      margin-left: 398px;
     }
   }
 

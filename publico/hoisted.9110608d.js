@@ -1,1 +1,0 @@
-import"./chunks/programa.721f1bf6.js";const o=(r,s,c=!0,n)=>{const e=new IntersectionObserver(([t])=>{t&&t.isIntersecting&&(s(t.target),c&&e.unobserve(t.target))},n);return e.observe(r),e},i=document.querySelectorAll(".perezoso"),u=r=>{r.src=r.dataset.src};i.forEach(r=>{o(r,u,!0,{threshold:.1})});
