@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && astro preview",
+    "check": "astro check",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write --list-different .",
     "serve": "yarn server:start",
@@ -19,7 +20,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^1.0.0",
     "@rollup/plugin-graphql": "^1.1.0",
-    "astro": "^1.4.0",
+    "astro": "^1.4.2",
     "autoprefixer": "^10.4.12"
   },
   "devDependencies": {
