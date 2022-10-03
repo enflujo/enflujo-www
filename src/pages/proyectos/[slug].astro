@@ -1,6 +1,6 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
-import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 
 export async function getStaticPaths() {
   const Proyectos = gql`
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
     return { params: { slug } };
   });
 }
-console.log(Astro.params);
+
 const { slug } = Astro.params;
 
 const Proyecto = gql`
@@ -54,16 +54,31 @@ if (proyectos && proyectos.length) {
     <section class="contenedorFluido">
       <h1 class="titulo">{pagina.titulo}</h1>
       <div>
-        <!-- <EnflujoImagen
-          v-if="pagina.banner && pagina.banner.id"
-          :imgId="pagina.banner.id"
-          ancho="1200"
-          alto="630"
-          :titulo="pagina.banner.title"
-        /> -->
-        <!-- <a v-if="pagina.enlace" class="enlace" :class="pagina.estado" :href="pagina.enlace" target="_blank">
-          Ver Proyecto
-        </a> -->
+        {
+          pagina.banner && pagina.banner.id && (
+            <img
+              src={urlImagen(pagina.banner.id, {
+                width: '1200',
+                height: '630',
+                quality: '90',
+                format: 'webp',
+              })}
+              alt={pagina.banner.title}
+              width="1200"
+              height="630"
+            />
+          )
+        }
+
+        {
+          pagina.enlace && (
+            <a class={`enlace ${pagina.estado}`} href={pagina.enlace} target="_blank">
+              Ver Proyecto
+            </a>
+          )
+        }
+
+        <!--  -->
         <!-- <ProyectoRepositorios v-if="pagina.repos && pagina.repos.length" :repos="pagina.repos" /> -->
       </div>
     </section>

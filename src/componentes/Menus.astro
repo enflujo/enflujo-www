@@ -2,6 +2,11 @@
 import Logo from '@/componentes/svg/Logo.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 
+type Red = {
+  red: string;
+  url: string;
+};
+
 const Paginas = gql`
   query {
     general {
@@ -17,21 +22,256 @@ const Paginas = gql`
 const { general, paginas } = await obtenerDatos(Paginas);
 ---
 
-<nav class="navegacion">
-  <a href="/" class="logoBtn">
-    <Logo clase="menuSuperior" />
-  </a>
-  {
-    paginas.map((pagina) => (
-      <a href={`/${pagina.slug}`} class="navBtn">
-        {pagina.titulo}
-      </a>
-    ))
+<div>
+  <nav class="navegacion">
+    <a href="/" class="logoBtn">
+      <Logo clase="menuSuperior" />
+    </a>
+    {
+      paginas.map((pagina) => (
+        <a href={`/${pagina.slug}`} class="navBtn">
+          {pagina.titulo}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div id="menuPrincipal" v-click-outside="cerrarMenu" class="cerrado">
+    <nav id="menuContenido">
+      <a href="/" class="navBtn">Inicio</a>
+      {
+        paginas.map((pagina) => {
+          <a href={`/${pagina.slug}`} class="navBtn">
+            {pagina.titulo}
+          </a>;
+        })
+      }
+
+      <span class="lineaVertical"></span>
+    </nav>
+
+    <nav class="menuRedes">
+      {
+        general.redes.map((obj: Red) => (
+          <a href={obj.url} target="_blank" rel="noopener">
+            <img src={`/imgs/${obj.red}.svg`} alt={obj.red} />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div id="menuBtn">
+      <span class="menuRaya"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  let menuAbierto = false;
+
+  menuBtn.onclick = resolverMenu;
+
+  function cerrarMenu() {
+    if (menuAbierto) {
+      menuAbierto = false;
+    }
   }
-</nav>
+
+  function resolverMenu() {
+    menuAbierto = !menuAbierto;
+  }
+</script>
 
 <style lang="scss">
+  @use 'sass:color';
   @import '../scss/_constantes.scss';
+
+  $menuRayaAncho: 30px;
+  $menuRayaAlto: 2px;
+  $menuRayaRadio: 2px;
+  $menuRayaEspacio: 8px;
+  $menuRayaColor: rgb(36, 36, 36);
+
+  #menuPrincipal {
+    font-family: $fuenteMono;
+    z-index: 9999;
+    &.abierto {
+      .menuBtn {
+        background-color: initial !important;
+        color: white;
+      }
+      .menuRaya {
+        background-color: white;
+        &::before,
+        &::after {
+          background-color: white;
+        }
+      }
+    }
+  }
+
+  #menuBtn {
+    position: fixed;
+    background-color: var(--colorPrincipal);
+    width: $anchoMarco;
+    height: $anchoMarco;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  #menuContenido {
+    height: 0;
+    width: 0;
+    position: fixed;
+    right: 0;
+    padding: 0;
+    top: 0;
+    text-align: center;
+    font-size: 0;
+    color: white;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    a,
+    a:link {
+      color: white;
+      padding: 0.3em 1em 0.7em 0.3em;
+      margin-bottom: 0.5em;
+      background-image: url(../imgs/marco.svg);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      font-weight: $fuentePrincipalPeso;
+      &:hover {
+        color: color.scale($colorPrincipal, $lightness: 70%);
+      }
+      &.activo {
+        opacity: 0.5;
+      }
+      &::before {
+        content: '>>';
+        font-size: 0.8em;
+        padding-right: 0.3em;
+      }
+    }
+  }
+  .abierto {
+    .menuBtn {
+      .menuRaya {
+        height: 0;
+        width: 0;
+        &::before {
+          transform: rotate(45deg) translate(-12px, 12px);
+        }
+        &::after {
+          transform: rotate(-45deg) translate(-12px, -12px);
+        }
+      }
+    }
+
+    #menuContenido {
+      width: 100vw;
+      height: 100vh;
+      padding: 60px 2em;
+      font-size: 1.2em;
+    }
+  }
+
+  .menuRaya {
+    width: $menuRayaAncho;
+    height: $menuRayaAlto;
+    background-color: $menuRayaColor;
+    border-radius: $menuRayaRadio;
+    transition: all 0.2s ease-in-out;
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: $menuRayaAncho;
+      height: $menuRayaAlto;
+      background-color: $menuRayaColor;
+      border-radius: $menuRayaRadio;
+      transition: all 0.5s ease-in-out;
+    }
+    &::before {
+      transform: translate(0, -$menuRayaEspacio);
+    }
+    &::after {
+      transform: translate(0, $menuRayaEspacio);
+    }
+  }
+
+  .menuRedes {
+    display: flex;
+    margin: 15px;
+    z-index: 9999;
+    position: fixed;
+    right: 0;
+    a {
+      width: 15px;
+      height: 15px;
+      margin: 5px;
+      &:hover {
+        opacity: 0.5;
+      }
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+    .menuBtn {
+      width: $anchoMarco;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+    }
+    .abierto {
+      .menuContenido {
+        width: 50vw;
+      }
+      .lineaVertical {
+        width: 2px;
+        height: calc(100vh - #{$anchoMarco});
+        top: $anchoMarco;
+        right: 30px;
+        background-color: white;
+        position: absolute;
+      }
+    }
+    .menuRedes {
+      right: 80px;
+    }
+  }
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+    .abierto {
+      .menuContenido {
+        width: 400px;
+      }
+    }
+    .menuRedes {
+      right: 124px;
+    }
+  }
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+    .abierto {
+      .menuContenido {
+        width: 600px;
+      }
+    }
+  }
+
   .navBtn,
   .navBtn:link {
     color: black;
@@ -49,6 +289,10 @@ const { general, paginas } = await obtenerDatos(Paginas);
   .logoBtn {
     line-height: 0;
     margin-right: 10px;
+  }
+
+  #menuContenido {
+    background-color: var(--colorPrincipal);
   }
 
   // Teléfonos horizontal
