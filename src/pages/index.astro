@@ -34,7 +34,11 @@ const colorPrincipal = general.color;
         <h1 class="titulo">{general.nombre}</h1>
         <p class="subtitulo">{general.subtitulo}</p>
       </div>
+      
     </div>
+
+    <div class="contenido">{general.contenido}</div>
+   
 
     <div id="lado2" class="lado"></div>
 
@@ -118,6 +122,10 @@ const colorPrincipal = general.color;
     font-size: 0.9em;
     font-weight: $fuentePrincipalBold;
     color: var(--colorPrincipal);
+  }
+
+  .contenido {
+    padding: calc($anchoMarco + 2em) 100px 0  calc($anchoMarco + 5em);
   }
 
   #ante {
