@@ -79,11 +79,11 @@ h3 {
   #marco {
     .seccionMarco {
       position: fixed;
-      background-color: white;
+      // background-color: white;
     }
 
     #marcoSuperior {
-      border-bottom: $estiloBorde;
+      // border-bottom: $estiloBorde;
       top: 0;
       left: $anchoMarco;
       width: calc(100vw - ($anchoMarco * 2));
@@ -91,7 +91,7 @@ h3 {
     }
 
     #marcoInferior {
-      border-top: $estiloBorde;
+      // border-top: $estiloBorde;
       bottom: 0;
       left: $anchoMarco;
       width: calc(100vw - ($anchoMarco * 2));
@@ -99,7 +99,7 @@ h3 {
     }
 
     #marcoIzq {
-      border-right: $estiloBorde;
+      // border-right: $estiloBorde;
       left: 0;
       top: $anchoMarco;
       height: calc(100vh - ($anchoMarco * 2));
@@ -107,7 +107,7 @@ h3 {
     }
 
     #marcoDer {
-      border-left: $estiloBorde;
+      // border-left: $estiloBorde;
       right: 0;
       top: $anchoMarco;
       height: calc(100vh - ($anchoMarco * 2));

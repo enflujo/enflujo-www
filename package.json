@@ -19,14 +19,15 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^1.0.0",
-    "@rollup/plugin-graphql": "^1.1.0",
-    "astro": "^1.4.2",
-    "autoprefixer": "^10.4.12"
+    "@rollup/plugin-graphql": "^2.0.2",
+    "astro": "^1.6.13",
+    "autoprefixer": "^10.4.13"
   },
   "devDependencies": {
     "graphql": "^16.6.0",
-    "prettier": "^2.6.0",
-    "prettier-plugin-astro": "^0.5.5",
-    "sass": "^1.49.9"
+    "postcss": "^8.4.19",
+    "prettier": "^2.8.0",
+    "prettier-plugin-astro": "^0.7.0",
+    "sass": "^1.56.1"
   }
 }

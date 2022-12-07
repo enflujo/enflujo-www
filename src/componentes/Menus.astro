@@ -7,6 +7,11 @@ type Red = {
   url: string;
 };
 
+type Pagina = {
+  slug: string;
+  titulo: string;
+};
+
 const Paginas = gql`
   query {
     general {
@@ -20,6 +25,7 @@ const Paginas = gql`
   }
 `;
 const { general, paginas } = await obtenerDatos(Paginas);
+const rutaActual = Astro.url.pathname.slice(1);
 ---
 
 <div>
@@ -28,23 +34,23 @@ const { general, paginas } = await obtenerDatos(Paginas);
       <Logo clase="menuSuperior" />
     </a>
     {
-      paginas.map((pagina) => (
-        <a href={`/${pagina.slug}`} class="navBtn">
+      paginas.map((pagina: Pagina) => (
+        <a href={`/${pagina.slug}`} class={`navBtn${rutaActual === pagina.slug ? ' activo' : ''}`}>
           {pagina.titulo}
         </a>
       ))
     }
   </nav>
 
-  <div id="menuPrincipal" v-click-outside="cerrarMenu" class="cerrado">
+  <div id="menuPrincipal" class="">
     <nav id="menuContenido">
       <a href="/" class="navBtn">Inicio</a>
       {
-        paginas.map((pagina) => {
-          <a href={`/${pagina.slug}`} class="navBtn">
+        paginas.map((pagina: Pagina) => (
+          <a href={`/${pagina.slug}`} class={`navBtn${rutaActual === pagina.slug ? ' activo' : ''}`}>
             {pagina.titulo}
-          </a>;
-        })
+          </a>
+        ))
       }
 
       <span class="lineaVertical"></span>
@@ -67,6 +73,7 @@ const { general, paginas } = await obtenerDatos(Paginas);
 </div>
 
 <script>
+  const menu = document.getElementById('menuPrincipal');
   const menuBtn = document.getElementById('menuBtn');
   let menuAbierto = false;
 
@@ -79,7 +86,7 @@ const { general, paginas } = await obtenerDatos(Paginas);
   }
 
   function resolverMenu() {
-    menuAbierto = !menuAbierto;
+    menu.classList.toggle('abierto');
   }
 </script>
 
@@ -113,7 +120,8 @@ const { general, paginas } = await obtenerDatos(Paginas);
 
   #menuBtn {
     position: fixed;
-    background-color: var(--colorPrincipal);
+    right: 0;
+    // background-color: var(--colorPrincipal);
     width: $anchoMarco;
     height: $anchoMarco;
     display: flex;
@@ -159,6 +167,7 @@ const { general, paginas } = await obtenerDatos(Paginas);
       }
     }
   }
+
   .abierto {
     .menuBtn {
       .menuRaya {
