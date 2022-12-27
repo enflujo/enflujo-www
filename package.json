@@ -20,14 +20,14 @@
   "dependencies": {
     "@astrojs/sitemap": "^1.0.0",
     "@rollup/plugin-graphql": "^2.0.2",
-    "astro": "^1.6.13",
+    "astro": "^1.8.0",
     "autoprefixer": "^10.4.13"
   },
   "devDependencies": {
     "graphql": "^16.6.0",
-    "postcss": "^8.4.19",
-    "prettier": "^2.8.0",
+    "postcss": "^8.4.20",
+    "prettier": "^2.8.1",
     "prettier-plugin-astro": "^0.7.0",
-    "sass": "^1.56.1"
+    "sass": "^1.57.1"
   }
 }
