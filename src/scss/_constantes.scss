@@ -1,0 +1,19 @@
+// Stacks de fuentes nativas a los diferentes sistemas para no cargar fuentes externas
+// $fuentePrincipal: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+//   'Helvetica Neue', sans-serif;
+$fuenteMono: ibm-plex-mono, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$fuentePrincipal: $fuenteMono;
+$fuentePrincipalPeso: 400;
+$fuentePrincipalBold: 700;
+$colorPrincipal: #5757f7;
+$colorOscuro: #000;
+$colorOscuro2: #346a7a;
+$anchoMarco: 50px;
+$anchoLinea: 3px;
+$anchoLado: calc(100vw / 7);
+
+// Tamaños Pantallas
+$minCelular: 576px;
+$minTablet: 768px;
+$minPantalla: 992px;
+$minPantallaGrande: 1200px;

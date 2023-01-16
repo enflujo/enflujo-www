@@ -1,0 +1,164 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import Logo from '@/componentes/svg/Logo.astro';
+
+const General = gql`
+  query {
+    general {
+      nombre
+      subtitulo
+      descripcion
+      contenido
+      color
+      banner {
+        id
+        title
+        filename_download
+        width
+        height
+      }
+    }
+  }
+`;
+
+const { general } = await obtenerDatos(General);
+const colorPrincipal = general.color;
+---
+
+<Plantilla descripcion={general.descripcion} banner={general.banner}>
+  <main id="inicio">
+    <div id="lado1" class="lado">
+      <Logo clase="inicio" />
+      <div>
+        <h1 class="titulo">{general.nombre}</h1>
+        <p class="subtitulo">{general.subtitulo}</p>
+      </div>
+    </div>
+
+    <div class="contenido">{general.contenido}</div>
+
+    <div id="lado2" class="lado"></div>
+
+    <div id="lado3" class="lado"></div>
+
+    <div id="lado4" class="lado"></div>
+
+    <div id="lado5" class="lado"></div>
+
+    <div id="lado6" class="lado"></div>
+
+    <div id="lado7" class="lado"></div>
+  </main>
+</Plantilla>
+
+<script>
+  import { distanciaEntreCoordenadas } from '@/utilidades/ayudas';
+
+  const respuestaIP = await fetch('http://ip-api.com/json');
+  const usuario = await respuestaIP.json();
+  const coordenadasEnflujo = [4.601247143009991, -74.06408649525687];
+
+  const distancia = distanciaEntreCoordenadas(usuario.lat, usuario.lon, coordenadasEnflujo[0], coordenadasEnflujo[1]);
+  console.log(distancia, usuario);
+</script>
+
+<style lang="scss">
+  @import '../scss/_constantes.scss';
+
+  .lado {
+    border: 1px dotted rgba(var(--colorPrincipal), 0.5);
+  }
+
+  #lado1 {
+    width: calc($anchoLado * 4);
+    padding: calc($anchoMarco + 2em) 0 0 calc($anchoMarco + 2em);
+    display: flex;
+  }
+
+  .seccion {
+    position: relative;
+    z-index: 1;
+    margin: 3em auto 3em auto;
+  }
+
+  #portada {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-23px);
+  }
+
+  .nombrePortada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lienzo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    vertical-align: top;
+    pointer-events: none;
+  }
+
+  .titulo {
+    font-size: 3.5em;
+    margin-top: -0.44em;
+    color: var(--colorPrincipal);
+    border-bottom: 3px solid;
+    letter-spacing: -3px;
+    padding-top: 3px;
+  }
+
+  .subtitulo {
+    font-size: 0.9em;
+    font-weight: $fuentePrincipalBold;
+    color: var(--colorPrincipal);
+  }
+
+  .contenido {
+    padding: calc($anchoMarco + 2em) 100px 0 calc($anchoMarco + 5em);
+  }
+
+  #ante {
+    font-weight: bold;
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+    #portada {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .enflujoLogo {
+      width: 151px;
+      margin-top: 4em;
+      // position: absolute;
+    }
+
+    .nombrePortada {
+      align-items: flex-start;
+      margin-left: 30px;
+    }
+  }
+
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+  }
+
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+  }
+</style>

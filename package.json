@@ -1,15 +1,15 @@
 {
   "name": "enfujo-www",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint": "yarn lint:js && yarn lint:prettier",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
-    "lint:prettier": "prettier --check .",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro build && astro preview",
+    "check": "astro check",
+    "lint": "prettier --check .",
+    "lint:fix": "prettier --write --list-different .",
     "serve": "yarn server:start",
     "stop": "yarn server:stop",
     "restart": "yarn server:restart",
@@ -18,29 +18,16 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "core-js": "^3.21.1",
-    "nuxt": "^2.15.8",
-    "nuxt-lazy-load": "^1.2.9",
-    "vue": "^2.6.14",
-    "vue-server-renderer": "^2.6.14",
-    "vue-template-compiler": "^2.6.14",
-    "webpack": "^4.46.0"
+    "@astrojs/sitemap": "^1.0.0",
+    "@rollup/plugin-graphql": "^2.0.2",
+    "astro": "^1.8.0",
+    "autoprefixer": "^10.4.13"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@nuxtjs/eslint-config": "^9.0.0",
-    "@nuxtjs/eslint-module": "^3.0.2",
-    "@nuxtjs/markdownit": "^2.0.0",
-    "@nuxtjs/style-resources": "^1.2.1",
-    "eslint": "^8.11.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-nuxt": "^3.2.0",
-    "eslint-plugin-vue": "^8.5.0",
-    "graphql": "^16.3.0",
-    "graphql-tag": "^2.12.6",
-    "nuxt-graphql-request": "^5.0.0",
-    "prettier": "^2.6.0",
-    "sass": "^1.49.9",
-    "sass-loader": "10"
+    "graphql": "^16.6.0",
+    "postcss": "^8.4.20",
+    "prettier": "^2.8.1",
+    "prettier-plugin-astro": "^0.7.0",
+    "sass": "^1.57.1"
   }
 }
