@@ -1,5 +1,5 @@
 # Omitir archivos exportados
-publico
+publico/
 .output/
 
 # dependencias

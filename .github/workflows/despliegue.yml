@@ -23,4 +23,3 @@ jobs:
             git pull origin main
             yarn
             yarn build
-            yarn restart
