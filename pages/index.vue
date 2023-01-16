@@ -43,7 +43,7 @@ export default {
     //
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.actualizar);
     window.cancelAnimationFrame(this.animReq);
   },
