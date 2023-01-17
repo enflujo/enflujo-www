@@ -11,11 +11,11 @@ jobs:
 
     steps:
       - name: 🐯 Obtener código del repositorio
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DOMINIO }}
           username: ${{ secrets.USUARIO }}
-          password: ${{ secrets.CLAVE }}
+          key: ${{ secrets.LLAVE_SSH }}
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
