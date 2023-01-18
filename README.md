@@ -48,3 +48,17 @@ yarn lint:fix
 ## Saltarse los procesos de Github Actions
 
 En el mensaje del push incluir `[skip ci]`. [Explicación](https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/)
+
+## Ejecutar acción de despliegue
+
+Todos los `push` a la rama `main` activan el despliegue. También se puede ejecutar desde el terminal o cualquier comando externo siguiendo la estructura de: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-dispatch-event
+
+```bash
+curl \
+  -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer <TOKEN_GITHUB_CON_PERMISOS>"\
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  https://api.github.com/repos/enflujo/enflujo-www/dispatches \
+  -d '{"event_type":"despliegue"}'
+```
