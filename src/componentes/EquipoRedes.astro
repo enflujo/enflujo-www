@@ -1,0 +1,42 @@
+---
+import SvgRedes from '@/componentes/svg/Redes.astro';
+const { sitioWeb, redes } = Astro.props;
+---
+
+<div class="redes">
+  {
+    sitioWeb && (
+      <a href={sitioWeb} target="_blank" rel="noopener external">
+        <SvgRedes nombre="sitio" ancho="18px" />
+      </a>
+    )
+  }
+  {
+    redes.length &&
+      redes.map((obj) => (
+        <a href={obj.url} target="_blank" rel="noopener external">
+          <SvgRedes nombre={obj.red} ancho="18px" />
+        </a>
+      ))
+  }
+</div>
+
+<style lang="scss">
+  .redes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    a,
+    a:link {
+      line-height: 0;
+      margin: 0.3em;
+      opacity: 0.5;
+      transition: opacity 0.25s ease-in-out;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+</style>

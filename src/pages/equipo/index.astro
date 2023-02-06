@@ -1,0 +1,114 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import Perfil from '@/componentes/Perfil.astro';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+
+const Equipo = gql`
+  query {
+    paginas(filter: { slug: { _eq: "equipo" }, status: { _eq: "published" } }, limit: 1) {
+      titulo
+      slug
+      descripcion
+      contenido
+      banner {
+        id
+        title
+      }
+    }
+
+    equipo(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
+      nombre
+      slug
+      descripcion
+      activo
+      date_created
+      redes
+      sitio_web
+      rol
+      foto {
+        id
+        title
+      }
+    }
+  }
+`;
+const datos = await obtenerDatos(Equipo);
+const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
+const activos = [];
+const inactivos = [];
+
+if (datos.equipo && datos.equipo.length) {
+  datos.equipo.forEach((miembro) => {
+    if (miembro.activo) {
+      activos.push(miembro);
+    } else {
+      inactivos.push(miembro);
+    }
+  });
+}
+---
+
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+  <main id="archivoEquipo" class="pagina">
+    <section class="inicioPagina contenedorFluido">
+      <h1 class="tituloPagina">{pagina.titulo}</h1>
+      <!-- <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div> -->
+    </section>
+
+    <section class="galeria activos contenedorFluido">
+      <h2 class="tituloSeccion">EnFlujo actualmente</h2>
+      {activos.map((miembro) => <Perfil miembro={miembro} />)}
+    </section>
+
+    {
+      inactivos.length && (
+        <section class="galeria inactivos contenedorFluido">
+          <h2 class="tituloSeccion">En el pasado</h2>
+          {inactivos.map((miembro) => {
+            <Perfil miembro={miembro} />;
+          })}
+        </section>
+      )
+    }
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @import '../../scss/_constantes.scss';
+  @import '../../scss/_mixins.scss';
+
+  .tituloSeccion {
+    font-family: $fuenteMono;
+    padding: 0.3em 1.5em 0.5em 0.5em;
+    font-size: 1.2em;
+    @include tituloMarco;
+  }
+
+  .galeria {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    &.inactivos {
+      background-color: rgb(228, 228, 228);
+      padding: 2em 0;
+    }
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+  }
+
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+  }
+
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+  }
+</style>

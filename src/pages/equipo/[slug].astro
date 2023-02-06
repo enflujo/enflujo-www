@@ -1,0 +1,163 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
+import EquipoRedes from '@/componentes/EquipoRedes.astro';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+
+export async function getStaticPaths() {
+  const Equipo = gql`
+    query {
+      equipo(filter: { status: { _eq: "published" } }) {
+        slug
+      }
+    }
+  `;
+  const { equipo } = await obtenerDatos(Equipo);
+
+  return equipo.map(({ slug }) => {
+    return { params: { slug } };
+  });
+}
+
+const { slug } = Astro.params;
+
+const Persona = gql`
+  query {
+    equipo(filter: { slug: { _eq: "${slug}" }, status: {_eq: "published"} }, limit: 1) {
+      nombre
+      slug
+      rol
+      descripcion
+      date_created
+      sitio_web
+      activo
+      redes
+      proyectos {
+        proyectos_id {
+          titulo
+          slug
+        }
+      }
+      foto {
+        id
+        title
+      }
+    }
+  }
+`;
+console.log(Persona)
+const { equipo } = await obtenerDatos(Persona);
+let pagina;
+
+if (equipo && equipo.length) {
+  pagina = equipo[0];
+  pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+}
+---
+
+<Plantilla>
+
+    <main class="pagina paginaMiembro">
+      <section class="resumen contenedorFluido">
+        {pagina.foto.id && <div class="seccionImagen">
+          <EnflujoImagen
+            imgId={pagina.foto.id}
+            ancho="300"
+            alto="300"
+            titulo={pagina.foto.title}
+          />
+        </div>}
+  
+        <div class="columna2">
+          <h1 class="nombre">{ pagina.nombre }</h1>
+          <p class="rol">{ pagina.rol }</p>
+          {pagina.redes && <EquipoRedes sitioWeb={pagina.sitio_web} redes={pagina.redes} />}
+        </div>
+      </section>
+  
+      <section class="contenedorFluido contenido">
+        <h2 class="tituloSeccion">Proyectos</h2>
+  
+        <ul v-if="pagina.proyectos && pagina.proyectos.length">
+          {
+            pagina.proyectos.map(proyecto => (
+              <li><a href={`/proyectos/${proyecto.proyectos_id.slug}`}>{ proyecto.proyectos_id.titulo }</a></li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+</Plantilla>
+
+<style lang="scss">
+  @import '../../scss/_constantes.scss';
+  @import '../../scss/_mixins.scss';
+
+  section {
+  margin-bottom: 1em;
+}
+
+.tituloSeccion {
+  margin-bottom: 0.8em;
+}
+
+.resumen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nombre {
+  font-size: 1.3em;
+  padding: 0.3em 1.3em 0.5em 0.8em;
+  margin-bottom: 0.5em;
+  margin-left: -0.8em;
+  margin-top: 0.5em;
+  @include tituloMarco;
+}
+
+.iconoRed {
+  width: 18px;
+}
+
+.rol {
+  font-weight: $fuentePrincipalBold;
+}
+
+.seccionImagen {
+  line-height: 0;
+}
+
+.columna2 {
+  border-bottom: 2px solid;
+}
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+}
+
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+  .resumen {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  .nombre {
+    margin-top: 0;
+  }
+
+  .columna2 {
+    margin-left: 1em;
+    width: calc(100% - 300px - 1em);
+  }
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
+}
+</style>

@@ -1,0 +1,53 @@
+---
+import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
+import EquipoRedes from '@/componentes/EquipoRedes.astro';
+const { miembro } = Astro.props;
+---
+
+<div class="perfil">
+  <a href={`/equipo/${miembro.slug}`}>
+    <EnflujoImagen
+      class={`foto${!miembro.activo ? ' inactivo' : ''}`}
+      imgId={miembro.foto.id}
+      ancho="200"
+      alto="200"
+      titulo={miembro.nombre}
+    />
+  </a>
+  <div>
+    <a class="nombre" href={`/equipo/${miembro.slug}`}>{miembro.nombre}</a>
+    <p class="rol">{miembro.rol}</p>
+
+    {miembro.redes && <EquipoRedes sitioWeb={miembro.sitio_web} redes={miembro.redes} />}
+  </div>
+</div>
+
+<style lang="scss" scoped>
+  @import '../scss/_constantes.scss';
+  .perfil {
+    padding: 0 1em 1em;
+  }
+
+  .nombre,
+  .rol {
+    display: block;
+    text-align: center;
+    margin: 0;
+  }
+
+  .rol {
+    font-size: 0.85em;
+    font-weight: $fuentePrincipalBold;
+  }
+
+  .foto {
+    &.inactivo {
+      filter: grayscale(100%);
+    }
+  }
+
+  .redes {
+    justify-content: center;
+    align-items: center;
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+const { titulo, ancho, alto, resolucion, imgId } = Astro.props;
+import { urlImagen } from '../utilidades/ayudas';
+
+function fuente() {
+  return urlImagen(imgId, {
+    width: ancho,
+    height: alto,
+    quality: resolucion || 80,
+    format: 'webp',
+  });
+}
+---
+
+<img
+  class="perezoso"
+  src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${ancho} ${alto}'%3E%3C/svg%3E`}
+  data-src={fuente()}
+  alt={titulo}
+  width={ancho}
+  height={alto}
+/>
+
+<script>
+  import { duranteInterseccion } from '@/utilidades/observador';
+
+  const imagenes = document.querySelectorAll('.perezoso');
+  const cuandoEsVisible = (imagen: HTMLImageElement) => {
+    imagen.src = imagen.dataset.src;
+  };
+
+  imagenes.forEach((imagen: HTMLImageElement) => {
+    duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
+  });
+</script>
