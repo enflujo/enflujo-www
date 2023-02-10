@@ -60,7 +60,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       {
         general.redes.map((obj: Red) => (
           <a href={obj.url} target="_blank" rel="noopener">
-            <img src={`/imgs/${obj.red}.svg`} alt={obj.red} />
+            <img src={`/imgs/${obj.red}.svg`} alt={obj.red} width="15px" height="15px" />
           </a>
         ))
       }

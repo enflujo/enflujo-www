@@ -2,7 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
-import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
 
 export async function getStaticPaths() {
   const Equipo = gql`
@@ -55,7 +55,7 @@ if (equipo && equipo.length) {
 }
 ---
 
-<Plantilla>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
   <main class="pagina paginaMiembro">
     <section class="resumen contenedorFluido">
       {
