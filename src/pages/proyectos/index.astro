@@ -132,8 +132,8 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
               </a>
 
               <div class="descripcion seccionDescripcion">
-                <div class="fecha" class={proyecto.estado}>
-                  <p id="textoEstado">{texto(proyecto.estado, proyecto.fecha)}</p>
+                <div class={`fecha ${proyecto.estado}`}>
+                  <p class="textoEstado">{texto(proyecto.estado, proyecto.fecha)}</p>
                   <img
                     class="enflujoPunto"
                     src="/imgs/EnFlujo_punto_v61.svg"
@@ -155,7 +155,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
                 <p class="interTitulo">Código:</p>
                 {proyecto.repos.map((repo) => (
                   <div class="repo">
-                    <img class="iconoRed" src="/imgs/github.svg" />
+                    <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
                     <a class="repoNombre" href={repo.url} target="_blank" rel="external">
                       {repo.nombre}
                     </a>
