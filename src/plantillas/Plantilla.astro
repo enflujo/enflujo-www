@@ -11,7 +11,7 @@ const imagen = { url: null, titulo: '', ancho: '1200', alto: '630' };
 if (banner && banner.id) {
   const nombreArchivo = quitarExtension(banner.filename_download || 'EnFlujo');
   imagen.url = `${apiBase}/assets/${banner.id}/${nombreArchivo}.webp?key=og-banner`;
-  imagen.titulo = banner.titulo;
+  imagen.titulo = banner.title;
 } else {
   imagen.url = `${Astro.site}/imgs/og-EnFlujo-predeterminado.jpg`;
   imagen.titulo = titulo;
