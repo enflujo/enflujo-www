@@ -128,6 +128,7 @@ const rutaActual = Astro.url.pathname.slice(1);
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 99;
   }
 
   #menuContenido {
@@ -183,10 +184,11 @@ const rutaActual = Astro.url.pathname.slice(1);
     }
 
     #menuContenido {
-      width: 100vw;
-      height: 100vh;
-      padding: 60px 2em;
+      width: 290px;
+      height: 100%;
+      padding: 60px 3em;
       font-size: 1.2em;
+      z-index: 98;
     }
   }
 
@@ -216,8 +218,7 @@ const rutaActual = Astro.url.pathname.slice(1);
 
   .menuRedes {
     display: flex;
-    margin: 7px 15px;
-    z-index: 9999;
+    margin: 10px 70px;
     position: fixed;
     right: 0;
     a {
@@ -245,7 +246,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       cursor: pointer;
     }
     .abierto {
-      .menuContenido {
+      #menuContenido {
         width: 50vw;
       }
       .lineaVertical {
@@ -257,26 +258,21 @@ const rutaActual = Astro.url.pathname.slice(1);
         position: absolute;
       }
     }
-    .menuRedes {
-      right: 80px;
-    }
   }
   // Dispositivos grandes y pantallas medianas
   @media (min-width: $minPantalla) {
     .abierto {
-      .menuContenido {
+      #menuContenido {
         width: 400px;
       }
-    }
-    .menuRedes {
-      right: 124px;
     }
   }
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
     .abierto {
-      .menuContenido {
-        width: 600px;
+      #menuContenido {
+        width: 18vw;
+        padding: 60px 2em;
       }
     }
   }
