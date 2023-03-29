@@ -1,5 +1,6 @@
 ---
 import Logo from '@/componentes/svg/Logo.astro';
+import Redes from '@/componentes/svg/Redes.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 
 type Red = {
@@ -60,7 +61,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       {
         general.redes.map((obj: Red) => (
           <a href={obj.url} target="_blank" rel="noopener">
-            <img src={`/imgs/${obj.red}.svg`} alt={obj.red} width="15px" height="15px" />
+            <Redes nombre={obj.red} />
           </a>
         ))
       }
@@ -75,22 +76,19 @@ const rutaActual = Astro.url.pathname.slice(1);
 <script>
   const menu = document.getElementById('menuPrincipal');
   const menuBtn = document.getElementById('menuBtn');
-  let menuAbierto = false;
 
-  menuBtn.onclick = resolverMenu;
-
-  function cerrarMenu() {
-    if (menuAbierto) {
-      menuAbierto = false;
-    }
-  }
-
-  function resolverMenu() {
+  menuBtn.onclick = () => {
     menu.classList.toggle('abierto');
-  }
+  };
+
+  document.body.onclick = (evento) => {
+    if (!(menu === evento.target || menu.contains(evento.target))) {
+      menu.classList.remove('abierto');
+    }
+  };
 </script>
 
-<style lang="scss">
+<style lang="scss" is:global>
   @use 'sass:color';
   @import '../scss/_constantes.scss';
 
@@ -169,6 +167,29 @@ const rutaActual = Astro.url.pathname.slice(1);
     }
   }
 
+  .navBtn,
+  .navBtn:link {
+    color: black;
+
+    &:hover {
+      color: var(--colorPrincipal);
+    }
+  }
+
+  .navegacion {
+    display: none;
+    z-index: 999;
+  }
+
+  .logoBtn {
+    line-height: 0;
+    margin-right: 10px;
+  }
+
+  #menuContenido {
+    background-color: var(--colorPrincipal);
+  }
+
   .abierto {
     .menuBtn {
       .menuRaya {
@@ -184,11 +205,15 @@ const rutaActual = Astro.url.pathname.slice(1);
     }
 
     #menuContenido {
-      width: 290px;
+      width: 100vw;
       height: 100%;
       padding: 60px 3em;
       font-size: 1.2em;
       z-index: 98;
+    }
+
+    .iconoRed {
+      fill: white;
     }
   }
 
@@ -219,8 +244,10 @@ const rutaActual = Astro.url.pathname.slice(1);
   .menuRedes {
     display: flex;
     margin: 10px 70px;
+    z-index: 9999;
     position: fixed;
     right: 0;
+
     a {
       width: 15px;
       height: 15px;
@@ -234,9 +261,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       }
     }
   }
-  // Teléfonos horizontal
-  @media (min-width: $minCelular) {
-  }
+
   // Pantallas medianas (Tablets)
   @media (min-width: $minTablet) {
     .menuBtn {
@@ -245,67 +270,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       top: 0;
       cursor: pointer;
     }
-    .abierto {
-      #menuContenido {
-        width: 50vw;
-      }
-      .lineaVertical {
-        width: 2px;
-        height: calc(100vh - #{$anchoMarco});
-        top: $anchoMarco;
-        right: 30px;
-        background-color: white;
-        position: absolute;
-      }
-    }
-  }
-  // Dispositivos grandes y pantallas medianas
-  @media (min-width: $minPantalla) {
-    .abierto {
-      #menuContenido {
-        width: 400px;
-      }
-    }
-  }
-  // Pantallas grandes
-  @media (min-width: $minPantallaGrande) {
-    .abierto {
-      #menuContenido {
-        width: 18vw;
-        padding: 60px 2em;
-      }
-    }
-  }
 
-  .navBtn,
-  .navBtn:link {
-    color: black;
-
-    &:hover {
-      color: var(--colorPrincipal);
-    }
-  }
-
-  .navegacion {
-    display: none;
-    z-index: 999;
-  }
-
-  .logoBtn {
-    line-height: 0;
-    margin-right: 10px;
-  }
-
-  #menuContenido {
-    background-color: var(--colorPrincipal);
-  }
-
-  // Teléfonos horizontal
-  @media (min-width: $minCelular) {
-  }
-
-  // Pantallas medianas (Tablets)
-  @media (min-width: $minTablet) {
     .navegacion {
       font-weight: $fuentePrincipalBold;
       position: fixed;
@@ -324,13 +289,36 @@ const rutaActual = Astro.url.pathname.slice(1);
         border-bottom: 1px solid var(--colorPrincipal);
       }
     }
-  }
 
+    .abierto {
+      #menuContenido {
+        width: 50vw;
+      }
+      .lineaVertical {
+        width: 2px;
+        height: calc(100vh - #{$anchoMarco});
+        top: $anchoMarco;
+        right: 25px;
+        background-color: white;
+        position: absolute;
+      }
+    }
+  }
   // Dispositivos grandes y pantallas medianas
   @media (min-width: $minPantalla) {
+    .abierto {
+      #menuContenido {
+        width: 45vw;
+      }
+    }
   }
-
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
+    .abierto {
+      #menuContenido {
+        width: 28vw;
+        padding: 60px 2em;
+      }
+    }
   }
 </style>
