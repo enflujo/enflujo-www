@@ -52,6 +52,7 @@ let pagina;
 if (equipo && equipo.length) {
   pagina = equipo[0];
   pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+  pagina.foto ? pagina.foto : pagina.foto = {id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: pagina.titulo}
 }
 ---
 
