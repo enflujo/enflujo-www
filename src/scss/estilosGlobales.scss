@@ -2,9 +2,10 @@
 @import './normalizar';
 @import './mixins';
 
-main.pagina {
-  padding-top: calc($anchoMarco + 2em);
-  padding-bottom: 4em;
+main {
+  border: 3px solid;
+  margin: 50px;
+  min-height: calc(100vh - 100px);
 }
 
 .contenedorFluido {
@@ -43,7 +44,11 @@ h1 {
   font-size: 1.8em;
 
   &.tituloPagina {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+    background-color: black;
+    color: white;
+    padding: 0.1em 0.2em 0.4em;
   }
 }
 
@@ -57,6 +62,10 @@ h3 {
 
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
+  main {
+    margin: 0 50px 50px 50px;
+    border-top: none;
+  }
   .contenedorFluido {
     width: 80vw;
   }
@@ -83,14 +92,6 @@ h3 {
       // background-color: white;
     }
 
-    #marcoSuperior {
-      // border-bottom: $estiloBorde;
-      top: 0;
-      left: $anchoMarco;
-      width: calc(100vw - ($anchoMarco * 2));
-      height: calc($anchoMarco + $anchoLinea);
-    }
-
     #marcoInferior {
       // border-top: $estiloBorde;
       bottom: 0;
@@ -115,12 +116,7 @@ h3 {
       width: calc($anchoMarco + $anchoLinea);
     }
   }
-  // border: $anchoLinea solid var(--colorPrincipal);
-  // margin: 0 $anchoMarco;
-  // position: fixed;
-  // top: $anchoMarco;
-  // width: calc(100vw - ($anchoMarco * 2));
-  // height: calc(100vh - ($anchoMarco * 2));
+
   .contenedorFluido {
     width: 60vw;
     max-width: 1200px;

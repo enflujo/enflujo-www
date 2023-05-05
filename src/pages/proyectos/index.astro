@@ -84,7 +84,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
   <main id="archivoProyectos" class="pagina">
-    <section class="inicioPagina contenedorFluido">
+    <section class="inicioPagina">
       <h1 class="tituloPagina">{pagina.titulo}</h1>
       <!-- <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div> -->
 
@@ -194,11 +194,6 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
 
-  .proyecto,
-  .contenedorFluido {
-    width: 95vw;
-  }
-
   .proyecto {
     display: flex;
     flex-direction: column;
@@ -220,8 +215,8 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     font-size: 0.8em;
     display: flex;
     flex-direction: column;
-    margin-top: 1em;
     border-bottom: 2px solid;
+    padding: 1em;
 
     .titulo,
     .titulo:link {
@@ -230,7 +225,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
       margin-bottom: 0.5em;
       transition: 0.2s ease-in-out opacity;
       margin-left: -1em;
-      @include tituloMarco;
+      // @include tituloMarco;
       &:hover {
         opacity: 0.6;
       }
@@ -318,10 +313,6 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     }
   }
 
-  .proyecto {
-    margin-bottom: 4em;
-  }
-
   #filtros {
     font-size: 0.9em;
     left: 0;
@@ -367,26 +358,21 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 
   .contenedorProyectos {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 
   // Teléfonos horizontal
   @media (min-width: $minCelular) {
-    .proyecto,
-    .contenedorFluido {
-      width: 80vw;
-    }
   }
 
   // Pantallas medianas (Tablets)
   @media (min-width: $minTablet) {
-    .contenedorFluido {
-      width: 95vw;
-    }
     .proyecto {
       flex-direction: row;
-      width: 95vw;
+      margin-bottom: 2em;
     }
     .contenedorImg {
       width: 50%;
@@ -400,18 +386,12 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 
   // Dispositivos grandes y pantallas medianas
   @media (min-width: $minPantalla) {
-    .proyecto,
-    .contenedorFluido {
-      width: 90vw;
-    }
   }
 
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
-    .proyecto,
-    .contenedorFluido {
-      width: 70vw;
-      max-width: 1200px;
+    .proyecto {
+      max-width: 900px;
     }
   }
 </style>

@@ -2,6 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import Perfil from '@/componentes/Perfil.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import { PersonaEquipo } from '@/enflujo';
 
 const Equipo = gql`
   query {
@@ -35,10 +36,10 @@ const Equipo = gql`
 const datos = await obtenerDatos(Equipo);
 const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
 const activos = [];
-const inactivos = [];
+const inactivos: PersonaEquipo[] = [];
 
 if (datos.equipo && datos.equipo.length) {
-  datos.equipo.forEach((miembro) => {
+  datos.equipo.forEach((miembro: PersonaEquipo) => {
     if (miembro.activo) {
       activos.push(miembro);
     } else {
@@ -50,23 +51,23 @@ if (datos.equipo && datos.equipo.length) {
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
   <main id="archivoEquipo" class="pagina">
-    <section class="inicioPagina contenedorFluido">
+    <section class="inicioPagina">
       <h1 class="tituloPagina">{pagina.titulo}</h1>
       <!-- <div v-if="pagina.contenido" v-html="$md.render(pagina.contenido)"></div> -->
     </section>
 
-    <section class="galeria activos contenedorFluido">
+    <section class="galeria activos">
       <h2 class="tituloSeccion">EnFlujo actualmente</h2>
       {activos.map((miembro) => <Perfil miembro={miembro} />)}
     </section>
 
     {
       inactivos.length && (
-        <section class="galeria inactivos contenedorFluido">
+        <section class="galeria inactivos">
           <h2 class="tituloSeccion">En el pasado</h2>
-          {inactivos.map((miembro) => {
-            <Perfil miembro={miembro} />;
-          })}
+          {inactivos.map((miembro) => (
+            <Perfil miembro={miembro} />
+          ))}
         </section>
       )
     }
@@ -81,7 +82,6 @@ if (datos.equipo && datos.equipo.length) {
     font-family: $fuenteMono;
     padding: 0.3em 1.5em 0.5em 0.5em;
     font-size: 1.2em;
-    @include tituloMarco;
   }
 
   .galeria {
@@ -91,7 +91,7 @@ if (datos.equipo && datos.equipo.length) {
     align-items: flex-start;
 
     &.inactivos {
-      background-color: rgb(228, 228, 228);
+      background-color: rgba(228, 228, 228, 0.308);
       padding: 2em 0;
     }
   }

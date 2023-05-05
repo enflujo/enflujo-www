@@ -59,7 +59,7 @@ const { general } = await obtenerDatos(General);
 
   #lado1 {
     width: calc($anchoLado * 4);
-    padding: calc($anchoMarco + 2em) 0 0 calc($anchoMarco + 2em);
+    padding: 2em 0 1em 0;
     display: flex;
   }
 
@@ -95,7 +95,7 @@ const { general } = await obtenerDatos(General);
   }
 
   .titulo {
-    font-size: 3.5em;
+    font-size: 10vw;
     margin-top: -0.44em;
     color: var(--colorPrincipal);
     border-bottom: 3px solid;
@@ -110,7 +110,7 @@ const { general } = await obtenerDatos(General);
   }
 
   .contenido {
-    padding: calc($anchoMarco + 2em) 100px 0 calc($anchoMarco + 5em);
+    padding: 2em 1em 5em;
   }
 
   #ante {
@@ -119,6 +119,17 @@ const { general } = await obtenerDatos(General);
 
   // Teléfonos horizontal
   @media (min-width: $minCelular) {
+    .contenido {
+      padding: calc($anchoMarco + 2em) 100px 0 calc($anchoMarco + 5em);
+    }
+
+    #lado1 {
+      padding: calc($anchoMarco + 2em) 0 0 calc($anchoMarco + 2em);
+    }
+
+    .titulo {
+      font-size: 3.5em;
+    }
   }
 
   // Pantallas medianas (Tablets)
