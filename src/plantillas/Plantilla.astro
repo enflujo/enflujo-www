@@ -14,7 +14,7 @@ if (banner && banner.id) {
   imagen.titulo = banner.title;
 } else {
   imagen.url = `${Astro.site}/imgs/og-EnFlujo-predeterminado.jpg`;
-  imagen.titulo = titulo;
+  imagen.titulo = tituloPagina;
 }
 
 const General = gql`
