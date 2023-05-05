@@ -28,10 +28,18 @@ const { clase } = Astro.props;
     }
 
     &.inicio {
-      fill: var(--colorPrincipal);
-      width: 80px;
-      margin-right: 25px;
-      display: block;
+      display: none;
+    }
+  }
+
+  @media (min-width: $minCelular) {
+    .enflujoLogo {
+      &.inicio {
+        fill: var(--colorPrincipal);
+        width: 80px;
+        margin-right: 25px;
+        display: block;
+      }
     }
   }
 </style>

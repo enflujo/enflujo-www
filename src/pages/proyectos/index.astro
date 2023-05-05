@@ -216,16 +216,13 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     display: flex;
     flex-direction: column;
     border-bottom: 2px solid;
-    padding: 1em;
+    padding: 0 1em;
 
     .titulo,
     .titulo:link {
       color: black;
-      padding: 0.8em 1.8em 0.8em 0.8em;
-      margin-bottom: 0.5em;
       transition: 0.2s ease-in-out opacity;
-      margin-left: -1em;
-      // @include tituloMarco;
+      font-size: 1.2em;
       &:hover {
         opacity: 0.6;
       }
@@ -269,6 +266,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
   .repos {
     align-items: flex-end;
     flex: 1;
+    margin: 0.5em 0;
   }
 
   .fecha {
