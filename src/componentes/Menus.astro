@@ -86,7 +86,7 @@ const rutaActual = Astro.url.pathname.slice(1);
   };
 
   document.body.onclick = (evento) => {
-    if (!(menu === evento.target || menu.contains(evento.target))) {
+    if (!(menu === evento.target || menu.contains(evento.target as Node))) {
       menu.classList.remove('abierto');
     }
   };
