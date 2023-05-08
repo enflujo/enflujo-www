@@ -5,7 +5,7 @@ import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 
 const Proyectos = gql`
   query {
-    paginas(filter: { slug: { _eq: "proyectos" }, status: { _eq: "published" } }, limit: 1) {
+    paginas(filter: { slug: { _eq: "proyectos" }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       slug
       descripcion
@@ -16,7 +16,7 @@ const Proyectos = gql`
       }
     }
 
-    proyectos(filter: { status: { _eq: "published" } }, sort: ["-date_created"]) {
+    proyectos(filter: { estado: { _eq: "publicado" } }, sort: ["-date_created"]) {
       titulo
       slug
       descripcion
@@ -27,7 +27,7 @@ const Proyectos = gql`
       enlace
       repos
       temas {
-        glosario_id(filter: { status: { _eq: "published" } }) {
+        glosario_id(filter: { estado: { _eq: "publicado" } }) {
           titulo
         }
       }

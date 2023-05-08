@@ -5,7 +5,7 @@ import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 export async function getStaticPaths() {
   const Proyectos = gql`
     query {
-      proyectos(filter: { status: { _eq: "published" } }, sort: ["-date_created"]) {
+      proyectos(filter: { estado: { _eq: "publicado" } }, sort: ["-date_created"]) {
         slug
       }
     }
@@ -21,7 +21,7 @@ const { slug } = Astro.params;
 
 const Proyecto = gql`
   query {
-    proyectos(filter: { slug: { _eq: "${slug}" }, status: {_eq: "published"} }, limit: 1) {
+    proyectos(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
       titulo
       slug
       descripcion

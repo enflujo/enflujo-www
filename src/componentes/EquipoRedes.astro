@@ -1,5 +1,6 @@
 ---
 import SvgRedes from '@/componentes/svg/Redes.astro';
+import { Red } from '@/enflujo';
 const { sitioWeb, redes } = Astro.props;
 ---
 
@@ -13,11 +14,14 @@ const { sitioWeb, redes } = Astro.props;
   }
   {
     redes.length &&
-      redes.map((obj) => (
-        <a href={obj.url} target="_blank" rel="noopener external">
-          <SvgRedes nombre={obj.red} ancho="18px" />
-        </a>
-      ))
+      redes.map(
+        (obj: Red) =>
+          obj.url && (
+            <a href={obj.url} target="_blank" rel="noopener external">
+              <SvgRedes nombre={obj.red} ancho="18px" />
+            </a>
+          )
+      )
   }
 </div>
 

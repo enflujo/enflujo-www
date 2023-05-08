@@ -6,7 +6,7 @@ import { PersonaEquipo } from '@/enflujo';
 
 const Equipo = gql`
   query {
-    paginas(filter: { slug: { _eq: "equipo" }, status: { _eq: "published" } }, limit: 1) {
+    paginas(filter: { slug: { _eq: "equipo" }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       slug
       descripcion
@@ -17,7 +17,7 @@ const Equipo = gql`
       }
     }
 
-    equipo(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
+    equipo(filter: { estado: { _eq: "publicado" } }, sort: ["sort"]) {
       nombre
       slug
       descripcion

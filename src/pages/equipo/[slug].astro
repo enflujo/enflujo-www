@@ -7,7 +7,7 @@ import { gql, obtenerDatos } from '@/utilidades/ayudas';
 export async function getStaticPaths() {
   const Equipo = gql`
     query {
-      equipo(filter: { status: { _eq: "published" } }) {
+      equipo(filter: { estado: { _eq: "publicado" } }) {
         slug
       }
     }
@@ -23,7 +23,7 @@ const { slug } = Astro.params;
 
 const Persona = gql`
   query {
-    equipo(filter: { slug: { _eq: "${slug}" }, status: {_eq: "published"} }, limit: 1) {
+    equipo(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
       nombre
       slug
       rol

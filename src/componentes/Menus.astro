@@ -19,7 +19,7 @@ const Paginas = gql`
       redes
     }
 
-    paginas(filter: { status: { _eq: "published" } }) {
+    paginas(filter: { estado: { _eq: "publicado" } }) {
       slug
       titulo
     }

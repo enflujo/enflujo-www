@@ -21,7 +21,7 @@ export const actions = {
           }
         }
 
-        paginas(filter: { status: { _eq: "published" } }) {
+        paginas(filter: { estado: { _eq: "publicado" } }) {
           slug
           titulo
         }
