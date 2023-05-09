@@ -1,7 +1,7 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
-import IconoEnflujo from '@/componentes/svg/IconoEnflujo.astro';
-import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import Tarjeta from '@/componentes/Tarjeta.astro';
 
 const Proyectos = gql`
   query {
@@ -21,7 +21,6 @@ const Proyectos = gql`
       slug
       descripcion
       fecha_publicacion
-      estado
       date_created
       fecha_inicio
       enlace
@@ -39,8 +38,6 @@ const Proyectos = gql`
   }
 `;
 const datos = await obtenerDatos(Proyectos);
-
-const dimsImg = { ancho: '630', alto: '350' };
 const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
 let proyectos = [];
 const temas = new Set();
@@ -49,7 +46,8 @@ if (datos.proyectos && datos.proyectos.length) {
   const cache = datos.proyectos.map((proyecto) => {
     proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
     proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
-    proyecto.fecha = proyecto.fecha_publicacion ? proyecto.fecha_publicacion : new Date(proyecto.fecha_inicio);
+    proyecto.fecha_inicio = proyecto.fecha_inicio ? new Date(proyecto.fecha_inicio) : null;
+    proyecto.terminado = !!proyecto.fecha_publicacion;
 
     if (proyecto.temas) {
       proyecto.temas = proyecto.temas
@@ -70,16 +68,16 @@ if (datos.proyectos && datos.proyectos.length) {
   proyectos = cache;
 }
 
-const formatoFecha = (fecha) => {
+const formatoFecha = (fecha: Date) => {
   return fecha.toLocaleString('es-CO', {
-    timezone: 'America/Bogota',
+    timeZone: 'America/Bogota',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 };
 
-const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso');
+const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
@@ -107,63 +105,67 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     <div class="contenedorProyectos">
       {
         proyectos.map((proyecto) => (
-          <div class="proyecto">
-            <div class="contenedorImg">
-              <a class="enlaceImg" href={`/proyectos/${proyecto.slug}`}>
+          <Tarjeta datos={proyecto}>
+            <div class="descripcion seccionDescripcion">
+              <div class={`fecha ${proyecto.terminado ? 'terminado' : ''}`}>
+                <p class="textoEstado">
+                  {texto(proyecto.terminado, proyecto.fecha_publicacion || proyecto.fecha_inicio)}
+                </p>
                 <img
-                  class="perezoso"
-                  src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-                  data-src={urlImagen(proyecto.banner.id, {
-                    width: '667',
-                    height: '350',
-                    quality: '90',
-                    format: 'webp',
-                  })}
-                  alt={proyecto.banner.title}
-                  width={dimsImg.ancho}
-                  height={dimsImg.alto}
+                  class="enflujoPunto"
+                  src="/imgs/EnFlujo_punto_v61.svg"
+                  alt="Icono separador entre fecha y hace cuanto se realizó el proyecto."
                 />
-              </a>
+                <span class="notaEnFlujo" data-fecha={proyecto.fecha_publicacion || proyecto.fecha_inicio} />
+              </div>
+
+              <p>{proyecto.descripcion}</p>
+
+              {!!proyecto.enlace && (
+                <a class={`enlace ${proyecto.estado}`} href={proyecto.enlace} target="_blank">
+                  Ver Proyecto
+                </a>
+              )}
             </div>
 
-            <section class="contenedorDescripcion">
-              <a class="titulo" href={`/proyectos/${proyecto.slug}`}>
-                <h2>{proyecto.titulo}</h2>
-              </a>
-
-              <div class="descripcion seccionDescripcion">
-                <div class={`fecha ${proyecto.estado}`}>
-                  <p class="textoEstado">{texto(proyecto.estado, proyecto.fecha)}</p>
-                  <img
-                    class="enflujoPunto"
-                    src="/imgs/EnFlujo_punto_v61.svg"
-                    alt="Icono separador entre fecha y hace cuanto se realizó el proyecto."
-                  />
-                  <span class="notaEnFlujo" data-fecha={proyecto.fecha} />
-                </div>
-
-                <p>{proyecto.descripcion}</p>
-
-                {!!proyecto.enlace && (
-                  <a class={`enlace ${proyecto.estado}`} href={proyecto.enlace} target="_blank">
-                    Ver Proyecto
+            <div class="repos">
+              <p class="interTitulo">Código:</p>
+              {proyecto.repos.map((repo) => (
+                <div class="repo">
+                  <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
+                  <a class="repoNombre" href={repo.url} target="_blank" rel="external">
+                    {repo.nombre}
                   </a>
-                )}
-              </div>
+                </div>
+              ))}
+            </div>
+          </Tarjeta>
+          // <div class="proyecto">
+          //   <div class="contenedorImg">
+          //     <a class="enlaceImg" href={`/proyectos/${proyecto.slug}`}>
+          //       <img
+          //         class="perezoso"
+          //         src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+          //         data-src={urlImagen(proyecto.banner.id, {
+          //           width: '667',
+          //           height: '350',
+          //           quality: '90',
+          //           format: 'webp',
+          //         })}
+          //         alt={proyecto.banner.title}
+          //         width={dimsImg.ancho}
+          //         height={dimsImg.alto}
+          //       />
+          //     </a>
+          //   </div>
 
-              <div class="repos">
-                <p class="interTitulo">Código:</p>
-                {proyecto.repos.map((repo) => (
-                  <div class="repo">
-                    <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
-                    <a class="repoNombre" href={repo.url} target="_blank" rel="external">
-                      {repo.nombre}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
+          //   <section class="contenedorDescripcion">
+          //     <a class="titulo" href={`/proyectos/${proyecto.slug}`}>
+          //       <h2>{proyecto.titulo}</h2>
+          //     </a>
+
+          //   </section>
+          // </div>
         ))
       }
     </div>
@@ -193,57 +195,6 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
 <style lang="scss">
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
-
-  .proyecto {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .contenedorImg {
-    a {
-      display: block;
-      line-height: 0;
-    }
-
-    img {
-      height: auto;
-      width: 100%;
-    }
-  }
-
-  .contenedorDescripcion {
-    font-size: 0.8em;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 2px solid;
-    padding: 0 1em;
-
-    .titulo,
-    .titulo:link {
-      color: black;
-      transition: 0.2s ease-in-out opacity;
-      font-size: 1.2em;
-      &:hover {
-        opacity: 0.6;
-      }
-      h2 {
-        font-size: 1.1em;
-      }
-    }
-
-    .fecha {
-      font-weight: $fuentePrincipalBold;
-      font-style: italic;
-    }
-
-    p {
-      margin: 1em 0;
-      line-height: 1.4;
-    }
-    .seccionDescripcion {
-      margin: 0.5em 0;
-    }
-  }
 
   .enlace,
   .enlace:link {
@@ -293,6 +244,7 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
   .repos {
     display: flex;
     align-items: center;
+
     .interTitulo {
       margin: 0 0.5em 0 0;
       width: auto;
@@ -360,36 +312,5 @@ const texto = (estado, fecha) => (estado === 'terminado' ? `Publicado el ${forma
     align-items: center;
     flex-wrap: wrap;
     justify-content: space-around;
-  }
-
-  // Teléfonos horizontal
-  @media (min-width: $minCelular) {
-  }
-
-  // Pantallas medianas (Tablets)
-  @media (min-width: $minTablet) {
-    .proyecto {
-      flex-direction: row;
-      margin-bottom: 2em;
-    }
-    .contenedorImg {
-      width: 50%;
-    }
-    .contenedorDescripcion {
-      width: 50%;
-      margin-left: 1em;
-      margin-top: 0;
-    }
-  }
-
-  // Dispositivos grandes y pantallas medianas
-  @media (min-width: $minPantalla) {
-  }
-
-  // Pantallas grandes
-  @media (min-width: $minPantallaGrande) {
-    .proyecto {
-      max-width: 900px;
-    }
   }
 </style>
