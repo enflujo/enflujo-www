@@ -1,0 +1,132 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import Tarjeta from '@/componentes/Tarjeta.astro';
+import { Evento } from '@/enflujo';
+
+const Eventos = gql`
+  query {
+    paginas(filter: { slug: { _eq: "eventos" }, estado: { _eq: "publicado" } }, limit: 1) {
+      titulo
+      slug
+      descripcion
+      contenido
+      banner {
+        id
+        title
+      }
+    }
+
+    eventos(filter: { estado: { _eq: "publicado" } }, sort: ["-fecha_inicio"]) {
+      titulo
+      slug
+      descripcion
+      fecha_inicio
+      fecha_fin
+      contenido
+
+      fotos {
+        id
+      }
+
+      imagen {
+        id
+        title
+      }
+      enlace
+
+      lugar {
+        nombre
+        pais {
+          nombre
+          slug
+        }
+      }
+
+      organizador {
+        colegas_id {
+          nombre
+          slug
+        }
+      }
+
+      registro
+    }
+  }
+`;
+const datos = await obtenerDatos(Eventos);
+const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
+
+const formatoFecha = (fecha) => {
+  return fecha.toLocaleString('es-CO', {
+    timezone: 'America/Bogota',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
+function partesFecha(fecha: Date) {
+  return {
+    año: fecha.getFullYear(),
+    mes: fecha.toLocaleString('es-CO', { month: 'long' }),
+    dia: fecha.getDate(),
+  };
+}
+
+function fecha(fecha_inicio: string, fecha_fin: string): string | null {
+  const inicio = fecha_inicio ? new Date(fecha_inicio) : null;
+  const fin = fecha_fin ? new Date(fecha_fin) : null;
+
+  if (fecha_inicio && !fecha_fin) {
+    return formatoFecha(inicio);
+  } else if (fecha_fin && !fecha_inicio) {
+    return formatoFecha(fin);
+  }
+
+  const partesInicio = partesFecha(inicio);
+  const partesFin = partesFecha(fin);
+
+  console.log(partesInicio, partesFin);
+
+  if (partesInicio.año === partesFin.año && partesInicio.mes === partesFin.mes && partesInicio.dia === partesFin.dia) {
+    return `${partesInicio.dia} de ${partesInicio.mes}, ${partesInicio.año}`;
+  } else if (partesInicio.año === partesFin.año && partesInicio.mes === partesFin.mes) {
+    return `${partesInicio.dia}-${partesFin.dia} de ${partesInicio.mes}, ${partesInicio.año}`;
+  } else if (partesInicio.año === partesFin.año && partesInicio.mes !== partesFin.mes) {
+    return `${partesInicio.dia} de ${partesInicio.mes} al ${partesFin.dia} de ${partesFin.mes}, ${partesInicio.año}`;
+  } else if (partesInicio.año !== partesFin.año) {
+    return `${partesInicio.dia} de ${partesInicio.mes}, ${partesInicio.año} al ${partesFin.dia} de ${partesFin.mes}, ${partesInicio.año}`;
+  }
+
+  return null;
+}
+---
+
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+  <main id="archivoEventos" class="pagina">
+    <h1 class="tituloPagina">{pagina.titulo}</h1>
+
+    <div class="contenedorTarjetas">
+      {
+        datos.eventos.map((evento: Evento) => (
+          <Tarjeta datos={evento} imagen={evento.imagen}>
+            <div class="fecha">
+              <p class="textoEstado">{fecha(evento.fecha_inicio, evento.fecha_fin)}</p>
+
+              <img
+                class="enflujoPunto"
+                src="/imgs/EnFlujo_punto_v61.svg"
+                alt="Icono separador entre fecha y hace cuanto se realizó el evento."
+              />
+
+              <span class="notaEnFlujo" data-fecha={evento.fecha_fin || evento.fecha_inicio} />
+            </div>
+
+            <Fragment set:html={evento.descripcion} />
+          </Tarjeta>
+        ))
+      }
+    </div>
+  </main>
+</Plantilla>

@@ -1,0 +1,153 @@
+---
+import { urlImagen } from '@/utilidades/ayudas';
+const { datos, imagen } = Astro.props;
+const dimsImg = { ancho: '630', alto: '350' };
+---
+
+<div class="tarjeta">
+  <div class="contenedorImg">
+    <a class="enlaceImg" href={`/proyectos/${datos.slug}`}>
+      {
+        imagen ? (
+          <img
+            class="perezoso"
+            src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+            data-src={urlImagen(imagen.id, {
+              width: '667',
+              height: '350',
+              quality: '90',
+              format: 'webp',
+            })}
+            alt={imagen.title}
+            width={dimsImg.ancho}
+            height={dimsImg.alto}
+          />
+        ) : (
+          <img
+            src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+            alt={datos.titulo}
+            width={dimsImg.ancho}
+            height={dimsImg.alto}
+          />
+        )
+      }
+    </a>
+  </div>
+
+  <section class="contenedorDescripcion">
+    <a class="titulo" href={`/proyectos/${datos.slug}`}>
+      <h2>{datos.titulo}</h2>
+    </a>
+
+    <slot />
+  </section>
+</div>
+
+<script>
+  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
+
+  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+
+  fechasEnFlujo.forEach((elemento: HTMLElement) => {
+    const fechaInicio = new Date(elemento.dataset.fecha);
+    elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
+  });
+</script>
+
+<style lang="scss" is:global>
+  @import '../scss/_constantes.scss';
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+
+    .contenedorImg {
+      a {
+        display: block;
+        line-height: 0;
+      }
+
+      img {
+        height: auto;
+        width: 100%;
+      }
+    }
+
+    .contenedorDescripcion {
+      font-size: 0.8em;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 2px solid;
+      padding: 0 1em;
+
+      .titulo,
+      .titulo:link {
+        transition: 0.2s ease-in-out opacity;
+        font-size: 1.2em;
+
+        &:hover {
+          opacity: 0.6;
+        }
+
+        h2 {
+          font-size: 1.1em;
+        }
+      }
+    }
+
+    .fecha {
+      display: flex;
+      align-items: center;
+      font-weight: $fuentePrincipalBold;
+      font-style: italic;
+      p {
+        margin: 0;
+      }
+      &.proceso {
+        color: $colorOscuro2;
+      }
+
+      .enflujoPunto {
+        margin: 0 0.6em;
+        width: 1.3em;
+      }
+
+      .notaEnFlujo {
+        font-size: 0.85em;
+        color: #757575;
+      }
+    }
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+  }
+
+  // Pantallas medianas (Tablets)
+  @media (min-width: $minTablet) {
+    .tarjeta {
+      flex-direction: row;
+      margin-bottom: 2em;
+
+      .contenedorImg {
+        width: 50%;
+      }
+
+      .contenedorDescripcion {
+        width: 50%;
+        margin-left: 1em;
+        margin-top: 0;
+      }
+    }
+  }
+
+  // Dispositivos grandes y pantallas medianas
+  @media (min-width: $minPantalla) {
+  }
+
+  // Pantallas grandes
+  @media (min-width: $minPantallaGrande) {
+    .tarjeta {
+      width: 900px;
+    }
+  }
+</style>

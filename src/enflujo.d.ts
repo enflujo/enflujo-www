@@ -7,7 +7,7 @@ export type PersonaEquipo = {
   redes: Red[];
   sitio_web: string;
   rol: String;
-  foto: Foto;
+  foto: Imagen;
 };
 
 export type Red = {
@@ -16,7 +16,24 @@ export type Red = {
   url: string;
 };
 
-export type Foto = {
+export type Imagen = {
   id: string;
   title: string;
 };
+
+export interface CamposComunes {
+  estado: string;
+  titulo: string;
+  slug: string;
+  contenido: string;
+  // SEO
+  descripcion: string;
+  imagen: Imagen;
+}
+
+export interface Evento extends CamposComunes {
+  fecha_inicio: string;
+  fecha_fin: string;
+  enlace: string;
+  ciudad: string;
+}
