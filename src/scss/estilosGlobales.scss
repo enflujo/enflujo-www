@@ -61,6 +61,14 @@ h3 {
   font-size: 1.2em;
 }
 
+.contenedorTarjetas {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
   main {

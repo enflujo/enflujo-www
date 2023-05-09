@@ -1,6 +1,6 @@
 ---
 import { urlImagen } from '@/utilidades/ayudas';
-const { datos } = Astro.props;
+const { datos, imagen } = Astro.props;
 const dimsImg = { ancho: '630', alto: '350' };
 ---
 
@@ -8,17 +8,24 @@ const dimsImg = { ancho: '630', alto: '350' };
   <div class="contenedorImg">
     <a class="enlaceImg" href={`/proyectos/${datos.slug}`}>
       {
-        datos.banner && (
+        imagen ? (
           <img
             class="perezoso"
             src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-            data-src={urlImagen(datos.banner.id, {
+            data-src={urlImagen(imagen.id, {
               width: '667',
               height: '350',
               quality: '90',
               format: 'webp',
             })}
-            alt={datos.banner.title}
+            alt={imagen.title}
+            width={dimsImg.ancho}
+            height={dimsImg.alto}
+          />
+        ) : (
+          <img
+            src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
+            alt={datos.titulo}
             width={dimsImg.ancho}
             height={dimsImg.alto}
           />
@@ -36,7 +43,18 @@ const dimsImg = { ancho: '630', alto: '350' };
   </section>
 </div>
 
-<style lang="scss">
+<script>
+  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
+
+  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+
+  fechasEnFlujo.forEach((elemento: HTMLElement) => {
+    const fechaInicio = new Date(elemento.dataset.fecha);
+    elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
+  });
+</script>
+
+<style lang="scss" is:global>
   @import '../scss/_constantes.scss';
   .tarjeta {
     display: flex;
@@ -74,18 +92,28 @@ const dimsImg = { ancho: '630', alto: '350' };
           font-size: 1.1em;
         }
       }
+    }
 
-      .fecha {
-        font-weight: $fuentePrincipalBold;
-        font-style: italic;
-      }
-
+    .fecha {
+      display: flex;
+      align-items: center;
+      font-weight: $fuentePrincipalBold;
+      font-style: italic;
       p {
-        margin: 1em 0;
-        line-height: 1.4;
+        margin: 0;
       }
-      .seccionDescripcion {
-        margin: 0.5em 0;
+      &.proceso {
+        color: $colorOscuro2;
+      }
+
+      .enflujoPunto {
+        margin: 0 0.6em;
+        width: 1.3em;
+      }
+
+      .notaEnFlujo {
+        font-size: 0.85em;
+        color: #757575;
       }
     }
   }
@@ -119,7 +147,7 @@ const dimsImg = { ancho: '630', alto: '350' };
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
     .tarjeta {
-      max-width: 900px;
+      width: 900px;
     }
   }
 </style>

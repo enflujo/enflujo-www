@@ -96,6 +96,21 @@ const colorPrincipal = general.color;
   </body>
 </html>
 
+<script>
+  import { duranteInterseccion } from '@/utilidades/observador';
+
+  const imagenes = document.querySelectorAll('.perezoso');
+  console.log(imagenes);
+  const cuandoEsVisible = (imagen: HTMLImageElement) => {
+    console.log(!!imagen.dataset.src);
+    imagen.src = imagen.dataset.src;
+  };
+
+  imagenes.forEach((imagen: HTMLImageElement) => {
+    duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
+  });
+</script>
+
 <style lang="scss" is:global define:vars={{ colorPrincipal }}>
   @use 'sass:color';
 
