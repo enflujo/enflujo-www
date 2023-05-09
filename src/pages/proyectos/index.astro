@@ -89,7 +89,7 @@ const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${format
     <div class="contenedorTarjetas">
       {
         proyectos.map((proyecto) => (
-          <Tarjeta datos={proyecto} imagen={proyecto.banner}>
+          <Tarjeta datos={proyecto} imagen={proyecto.banner} coleccion="proyectos">
             <div class="descripcion seccionDescripcion">
               <div class="fecha">
                 <p class="textoEstado">

@@ -1,12 +1,12 @@
 ---
 import { urlImagen } from '@/utilidades/ayudas';
-const { datos, imagen } = Astro.props;
+const { datos, imagen, coleccion } = Astro.props;
 const dimsImg = { ancho: '630', alto: '350' };
 ---
 
 <div class="tarjeta">
   <div class="contenedorImg">
-    <a class="enlaceImg" href={`/proyectos/${datos.slug}`}>
+    <a class="enlaceImg" href={`/${coleccion}/${datos.slug}`}>
       {
         imagen ? (
           <img
@@ -35,7 +35,7 @@ const dimsImg = { ancho: '630', alto: '350' };
   </div>
 
   <section class="contenedorDescripcion">
-    <a class="titulo" href={`/proyectos/${datos.slug}`}>
+    <a class="titulo" href={`/${coleccion}/${datos.slug}`}>
       <h2>{datos.titulo}</h2>
     </a>
 

@@ -1,0 +1,113 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+
+export async function getStaticPaths() {
+  const Eventos = gql`
+    query {
+      eventos(filter: { estado: { _eq: "publicado" } }, sort: ["-fecha_inicio"]) {
+        slug
+      }
+    }
+  `;
+  const { eventos } = await obtenerDatos(Eventos);
+
+  return eventos.map(({ slug }) => {
+    return { params: { slug } };
+  });
+}
+
+const { slug } = Astro.params;
+
+const Evento = gql`
+  query {
+    eventos(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
+      titulo
+      slug
+      descripcion
+      contenido
+      enlace
+      imagen {
+        id
+        title
+      }
+    }
+  }
+`;
+
+const { eventos } = await obtenerDatos(Evento);
+let pagina;
+
+if (eventos && eventos.length) {
+  pagina = eventos[0];
+}
+---
+
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+  <main class="pagina">
+    <section class="contenedorFluido">
+      <h1 class="tituloPagina">{pagina.titulo}</h1>
+      <div>
+        {
+          pagina.banner && pagina.banner.id && (
+            <img
+              src={urlImagen(pagina.banner.id, {
+                width: '1200',
+                height: '630',
+                quality: '90',
+                format: 'webp',
+              })}
+              alt={pagina.banner.title}
+              width="1200"
+              height="630"
+            />
+          )
+        }
+
+        {
+          pagina.enlace && (
+            <a class={`enlace ${pagina.estado}`} href={pagina.enlace} target="_blank">
+              Ver Proyecto
+            </a>
+          )
+        }
+      </div>
+    </section>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @import '../../scss/_constantes.scss';
+  @import '../../scss/_mixins.scss';
+
+  .titulo {
+    font-size: 1.6em;
+    padding: 0.3em 1.3em 0.5em 0.3em;
+    margin-bottom: 1em;
+    @include tituloMarco;
+  }
+
+  .seccionProyecto {
+    margin-top: 1em;
+  }
+
+  .enlace {
+    padding: 0.5em;
+    background-color: $colorPrincipal;
+    font-weight: $fuentePrincipalPeso;
+    color: white;
+    width: 50%;
+    text-align: center;
+    width: 100%;
+    margin: 1em 0;
+    display: block;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &.proceso {
+      background-color: $colorOscuro2;
+    }
+  }
+</style>

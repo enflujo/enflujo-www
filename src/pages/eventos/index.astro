@@ -87,8 +87,6 @@ function fecha(fecha_inicio: string, fecha_fin: string): string | null {
   const partesInicio = partesFecha(inicio);
   const partesFin = partesFecha(fin);
 
-  console.log(partesInicio, partesFin);
-
   if (partesInicio.año === partesFin.año && partesInicio.mes === partesFin.mes && partesInicio.dia === partesFin.dia) {
     return `${partesInicio.dia} de ${partesInicio.mes}, ${partesInicio.año}`;
   } else if (partesInicio.año === partesFin.año && partesInicio.mes === partesFin.mes) {
@@ -110,7 +108,7 @@ function fecha(fecha_inicio: string, fecha_fin: string): string | null {
     <div class="contenedorTarjetas">
       {
         datos.eventos.map((evento: Evento) => (
-          <Tarjeta datos={evento} imagen={evento.imagen}>
+          <Tarjeta datos={evento} imagen={evento.imagen} coleccion="eventos">
             <div class="fecha">
               <p class="textoEstado">{fecha(evento.fecha_inicio, evento.fecha_fin)}</p>
 
