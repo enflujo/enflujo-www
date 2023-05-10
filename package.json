@@ -18,13 +18,13 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^1.3.0",
+    "@astrojs/sitemap": "^1.3.1",
     "@rollup/plugin-graphql": "^2.0.3",
-    "astro": "^2.4.2",
+    "astro": "^2.4.4",
     "astro-compress": "^1.1.42",
     "astro-robots-txt": "^0.5.0",
     "autoprefixer": "^10.4.14",
-    "marked": "^5.0.0"
+    "marked": "^5.0.1"
   },
   "devDependencies": {
     "@types/marked": "^4.3.0",
