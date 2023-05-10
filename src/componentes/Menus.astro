@@ -26,7 +26,7 @@ const Paginas = gql`
   }
 `;
 const { general, paginas } = await obtenerDatos(Paginas);
-const rutaActual = Astro.url.pathname.slice(1);
+const rutaActual = Astro.url.pathname.slice(1).split('/');
 ---
 
 <div>
@@ -38,7 +38,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       {
         paginas.map((pagina: Pagina) => (
           <li>
-            <a href={`/${pagina.slug}`} class={`navBtn${rutaActual === pagina.slug ? ' activo' : ''}`}>
+            <a href={`/${pagina.slug}`} class={`navBtn${rutaActual.includes(pagina.slug) ? ' activo' : ''}`}>
               {pagina.titulo}
             </a>
           </li>
@@ -52,7 +52,7 @@ const rutaActual = Astro.url.pathname.slice(1);
       <a href="/" class="navBtn">Inicio</a>
       {
         paginas.map((pagina: Pagina) => (
-          <a href={`/${pagina.slug}`} class={`navBtn${rutaActual === pagina.slug ? ' activo' : ''}`}>
+          <a href={`/${pagina.slug}`} class={`navBtn${rutaActual.includes(pagina.slug) ? ' activo' : ''}`}>
             {pagina.titulo}
           </a>
         ))
