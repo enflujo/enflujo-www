@@ -2,6 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import Tarjeta from '@/componentes/Tarjeta.astro';
+import { Proyecto } from '@/enflujo';
 
 const Proyectos = gql`
   query {
@@ -37,35 +38,13 @@ const Proyectos = gql`
     }
   }
 `;
-const datos = await obtenerDatos(Proyectos);
-const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
-let proyectos = [];
-const temas = new Set();
+const { proyectos, paginas } = await obtenerDatos(Proyectos);
+const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
 
-if (datos.proyectos && datos.proyectos.length) {
-  const cache = datos.proyectos.map((proyecto) => {
-    proyecto.fecha_publicacion = proyecto.fecha_publicacion ? new Date(proyecto.fecha_publicacion) : null;
-    proyecto.date_created = proyecto.date_created ? new Date(proyecto.date_created) : null;
-    proyecto.fecha_inicio = proyecto.fecha_inicio ? new Date(proyecto.fecha_inicio) : null;
+if (proyectos && proyectos.length) {
+  proyectos.forEach((proyecto: Proyecto) => {
     proyecto.terminado = !!proyecto.fecha_publicacion;
-
-    if (proyecto.temas) {
-      proyecto.temas = proyecto.temas
-        .map((tema) => (tema.glosario_id ? tema.glosario_id.titulo : null))
-        .filter(Boolean);
-    }
-    return proyecto;
   });
-
-  cache.forEach((proyecto) => {
-    if (proyecto.temas && proyecto.temas.length) {
-      proyecto.temas.forEach((tema) => {
-        temas.add(tema);
-      });
-    }
-  });
-
-  proyectos = cache;
 }
 
 const formatoFecha = (fecha: Date) => {
@@ -77,7 +56,8 @@ const formatoFecha = (fecha: Date) => {
   });
 };
 
-const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso');
+const texto = (estado: boolean, fecha: string) =>
+  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
@@ -88,7 +68,7 @@ const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${format
 
     <div class="contenedorTarjetas">
       {
-        proyectos.map((proyecto) => (
+        proyectos.map((proyecto: Proyecto) => (
           <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
             <div class="descripcion seccionDescripcion">
               <div class="fecha">
@@ -106,17 +86,19 @@ const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${format
               <p>{proyecto.descripcion}</p>
             </div>
 
-            <div class="repos">
-              <p class="interTitulo">Código:</p>
-              {proyecto.repos.map((repo) => (
-                <div class="repo">
-                  <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
-                  <a class="repoNombre" href={repo.url} target="_blank" rel="external">
-                    {repo.nombre}
-                  </a>
-                </div>
-              ))}
-            </div>
+            {proyecto.repos && (
+              <div class="repos">
+                <p class="interTitulo">Código:</p>
+                {proyecto.repos.map((repo) => (
+                  <div class="repo">
+                    <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
+                    <a class="repoNombre" href={repo.url} target="_blank" rel="external">
+                      {repo.nombre}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
           </Tarjeta>
         ))
       }

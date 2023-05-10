@@ -2,11 +2,11 @@ export type PersonaEquipo = {
   date_created: Date;
   nombre: string;
   slug: string;
-  descripcion: String;
+  descripcion: string;
   activo: boolean;
   redes: Red[];
   sitio_web: string;
-  rol: String;
+  rol: string;
   foto: Imagen;
 };
 
@@ -19,6 +19,15 @@ export type Red = {
 export type Imagen = {
   id: string;
   title: string;
+};
+
+export type Repo = {
+  nombre: string;
+  url: string;
+};
+
+export type TerminoGlosario = {
+  titulo: string;
 };
 
 export interface CamposComunes {
@@ -36,4 +45,16 @@ export interface Evento extends CamposComunes {
   fecha_fin: string;
   enlace: string;
   ciudad: string;
+}
+
+export interface Proyecto extends CamposComunes {
+  id: number;
+  user_created: string;
+  fecha_inicio: string;
+  fecha_publicacion: string;
+  enlace: string;
+  repos: Repo[];
+  equipo: PersonaEquipo[];
+  temas: { glosario_id: TerminoGlosario }[];
+  terminado?: boolean;
 }
