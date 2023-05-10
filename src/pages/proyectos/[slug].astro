@@ -1,6 +1,7 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   const Proyectos = gql`
@@ -31,7 +32,7 @@ const Proyecto = gql`
       enlace
       estado
       repos
-      banner {
+      imagen {
         id
         title
       }
@@ -49,21 +50,21 @@ if (proyectos && proyectos.length) {
 }
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
-    <section class="contenedorFluido">
+    <section>
       <h1 class="tituloPagina">{pagina.titulo}</h1>
       <div>
         {
-          pagina.banner && pagina.banner.id && (
+          pagina.imagen && pagina.imagen.id && (
             <img
-              src={urlImagen(pagina.banner.id, {
+              src={urlImagen(pagina.imagen.id, {
                 width: '1200',
                 height: '630',
                 quality: '90',
                 format: 'webp',
               })}
-              alt={pagina.banner.title}
+              alt={pagina.imagen.title}
               width="1200"
               height="630"
             />
@@ -83,10 +84,13 @@ if (proyectos && proyectos.length) {
       </div>
     </section>
 
-    <!-- <section v-if="pagina.contenido" class="seccionProyecto contenedorFluido contenido">
-      <h2>Notas</h2>
-      <div v-html="$md.render(pagina.contenido)"></div>
-    </section> -->
+    {
+      pagina.contenido && (
+        <div>
+          <Fragment set:html={marked.parse(pagina.contenido)} />
+        </div>
+      )
+    }
   </main>
 </Plantilla>
 

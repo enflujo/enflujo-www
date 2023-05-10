@@ -10,7 +10,7 @@ const Proyectos = gql`
       slug
       descripcion
       contenido
-      banner {
+      imagen {
         id
         title
       }
@@ -30,7 +30,7 @@ const Proyectos = gql`
           titulo
         }
       }
-      banner {
+      imagen {
         id
         title
       }
@@ -80,7 +80,7 @@ const formatoFecha = (fecha: Date) => {
 const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso');
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main id="archivoProyectos" class="pagina">
     <section class="inicioPagina">
       <h1 class="tituloPagina">{pagina.titulo}</h1>
@@ -89,7 +89,7 @@ const texto = (estado: boolean, fecha: Date) => (estado ? `Publicado el ${format
     <div class="contenedorTarjetas">
       {
         proyectos.map((proyecto) => (
-          <Tarjeta datos={proyecto} imagen={proyecto.banner} coleccion="proyectos">
+          <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
             <div class="descripcion seccionDescripcion">
               <div class="fecha">
                 <p class="textoEstado">

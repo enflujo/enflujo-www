@@ -11,7 +11,7 @@ const Equipo = gql`
       slug
       descripcion
       contenido
-      banner {
+      imagen {
         id
         title
       }
@@ -49,7 +49,7 @@ if (datos.equipo && datos.equipo.length) {
 }
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main id="archivoEquipo" class="pagina">
     <section class="inicioPagina">
       <h1 class="tituloPagina">{pagina.titulo}</h1>

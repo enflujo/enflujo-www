@@ -11,7 +11,7 @@ const Eventos = gql`
       slug
       descripcion
       contenido
-      banner {
+      imagen {
         id
         title
       }
@@ -23,17 +23,11 @@ const Eventos = gql`
       descripcion
       fecha_inicio
       fecha_fin
-      contenido
-
-      fotos {
-        id
-      }
 
       imagen {
         id
         title
       }
-      enlace
 
       lugar {
         nombre
@@ -49,8 +43,6 @@ const Eventos = gql`
           slug
         }
       }
-
-      registro
     }
   }
 `;
@@ -101,7 +93,7 @@ function fecha(fecha_inicio: string, fecha_fin: string): string | null {
 }
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main id="archivoEventos" class="pagina">
     <h1 class="tituloPagina">{pagina.titulo}</h1>
 

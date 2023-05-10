@@ -11,7 +11,7 @@ const General = gql`
       descripcion
       contenido
       color
-      banner {
+      imagen {
         id
         title
         filename_download
@@ -25,7 +25,7 @@ const General = gql`
 const { general } = await obtenerDatos(General);
 ---
 
-<Plantilla descripcion={general.descripcion} banner={general.banner}>
+<Plantilla descripcion={general.descripcion} imagen={general.imagen}>
   <main id="inicio">
     <div id="lado1" class="lado">
       <Logo clase="inicio" />

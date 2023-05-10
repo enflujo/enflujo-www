@@ -1,6 +1,7 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   const Eventos = gql`
@@ -43,36 +44,32 @@ if (eventos && eventos.length) {
 }
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} banner={pagina.banner}>
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
     <section class="contenedorFluido">
       <h1 class="tituloPagina">{pagina.titulo}</h1>
       <div>
         {
-          pagina.banner && pagina.banner.id && (
+          pagina.imagen && pagina.imagen.id && (
             <img
-              src={urlImagen(pagina.banner.id, {
+              src={urlImagen(pagina.imagen.id, {
                 width: '1200',
                 height: '630',
                 quality: '90',
                 format: 'webp',
               })}
-              alt={pagina.banner.title}
+              alt={pagina.imagen.title}
               width="1200"
               height="630"
             />
           )
         }
-
-        {
-          pagina.enlace && (
-            <a class={`enlace ${pagina.estado}`} href={pagina.enlace} target="_blank">
-              Ver Proyecto
-            </a>
-          )
-        }
       </div>
     </section>
+
+    <div>
+      <Fragment set:html={marked.parse(pagina.contenido)} />
+    </div>
   </main>
 </Plantilla>
 
@@ -84,7 +81,6 @@ if (eventos && eventos.length) {
     font-size: 1.6em;
     padding: 0.3em 1.3em 0.5em 0.3em;
     margin-bottom: 1em;
-    @include tituloMarco;
   }
 
   .seccionProyecto {
