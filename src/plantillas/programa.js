@@ -10,10 +10,14 @@ const opciones = {
 };
 
 const actualizarFecha = () => {
-  setInterval(() => {
+  const actualizar = () => {
     const ahora = new Date();
     fecha.innerText = ahora.toLocaleString('es-CO', opciones);
-  }, 1000);
+  };
+
+  actualizar();
+
+  setInterval(actualizar, 1000);
 };
 
 actualizarFecha();
