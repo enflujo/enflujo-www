@@ -64,11 +64,12 @@ const { general } = await obtenerDatos(General);
 
   //const palabra = window.prompt('busca una palabra: ');
 
-  const palabra = document.getSelection.toString();
+  //const palabra = document.getSelection.toString();
 
   parrafos.forEach((parrafo) => {
+    const palabra = 'presente';
     if (parrafo) {
-      //const palabra = parrafo.addEventListener('click', mostrarSeleccion);
+      parrafo.addEventListener('click', mostrarSeleccion);
 
       console.log(palabra);
       const re = new RegExp(palabra, 'g');
@@ -95,6 +96,7 @@ const { general } = await obtenerDatos(General);
     const textico = document.getSelection();
     //const textico = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
     console.log(`You selected: ${textico}`);
+
     return textico;
   }
 </script>
