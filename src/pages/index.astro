@@ -31,11 +31,11 @@ const { general } = await obtenerDatos(General);
       <Logo clase="inicio" />
       <div class="titulos">
         <h1 class="titulo">{general.nombre}</h1>
-        <p class="subtitulo">{general.subtitulo}</p>
+        <p id="texto" class="subtitulo">{general.subtitulo}</p>
       </div>
     </div>
 
-    <div class="contenido">{general.contenido}</div>
+    <div class="contenido"><p>{general.contenido}</p></div>
   </main>
 </Plantilla>
 
@@ -48,6 +48,55 @@ const { general } = await obtenerDatos(General);
 
   // const distancia = distanciaEntreCoordenadas(usuario.lat, usuario.lon, coordenadasEnflujo[0], coordenadasEnflujo[1]);
   // console.log(distancia, usuario);
+
+  // const parrafos = document.querySelectorAll('p');
+  // const texto = document.getElementById('texto');
+  // let palabra = 'caja';
+  // function mostrarSeleccion(event) {
+  //   //palabra = document.getSelection().toString();
+
+  //   const selection = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+  //   console.log(`You selected: ${selection}`);
+  // }
+
+  const parrafos = document.querySelectorAll('p');
+  const texto = document.getElementById('texto');
+
+  //const palabra = window.prompt('busca una palabra: ');
+
+  const palabra = document.getSelection.toString();
+
+  parrafos.forEach((parrafo) => {
+    if (parrafo) {
+      //const palabra = parrafo.addEventListener('click', mostrarSeleccion);
+
+      console.log(palabra);
+      const re = new RegExp(palabra, 'g');
+
+      const resultado = re.exec(parrafo.innerText);
+
+      // parrafo.addEventListener('click', mostrarSeleccion);
+
+      if (resultado) {
+        parrafo.innerHTML = parrafo.innerText.replace(re, `<span class="nodo">${palabra}</span>`);
+      }
+    }
+  });
+  const nodos = document.querySelectorAll('.nodo');
+
+  const posiciones = [];
+
+  nodos.forEach((nodo) => {
+    nodo.style.backgroundColor = 'coral';
+    //console.log(nodo.getBoundingClientRect());
+  });
+
+  function mostrarSeleccion(event) {
+    const textico = document.getSelection();
+    //const textico = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+    console.log(`You selected: ${textico}`);
+    return textico;
+  }
 </script>
 
 <style lang="scss">
@@ -109,6 +158,10 @@ const { general } = await obtenerDatos(General);
   .titulos {
     width: 100%;
     text-align: center;
+  }
+
+  .nodo {
+    background-color: coral;
   }
 
   // Teléfonos horizontal
