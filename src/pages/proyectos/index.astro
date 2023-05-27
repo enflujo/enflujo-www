@@ -3,6 +3,7 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import Tarjeta from '@/componentes/Tarjeta.astro';
 import { Proyecto } from '@/enflujo';
+import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
 
 const Proyectos = gql`
   query {
@@ -40,24 +41,6 @@ const Proyectos = gql`
 `;
 const { proyectos, paginas } = await obtenerDatos(Proyectos);
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
-
-if (proyectos && proyectos.length) {
-  proyectos.forEach((proyecto: Proyecto) => {
-    proyecto.terminado = !!proyecto.fecha_publicacion;
-  });
-}
-
-const formatoFecha = (fecha: Date) => {
-  return fecha.toLocaleString('es-CO', {
-    timeZone: 'America/Bogota',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
-const texto = (estado: boolean, fecha: string) =>
-  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
@@ -70,35 +53,7 @@ const texto = (estado: boolean, fecha: string) =>
       {
         proyectos.map((proyecto: Proyecto) => (
           <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
-            <div class="descripcion seccionDescripcion">
-              <div class="fecha">
-                <p class="textoEstado">
-                  {texto(proyecto.terminado, proyecto.fecha_publicacion || proyecto.fecha_inicio)}
-                </p>
-                <img
-                  class="enflujoPunto"
-                  src="/imgs/EnFlujo_punto_v61.svg"
-                  alt="Icono separador entre fecha y hace cuanto se realizó el proyecto."
-                />
-                <span class="notaEnFlujo" data-fecha={proyecto.fecha_publicacion || proyecto.fecha_inicio} />
-              </div>
-
-              <p>{proyecto.descripcion}</p>
-            </div>
-
-            {proyecto.repos && (
-              <div class="repos">
-                <p class="interTitulo">Código:</p>
-                {proyecto.repos.map((repo) => (
-                  <div class="repo">
-                    <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
-                    <a class="repoNombre" href={repo.url} target="_blank" rel="external">
-                      {repo.nombre}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            )}
+            <DescripcionProyecto datos={proyecto} />
           </Tarjeta>
         ))
       }
@@ -116,31 +71,6 @@ const texto = (estado: boolean, fecha: string) =>
 
   .seccionDescripcion {
     margin: 0.5em 0;
-  }
-
-  .repos {
-    display: flex;
-    align-items: flex-end;
-    flex: 1;
-    margin: 0.5em 0;
-    flex-wrap: wrap;
-
-    .interTitulo {
-      margin: 0 0.5em 0 0;
-      width: auto;
-      line-height: 1.25;
-    }
-    .repo {
-      margin-right: 2em;
-      display: flex;
-      align-items: center;
-    }
-    .iconoRed {
-      width: 15px;
-    }
-    .repoNombre {
-      margin-left: 0.3em;
-    }
   }
 
   #filtros {

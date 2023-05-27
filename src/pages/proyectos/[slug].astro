@@ -1,4 +1,5 @@
 ---
+import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import { marked } from 'marked';
@@ -29,6 +30,7 @@ const Proyecto = gql`
       contenido
       fecha_publicacion
       date_created
+      fecha_inicio
       enlace
       estado
       repos
@@ -52,9 +54,8 @@ if (proyectos && proyectos.length) {
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
-    <section>
-      <h1 class="tituloPagina">{pagina.titulo}</h1>
-      <div>
+    <div id="portada">
+      <div class="imagen">
         {
           pagina.imagen && pagina.imagen.id && (
             <img
@@ -70,6 +71,12 @@ if (proyectos && proyectos.length) {
             />
           )
         }
+      </div>
+
+      <section class="contenidoPortada">
+        <h1>{pagina.titulo}</h1>
+
+        <DescripcionProyecto datos={pagina} />
 
         {
           pagina.enlace && (
@@ -78,11 +85,8 @@ if (proyectos && proyectos.length) {
             </a>
           )
         }
-
-        <!--  -->
-        <!-- <ProyectoRepositorios v-if="pagina.repos && pagina.repos.length" :repos="pagina.repos" /> -->
-      </div>
-    </section>
+      </section>
+    </div>
 
     {
       pagina.contenido && (
@@ -97,13 +101,6 @@ if (proyectos && proyectos.length) {
 <style lang="scss">
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
-
-  .titulo {
-    font-size: 1.6em;
-    padding: 0.3em 1.3em 0.5em 0.3em;
-    margin-bottom: 1em;
-    @include tituloMarco;
-  }
 
   .seccionProyecto {
     margin-top: 1em;
@@ -122,10 +119,24 @@ if (proyectos && proyectos.length) {
 
     &:hover {
       opacity: 0.8;
+      color: white;
     }
 
     &.proceso {
       background-color: $colorOscuro2;
+    }
+  }
+
+  #portada {
+    display: flex;
+
+    .imagen,
+    .contenidoPortada {
+      flex-basis: 50%;
+    }
+
+    .contenidoPortada {
+      padding: 0 2em 0 2em;
     }
   }
 </style>

@@ -43,17 +43,6 @@ const dimsImg = { ancho: '630', alto: '350' };
   </section>
 </div>
 
-<script>
-  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
-
-  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
-
-  fechasEnFlujo.forEach((elemento: HTMLElement) => {
-    const fechaInicio = new Date(elemento.dataset.fecha);
-    elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
-  });
-</script>
-
 <style lang="scss" is:global>
   @import '../scss/_constantes.scss';
   .tarjeta {
@@ -95,8 +84,6 @@ const dimsImg = { ancho: '630', alto: '350' };
     }
 
     .fecha {
-      display: flex;
-      align-items: center;
       font-weight: $fuentePrincipalBold;
       font-style: italic;
       p {
@@ -104,16 +91,6 @@ const dimsImg = { ancho: '630', alto: '350' };
       }
       &.proceso {
         color: $colorOscuro2;
-      }
-
-      .enflujoPunto {
-        margin: 0 0.6em;
-        width: 1.3em;
-      }
-
-      .notaEnFlujo {
-        font-size: 0.85em;
-        color: #757575;
       }
     }
   }
