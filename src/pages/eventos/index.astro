@@ -103,13 +103,6 @@ function fecha(fecha_inicio: string, fecha_fin: string): string | null {
           <Tarjeta datos={evento} imagen={evento.imagen} coleccion="eventos">
             <div class="fecha">
               <p class="textoEstado">{fecha(evento.fecha_inicio, evento.fecha_fin)}</p>
-
-              <img
-                class="enflujoPunto"
-                src="/imgs/EnFlujo_punto_v61.svg"
-                alt="Icono separador entre fecha y hace cuanto se realizó el evento."
-              />
-
               <span class="notaEnFlujo" data-fecha={evento.fecha_fin || evento.fecha_inicio} />
             </div>
 

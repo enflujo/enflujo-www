@@ -1,0 +1,76 @@
+---
+import { Proyecto } from '@/enflujo';
+
+export type Props = {
+  datos: Proyecto;
+};
+const { datos } = Astro.props;
+
+const formatoFecha = (fecha: Date) => {
+  return fecha.toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
+const texto = (estado: boolean, fecha: string) =>
+  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
+
+datos.terminado = !!datos.fecha_publicacion;
+---
+
+<div class="descripcion seccionDescripcion">
+  <div class="fecha">
+    <p class="textoEstado">
+      {texto(datos.terminado, datos.fecha_publicacion || datos.fecha_inicio)}
+    </p>
+    <p class="notaEnFlujo" data-fecha={datos.fecha_publicacion || datos.fecha_inicio}></p>
+  </div>
+
+  <p>{datos.descripcion}</p>
+</div>
+
+{
+  datos.repos && (
+    <div class="repos">
+      <p class="interTitulo">Código:</p>
+      {datos.repos.map((repo) => (
+        <div class="repo">
+          <img class="iconoRed" src="/imgs/github.svg" alt="Icono GitHub" />
+          <a class="repoNombre" href={repo.url} target="_blank" rel="external">
+            {repo.nombre}
+          </a>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style lang="scss">
+  .repos {
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    margin: 0.5em 0;
+    flex-wrap: wrap;
+
+    .interTitulo {
+      margin: 0 0.5em 0 0;
+      width: auto;
+      line-height: 1.25;
+    }
+    .repo {
+      margin-right: 2em;
+      display: flex;
+      align-items: center;
+    }
+    .iconoRed {
+      width: 15px;
+    }
+    .repoNombre {
+      margin-left: 0.3em;
+    }
+  }
+</style>

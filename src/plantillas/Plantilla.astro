@@ -91,14 +91,14 @@ const colorPrincipal = general.color;
       </div>
       <span id="marcoDer" class="seccionMarco"></span>
     </div>
-
+    <canvas id="lienzo"></canvas>
     <script src="./programa.js"></script>
   </body>
 </html>
 
 <script>
   import { duranteInterseccion } from '@/utilidades/observador';
-
+  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
   const imagenes = document.querySelectorAll('.perezoso');
 
   const cuandoEsVisible = (imagen: HTMLImageElement) => {
@@ -108,6 +108,15 @@ const colorPrincipal = general.color;
   imagenes.forEach((imagen: HTMLImageElement) => {
     duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
   });
+
+  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+
+  if (fechasEnFlujo.length) {
+    fechasEnFlujo.forEach((elemento: HTMLElement) => {
+      const fechaInicio = new Date(elemento.dataset.fecha);
+      elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
+    });
+  }
 </script>
 
 <style lang="scss" is:global define:vars={{ colorPrincipal }}>
@@ -115,6 +124,12 @@ const colorPrincipal = general.color;
 
   :root {
     --colorPrincipal: colorPrincipal;
+  }
+
+  .notaEnFlujo {
+    font-weight: normal;
+    font-size: 0.85em;
+    color: #757575;
   }
 </style>
 
