@@ -80,6 +80,10 @@ const dimsImg = { ancho: '630', alto: '350' };
         h2 {
           font-size: 1.1em;
         }
+
+        p {
+          line-height: 1.2;
+        }
       }
     }
 
@@ -106,7 +110,7 @@ const dimsImg = { ancho: '630', alto: '350' };
       margin-bottom: 2em;
 
       .contenedorImg {
-        width: 50%;
+        flex-basis: 50%;
       }
 
       .contenedorDescripcion {
@@ -124,7 +128,13 @@ const dimsImg = { ancho: '630', alto: '350' };
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
     .tarjeta {
-      width: 900px;
+      width: 48%;
+    }
+  }
+
+  @media (min-width: $minPantallaGigante) {
+    .tarjeta {
+      width: 800px;
     }
   }
 </style>
