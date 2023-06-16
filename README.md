@@ -1,5 +1,7 @@
 # Sitio principal del Laboratorio EnFlujo
 
+<img src="publico/favicon.svg" style="width:100px;" alt="Logo EnFlujo" />
+
 ![Estilo Código](https://github.com/enflujo/enflujo-www/actions/workflows/estilo-codigo.yml/badge.svg)
 ![Despliegue](https://github.com/enflujo/enflujo-www/actions/workflows/despliegue.yml/badge.svg)
 ![Tamaño](https://img.shields.io/github/repo-size/enflujo/enflujo-www?color=%235757f7&label=Tama%C3%B1o%20repo&logo=open-access&logoColor=white)
