@@ -36,6 +36,10 @@ const { general } = await obtenerDatos(General);
     </div>
 
     <div class="contenido">{general.contenido}</div>
+
+    <div id="muchachita">
+      <img src="https://muchachita.enflujo.com/" alt="Video en vivo del laboratorio EnFlujo" />
+    </div>
   </main>
 </Plantilla>
 
@@ -43,6 +47,20 @@ const { general } = await obtenerDatos(General);
 
 <style lang="scss">
   @import '../scss/_constantes.scss';
+
+  #muchachita {
+    position: absolute;
+    top: $anchoMarco;
+    width: calc(100% - ($anchoMarco * 2) - 4px);
+    z-index: 1;
+    opacity: 0.5;
+    pointer-events: none;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 
   .lado {
     border: 1px dotted rgba(var(--colorPrincipal), 0.5);
