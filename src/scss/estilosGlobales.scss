@@ -2,6 +2,10 @@
 @import './normalizar';
 @import './mixins';
 
+:root {
+  --anchoMarco: 50px;
+}
+
 main {
   border: 3px solid;
   margin: 50px;
@@ -104,25 +108,25 @@ h3 {
     #marcoInferior {
       // border-top: $estiloBorde;
       bottom: 0;
-      left: $anchoMarco;
-      width: calc(100vw - ($anchoMarco * 2));
-      height: calc($anchoMarco + $anchoLinea);
+      left: var(--anchoMarco);
+      width: calc(100vw - (var(--anchoMarco) * 2));
+      height: calc(var(--anchoMarco) + $anchoLinea);
     }
 
     #marcoIzq {
       // border-right: $estiloBorde;
       left: 0;
-      top: $anchoMarco;
-      height: calc(100vh - ($anchoMarco * 2));
-      width: calc($anchoMarco + $anchoLinea);
+      top: var(--anchoMarco);
+      height: calc(100vh - (var(--anchoMarco) * 2));
+      width: calc(var(--anchoMarco) + $anchoLinea);
     }
 
     #marcoDer {
       // border-left: $estiloBorde;
       right: 0;
-      top: $anchoMarco;
-      height: calc(100vh - ($anchoMarco * 2));
-      width: calc($anchoMarco + $anchoLinea);
+      top: var(--anchoMarco);
+      height: calc(100vh - (var(--anchoMarco) * 2));
+      width: calc(var(--anchoMarco) + $anchoLinea);
     }
   }
 

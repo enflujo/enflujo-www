@@ -59,10 +59,44 @@ const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
       }
     </div>
   </main>
+
+  <div id="videoFondo">
+    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo">
+  </div>
 </Plantilla>
+
+<script>
+  const ventanita = document.getElementById('ventanita') as HTMLImageElement;
+  const ws = new WebSocket(`wss://ventanita.enflujo.com/ventanita`);
+
+  ws.onmessage = (evento) => {
+    ventanita.src = `data:image/jpeg;base64,${evento.data}`;
+  };
+
+</script>
 
 <style lang="scss">
   @import '../../scss/_constantes.scss';
+  main {
+    z-index: 2;
+  }
+
+  #videoFondo {
+    position: fixed;
+    top: var(--anchoMarco);
+    left: var(--anchoMarco);
+    z-index: -1;
+    opacity: 0.2;
+    pointer-events: none;
+    width: calc(100% - (var(--anchoMarco) * 2) - 4px);
+    height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 
   p {
     margin: 1em 0;

@@ -124,8 +124,8 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     position: fixed;
     right: 0;
     top: 0;
-    width: $anchoMarco;
-    height: $anchoMarco;
+    width: var(--anchoMarco);
+    height: var(--anchoMarco);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -270,7 +270,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   // Pantallas medianas (Tablets)
   @media (min-width: $minCelular) {
     .menuBtn {
-      width: $anchoMarco;
+      width: var(--anchoMarco);
       right: 0;
       top: 0;
       cursor: pointer;
@@ -315,8 +315,8 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
       }
       .lineaVertical {
         width: 2px;
-        height: calc(100vh - #{$anchoMarco});
-        top: $anchoMarco;
+        height: calc(100vh - var(--anchoMarco));
+        top: var(--anchoMarco);
         right: 25px;
         background-color: white;
         position: absolute;
