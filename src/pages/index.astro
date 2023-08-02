@@ -52,6 +52,8 @@ const { general } = await obtenerDatos(General);
     position: absolute;
     top: $anchoMarco;
     width: calc(100% - ($anchoMarco * 2) - 4px);
+    height: calc(100vh - ($anchoMarco * 2) - 4px);
+    overflow: hidden;
     z-index: 1;
     opacity: 0.5;
     pointer-events: none;
