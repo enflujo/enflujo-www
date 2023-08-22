@@ -2,7 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import Tarjeta from '@/componentes/Tarjeta.astro';
-import { Proyecto } from '@/enflujo';
+import { Proyecto } from '@/tipos';
 import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
 
 const Proyectos = gql`
@@ -61,7 +61,7 @@ const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
   </main>
 
   <div id="videoFondo">
-    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo">
+    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
   </div>
 </Plantilla>
 
@@ -72,7 +72,6 @@ const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
   ws.onmessage = (evento) => {
     ventanita.src = `data:image/jpeg;base64,${evento.data}`;
   };
-
 </script>
 
 <style lang="scss">
