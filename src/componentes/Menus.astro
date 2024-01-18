@@ -29,7 +29,7 @@ const { general, paginas } = await obtenerDatos(Paginas);
 const rutaActual = Astro.url.pathname.slice(1).split('/');
 ---
 
-<div>
+<div id="menus">
   <nav class="navegacion">
     <a href="/" class="logoBtn">
       <Logo clase="menuSuperior" />
@@ -101,6 +101,11 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   $menuRayaRadio: 2px;
   $menuRayaEspacio: 8px;
   $menuRayaColor: rgb(36, 36, 36);
+
+  #menus {
+    position: relative;
+    z-index: 999;
+  }
 
   #menuPrincipal {
     font-family: $fuenteMono;
