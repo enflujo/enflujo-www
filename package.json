@@ -23,12 +23,10 @@
     "@rollup/plugin-graphql": "^2.0.4",
     "@speed-highlight/core": "^1.2.6",
     "astro": "^4.2.1",
-    "astro-compress": "^2.2.8",
     "astro-robots-txt": "^1.0.0",
     "autoprefixer": "^10.4.17",
     "marked": "^11.1.1",
-    "marked-highlight": "^2.1.0",
-    "sharp": "^0.33.2"
+    "marked-highlight": "^2.1.0"
   },
   "devDependencies": {
     "@types/marked": "^6.0.0",

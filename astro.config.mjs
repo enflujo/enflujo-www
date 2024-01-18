@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import graphql from '@rollup/plugin-graphql';
 import robotsTxt from 'astro-robots-txt';
-import compress from 'astro-compress';
+// import compress from 'astro-compress';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,9 +12,9 @@ export default defineConfig({
   integrations: [
     sitemap(),
     robotsTxt(),
-    compress({
-      path: './publico',
-    }),
+    // compress({
+    //   path: './publico',
+    // }),
   ],
   vite: {
     plugins: [graphql()],
