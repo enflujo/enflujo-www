@@ -2,7 +2,21 @@
 import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import { highlightText } from '@speed-highlight/core';
+import type { ShjLanguage } from '@speed-highlight/core';
+import '@speed-highlight/core/themes/github-dim.css';
+
+const marked = new Marked(
+  markedHighlight({
+    async: true,
+    langPrefix: 'shj-lang-',
+    highlight(codigo, lenguaje: ShjLanguage) {
+      return highlightText(codigo, lenguaje, true);
+    },
+  })
+);
 
 export async function getStaticPaths() {
   const Proyectos = gql`
@@ -49,6 +63,26 @@ if (proyectos && proyectos.length) {
   pagina = proyectos[0];
   pagina.fecha_publicacion = pagina.fecha_publicacion ? new Date(pagina.fecha_publicacion) : null;
   pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+  if (pagina.contenido && pagina.contenido.length) {
+    const comando = /\/\/\/(.*?)\)/g;
+    const imgsGaleria = pagina.contenido.match(comando);
+    if (imgsGaleria) {
+      imgsGaleria.forEach((elemento: string) => {
+        const alt = elemento.match(/(?<=\[).+?(?=\])/);
+        const id = elemento.match(/(?<=\().+?(?=\))/);
+
+        const html = `<picture>
+          <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=75&format=webp" />
+          <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=400&quality=80&format=webp" />
+          <source media="(min-width: 800px)" srcset="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" />
+          <img src="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" alt="${alt}" />
+        </picture>
+        `;
+
+        pagina.contenido = pagina.contenido.replace(elemento, html);
+      });
+    }
+  }
 }
 ---
 

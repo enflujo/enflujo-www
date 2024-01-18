@@ -18,20 +18,23 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.0.3",
+    "@astrojs/sitemap": "^3.0.5",
     "@enflujo/alquimia": "^2.0.0",
     "@rollup/plugin-graphql": "^2.0.4",
-    "astro": "^3.5.5",
-    "astro-compress": "^2.2.3",
+    "@speed-highlight/core": "^1.2.6",
+    "astro": "^4.2.1",
+    "astro-compress": "^2.2.8",
     "astro-robots-txt": "^1.0.0",
-    "autoprefixer": "^10.4.16",
-    "marked": "^10.0.0"
+    "autoprefixer": "^10.4.17",
+    "marked": "^11.1.1",
+    "marked-highlight": "^2.1.0",
+    "sharp": "^0.33.2"
   },
   "devDependencies": {
     "@types/marked": "^6.0.0",
     "graphql": "^16.8.1",
-    "postcss": "^8.4.31",
-    "prettier": "^3.1.0",
-    "sass": "^1.69.5"
+    "postcss": "^8.4.33",
+    "prettier": "^3.2.4",
+    "sass": "^1.70.0"
   }
 }
