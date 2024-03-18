@@ -6,7 +6,7 @@ import { apiBase, crearTitulo, gql, obtenerDatos, quitarExtension } from '@/util
 const { titulo, descripcion, imagen } = Astro.props;
 const ruta = new URL(Astro.url.pathname, Astro.site);
 const tituloPagina = crearTitulo(titulo);
-const img = { url: null, titulo: '', ancho: '1200', alto: '630' };
+const img = { url: '', titulo: '', ancho: '1200', alto: '630' };
 
 if (imagen && imagen.id) {
   const nombreArchivo = quitarExtension(imagen.filename_download || 'EnFlujo');
@@ -25,11 +25,11 @@ const General = gql`
   }
 `;
 
-const { general } = await obtenerDatos(General);
+const { general } = await obtenerDatos<{ general: { color: string } }>(General);
 const colorPrincipal = general.color;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -99,21 +99,25 @@ const colorPrincipal = general.color;
 <script>
   import { duranteInterseccion } from '@/utilidades/observador';
   import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
-  const imagenes = document.querySelectorAll('.perezoso');
+  const imagenes = document.querySelectorAll<HTMLImageElement>('.perezoso');
 
   const cuandoEsVisible = (imagen: HTMLImageElement) => {
-    imagen.src = imagen.dataset.src;
+    const fuente = imagen.dataset.src;
+    if (!fuente) return;
+    imagen.src = fuente;
   };
 
   imagenes.forEach((imagen: HTMLImageElement) => {
     duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
   });
 
-  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+  const fechasEnFlujo = document.querySelectorAll<HTMLElement>('.notaEnFlujo');
 
   if (fechasEnFlujo.length) {
-    fechasEnFlujo.forEach((elemento: HTMLElement) => {
-      const fechaInicio = new Date(elemento.dataset.fecha);
+    fechasEnFlujo.forEach((elemento) => {
+      const { fecha } = elemento.dataset;
+      if (!fecha) return;
+      const fechaInicio = new Date(fecha);
       elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
     });
   }

@@ -3,19 +3,17 @@ export const apiGraqhql = `${apiBase}/graphql`;
 
 export const gql = String.raw;
 
-export const obtenerDatos = async (query) => {
+export async function obtenerDatos<Esquema>(query: string) {
   const peticion = await fetch(apiGraqhql, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query }),
-  }).then((respuesta) => respuesta.json());
+  });
 
-  if (peticion.errors) {
-    throw new Error(JSON.stringify(peticion.errors, null, 2));
-  }
+  const datos = await peticion.json();
 
-  return peticion.data;
-};
+  return datos.data as Esquema;
+}
 
 /**
  * Ayuda a crear el título con estilos propios.
@@ -23,7 +21,7 @@ export const obtenerDatos = async (query) => {
  * @param {string} tituloPagina El nombre o título de la página actual, se puede dejar vacío para la Maloca.
  * @returns Título para el encabezado con estilos personalizados.
  */
-export const crearTitulo = (tituloPagina) => {
+export const crearTitulo = (tituloPagina: string) => {
   const nombreProyecto = `..:: EnFlujo ::..`;
   return tituloPagina ? `${tituloPagina} | ${nombreProyecto}` : nombreProyecto;
 };
@@ -32,11 +30,11 @@ export const crearTitulo = (tituloPagina) => {
  * Ayuda a construir la URL para pedir un archivo al API de Directus.
  * https://docs.directus.io/reference/files.html#accessing-a-file
  *
- * @param {string} id El ID del archivo o imagen en Directus
- * @param {string|object} key El nombre del key u Objeto con parámetros
- * @returns {string} URL con el endpoint desde donde se puede pedir el archivo
+ * @param id El ID del archivo o imagen en Directus
+ * @param key El nombre del key u Objeto con parámetros
+ * @returns URL con el endpoint desde donde se puede pedir el archivo
  */
-export const urlImagen = (id, key = null) => {
+export const urlImagen = (id: string, key = null) => {
   if (!id) {
     throw new Error(`Se tiene que usar un ID del archivo pero ahora el parámetro es ${JSON.stringify(id)}`);
   }
@@ -52,17 +50,17 @@ export const urlImagen = (id, key = null) => {
   return `${apiBase}/assets/${id}?${query}`;
 };
 
-export const quitarExtension = (nombreArchivo) => nombreArchivo.replace(/\.[^\/.]+$/, '');
+export const quitarExtension = (nombreArchivo: string) => nombreArchivo.replace(/\.[^\/.]+$/, '');
 
 /**
  * Calcula la diferencia entre una fecha y el presente.
  *
- * @param {Date} fecha Fecha inicial
+ * @param fecha Fecha inicial
  * @returns La diferencia en texto
  */
-export const calcularDiferenciaFecha = (fecha) => {
+export const calcularDiferenciaFecha = (fecha: Date) => {
   const ahora = new Date();
-  const diferencia = new Date(ahora - fecha);
+  const diferencia = new Date(ahora.getMilliseconds() - fecha.getMilliseconds());
   const partes = {
     dias: diferencia.getDate(),
     meses: diferencia.getMonth(),
@@ -80,18 +78,18 @@ export const calcularDiferenciaFecha = (fecha) => {
   return texto;
 };
 
-export const gradosARadianes = (grados) => grados * (Math.PI / 180);
+export const gradosARadianes = (grados: number) => grados * (Math.PI / 180);
 
 /**
  * Calcula distancia en kilómetros entre dos puntos/coordenadas.
  *
- * @param {number} lat1 Latitud del punto 1.
- * @param {number} lon1 Longitud del punto 1.
- * @param {number} lat2 Latitud del punto 2.
- * @param {number} lon2 Longitud del punto 2.
+ * @param lat1 Latitud del punto 1.
+ * @param lon1 Longitud del punto 1.
+ * @param lat2 Latitud del punto 2.
+ * @param lon2 Longitud del punto 2.
  * @returns Distancia en kilómetros entre los dos puntos.
  */
-export const distanciaEntreCoordenadas = (lat1, lon1, lat2, lon2) => {
+export const distanciaEntreCoordenadas = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   // Radio del planeta en KM
   const radio = 6371;
   const dLat = gradosARadianes(lat2 - lat1);

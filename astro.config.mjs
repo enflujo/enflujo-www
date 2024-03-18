@@ -7,7 +7,7 @@ import robotsTxt from 'astro-robots-txt';
 // https://astro.build/config
 export default defineConfig({
   outDir: './publico',
-  publicDir: './recursos',
+  publicDir: './estaticos',
   site: 'https://enflujo.com',
   integrations: [
     sitemap(),
