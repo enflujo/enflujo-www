@@ -11,7 +11,7 @@ export async function getStaticPaths() {
       }
     }
   `;
-  const { eventos } = await obtenerDatos(Eventos);
+  const { eventos } = await obtenerDatos<{ eventos: { slug: string }[] }>(Eventos);
 
   return eventos.map(({ slug }) => {
     return { params: { slug } };
@@ -19,6 +19,19 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
+
+interface Evento {
+  titulo: string;
+  slug: string;
+  descripcion: string;
+  contenido: string;
+  enlace: string;
+  registro: string;
+  imagen: {
+    id: string;
+    title: string;
+  };
+}
 
 const Evento = gql`
   query {
@@ -28,6 +41,7 @@ const Evento = gql`
       descripcion
       contenido
       enlace
+      registro
       imagen {
         id
         title
@@ -36,18 +50,17 @@ const Evento = gql`
   }
 `;
 
-const { eventos } = await obtenerDatos(Evento);
-let pagina;
-
-if (eventos && eventos.length) {
-  pagina = eventos[0];
-}
+const { eventos } = await obtenerDatos<{ eventos: Evento[] }>(Evento);
+const pagina = eventos && eventos.length ? eventos[0] : null;
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
     <section class="contenedorFluido">
       <h1 class="tituloPagina">{pagina.titulo}</h1>
+
+      {pagina.registro && <iframe class="videoRegistro" src={pagina.registro} width="960" height="540" />}
+
       <div>
         {
           pagina.imagen && pagina.imagen.id && (
