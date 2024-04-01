@@ -164,20 +164,26 @@ if (proyectos && proyectos.length) {
 
   #portada {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    .imagen,
-    .contenidoPortada {
-      flex-basis: 50%;
+    .imagen {
+      img {
+        max-height: 80vh;
+        width: auto;
+      }
     }
 
     .contenidoPortada {
-      padding: 3em 2em;
+      flex-basis: 50%;
+      padding: 2em 10%;
+      margin: auto;
     }
   }
 
   .contenidoProyecto {
-    padding: 2em;
-
+    padding: 0em 2em;
+   
     .contenedorVideo169 {
       width: 100%;
       padding-top: 56.25%;
@@ -192,9 +198,40 @@ if (proyectos && proyectos.length) {
       }
     }
   }
+
+  
+
+  @media (min-width: $minTablet) {
+   
+  .contenidoProyecto {
+    padding: 3em 4em;
+  }
+    }
+  @media (min-width: $minPantalla) {
+    #portada {
+      display: flex;
+      flex-direction: row;
+
+    .contenidoPortada {
+      flex-basis: 50%;
+      padding: 4em 5%;
+      margin: auto;
+    }
+  }
+  .contenidoProyecto {
+    padding: 3em 4em;
+  }
+    }
+
+    
+  
+
+
 </style>
 
 <style lang="scss" is:global>
+  @import '../../scss/_constantes.scss';
+
   .contenidoProyecto {
     ul {
       list-style: circle;
@@ -231,6 +268,22 @@ if (proyectos && proyectos.length) {
 
     .galeria {
       margin: 1em 0;
+    }
+  }
+
+  @media (min-width: $minPantalla) {
+    .contenidoProyecto {
+
+      
+      p {
+        padding: 10px 20px;
+        max-width: 900px;
+        margin-top: 0;
+      }
+
+      h2 {
+        padding: 20px;
+      }
     }
   }
 </style>
