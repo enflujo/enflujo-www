@@ -29,7 +29,7 @@ const { general } = await obtenerDatos(General);
 const colorPrincipal = general.color;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -155,9 +155,21 @@ const colorPrincipal = general.color;
     transform-origin: left;
     transform: rotate(270deg);
     position: fixed;
+    display: flex;
 
     p {
-      margin: 4px 0px -7px 0;
+      margin: 4px 10px 0px 0;
+    }
+  }
+
+  // Teléfonos horizontal
+  @media (min-width: $minCelular) {
+    .flujo {
+      display: block;
+
+      p {
+        margin: 4px 0px -7px 0;
+      }
     }
   }
 </style>

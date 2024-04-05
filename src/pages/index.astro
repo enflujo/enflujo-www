@@ -27,18 +27,20 @@ const { general } = await obtenerDatos(General);
 
 <Plantilla descripcion={general.descripcion} imagen={general.imagen}>
   <main id="inicio">
-    <div id="lado1" class="lado">
-      <Logo clase="inicio" />
-      <div class="titulos">
-        <h1 class="titulo">{general.nombre}</h1>
-        <p class="subtitulo">{general.subtitulo}</p>
-      </div>
-    </div>
-
-    <div class="contenido">{general.contenido}</div>
-
     <div id="muchachita">
       <img src="https://muchachita.enflujo.com/" alt="Video en vivo del laboratorio EnFlujo" />
+    </div>
+
+    <div id="contenedorTextoInicio">
+      <div id="lado1" class="lado">
+        <Logo clase="inicio" />
+        <div class="titulos">
+          <h1 class="titulo">{general.nombre}</h1>
+          <p class="subtitulo">{general.subtitulo}</p>
+        </div>
+      </div>
+
+      <div class="contenido">{general.contenido}</div>
     </div>
   </main>
 </Plantilla>
@@ -50,12 +52,12 @@ const { general } = await obtenerDatos(General);
 
   #muchachita {
     position: absolute;
-    top: var(--anchoMarco);
-    width: calc(100% - (var(--anchoMarco) * 2) - 4px);
+    top: 40px;
+    width: calc(100% - (80px) - 3px);
     height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
     overflow: hidden;
-    z-index: 1;
-    opacity: 0.5;
+    z-index: -1;
+    opacity: 1;
     pointer-events: none;
 
     img {
@@ -85,73 +87,193 @@ const { general } = await obtenerDatos(General);
     align-items: center;
   }
 
-  .titulo {
-    font-size: 10vw;
-    margin-top: -0.44em;
-    color: var(--colorPrincipal);
-    border-bottom: 3px solid;
-    letter-spacing: -3px;
-    padding-top: 3px;
-  }
+  .titulos {
+    width: 100%;
+    text-align: center;
+    margin-top: calc(80vw - 80px);
 
-  .subtitulo {
-    font-size: 0.9em;
-    font-weight: $fuentePrincipalBold;
-    color: var(--colorPrincipal);
+    .titulo {
+      font-size: 12.5vw;
+      color: var(--colorPrincipal);
+      border-bottom: 2px solid;
+      max-width: 80%;
+      margin: auto;
+      letter-spacing: 0px;
+      padding-top: 3px;
+      padding-bottom: 10px;
+    }
+
+    .subtitulo {
+      font-size: 0.9em;
+      font-weight: 600;
+      // font-weight: $fuentePrincipalBold;
+      color: var(--colorPrincipal);
+    }
   }
 
   .contenido {
-    padding: 2em 1em 5em;
+    padding: 1.5em 1.8em 5em;
+    font-size: 0.95em;
+    // line-height: 1.4em;
   }
 
   #ante {
     font-weight: bold;
   }
 
-  .titulos {
-    width: 100%;
-    text-align: center;
-  }
-
   // Teléfonos horizontal
   @media (min-width: $minCelular) {
-    .contenido {
-      padding: calc(var(--anchoMarco) + 2em) 100px 0 calc(var(--anchoMarco) + 5em);
+    #muchachita {
+      position: absolute;
+      top: var(--anchoMarco);
+      width: 50vw;
+      height: calc(100vh - (var(--anchoMarco)));
+      overflow: hidden;
+      z-index: -1;
+      opacity: 0.5;
+      pointer-events: none;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
 
-    #lado1 {
-      padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
-    }
+    #contenedorTextoInicio {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
 
-    .titulos {
-      width: auto;
-      text-align: left;
-    }
+      #lado1 {
+        padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
 
-    .titulo {
-      font-size: 3.5em;
+      .titulos {
+        width: auto;
+        text-align: left;
+        margin-top: 0;
+        .titulo {
+          font-size: 2.5em;
+          margin-top: -0.44em;
+          color: var(--colorPrincipal);
+          border-bottom: 3px solid;
+          letter-spacing: -3px;
+          padding-top: 3px;
+          max-width: 100%;
+        }
+        .subtitulo {
+          font-size: 0.9em;
+          font-weight: $fuentePrincipalBold;
+          color: var(--colorPrincipal);
+        }
+      }
     }
   }
-
   // Pantallas medianas (Tablets)
   @media (min-width: $minTablet) {
-    .enflujoLogo {
-      width: 151px;
-      margin-top: 4em;
-      // position: absolute;
-    }
+    #contenedorTextoInicio {
+      // display: flex;
 
-    .nombrePortada {
-      align-items: flex-start;
-      margin-left: 30px;
+      #lado1 {
+        padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .titulos {
+        .titulo {
+          font-size: 3em;
+          margin-top: -0.44em;
+          color: var(--colorPrincipal);
+          border-bottom: 3px solid;
+          letter-spacing: -3px;
+          padding-top: 3px;
+          max-width: 100%;
+        }
+        .subtitulo {
+          font-size: 0.8em;
+          font-weight: $fuentePrincipalBold;
+          color: var(--colorPrincipal);
+        }
+      }
+      .enflujoLogo {
+        width: 151px;
+        margin-top: 4em;
+      }
+
+      .nombrePortada {
+        align-items: flex-start;
+        margin-left: 30px;
+      }
+
+      .contenido {
+        padding: var(--anchoMarco) 50px 0 17vw;
+      }
     }
   }
 
   // Dispositivos grandes y pantallas medianas
   @media (min-width: $minPantalla) {
+    #contenedorTextoInicio {
+      display: block;
+      .titulos {
+        width: auto;
+        text-align: left;
+        margin-top: 0;
+        .titulo {
+          font-size: 3.5em;
+          margin-top: -0.44em;
+          color: var(--colorPrincipal);
+          border-bottom: 3px solid;
+          letter-spacing: -3px;
+          padding-top: 3px;
+          max-width: 100%;
+        }
+        .subtitulo {
+          font-size: 0.9em;
+          font-weight: $fuentePrincipalBold;
+          color: var(--colorPrincipal);
+        }
+      }
+      #lado1 {
+        justify-content: left;
+        #lado1 {
+          padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+        }
+      }
+      .contenido {
+        padding: calc(var(--anchoMarco) + 2em) 100px 0 calc(var(--anchoMarco) + 5em);
+      }
+    }
+    #muchachita {
+      position: absolute;
+      top: var(--anchoMarco);
+      width: calc(100% - (var(--anchoMarco) * 2) - 4px);
+      height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
+      overflow: hidden;
+      z-index: 1;
+      opacity: 0.5;
+      pointer-events: none;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
   }
 
   // Pantallas grandes
   @media (min-width: $minPantallaGrande) {
+    .contenido {
+      padding: calc(var(--anchoMarco) + 2em) 100px 0 calc(var(--anchoMarco) + 5em);
+      margin-right: 30vw;
+    }
   }
 </style>
