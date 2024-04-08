@@ -129,7 +129,6 @@ const { general } = await obtenerDatos(General);
       overflow: hidden;
       z-index: -1;
       opacity: 0.5;
-      pointer-events: none;
 
       img {
         width: 100%;
@@ -262,10 +261,7 @@ const { general } = await obtenerDatos(General);
       top: var(--anchoMarco);
       width: calc(100% - (var(--anchoMarco) * 2) - 4px);
       height: calc(100vh - (var(--anchoMarco) * 2) - 2px);
-      overflow: hidden;
-      z-index: 1;
-      opacity: 0.5;
-      pointer-events: none;
+      z-index: -1;
 
       img {
         width: 100%;
