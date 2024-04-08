@@ -114,7 +114,6 @@ const { general } = await obtenerDatos(General);
   .contenido {
     padding: 1.5em 1.8em 5em;
     font-size: 0.95em;
-    // line-height: 1.4em;
   }
 
   #ante {
@@ -126,8 +125,8 @@ const { general } = await obtenerDatos(General);
     #muchachita {
       position: absolute;
       top: var(--anchoMarco);
-      width: 50vw;
-      height: calc(100vh - (var(--anchoMarco)));
+      width: 49vw;
+      height: 77vh;
       overflow: hidden;
       z-index: -1;
       opacity: 0.5;
@@ -143,6 +142,7 @@ const { general } = await obtenerDatos(General);
       display: flex;
       flex-direction: row;
       justify-content: center;
+      padding-bottom: 6vh;
 
       #lado1 {
         padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
@@ -174,11 +174,16 @@ const { general } = await obtenerDatos(General);
   }
   // Pantallas medianas (Tablets)
   @media (min-width: $minTablet) {
-    #contenedorTextoInicio {
-      // display: flex;
+    #muchachita {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
 
+    #contenedorTextoInicio {
       #lado1 {
-        padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
+        padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 1em);
         display: flex;
         justify-content: center;
         align-items: flex-start;
@@ -186,7 +191,7 @@ const { general } = await obtenerDatos(General);
 
       .titulos {
         .titulo {
-          font-size: 3em;
+          font-size: 2.8em;
           margin-top: -0.44em;
           color: var(--colorPrincipal);
           border-bottom: 3px solid;
@@ -195,7 +200,7 @@ const { general } = await obtenerDatos(General);
           max-width: 100%;
         }
         .subtitulo {
-          font-size: 0.8em;
+          font-size: 0.7em;
           font-weight: $fuentePrincipalBold;
           color: var(--colorPrincipal);
         }
@@ -211,7 +216,9 @@ const { general } = await obtenerDatos(General);
       }
 
       .contenido {
-        padding: var(--anchoMarco) 50px 0 17vw;
+        padding: calc(var(--anchoMarco) - 10px) 30px 30px 11vw;
+        height: 71vh;
+        overflow: scroll;
       }
     }
   }
@@ -219,7 +226,8 @@ const { general } = await obtenerDatos(General);
   // Dispositivos grandes y pantallas medianas
   @media (min-width: $minPantalla) {
     #contenedorTextoInicio {
-      display: block;
+      justify-content: left;
+
       .titulos {
         width: auto;
         text-align: left;
@@ -241,22 +249,20 @@ const { general } = await obtenerDatos(General);
       }
       #lado1 {
         justify-content: left;
-        #lado1 {
-          padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 2em);
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-        }
+        padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 3em);
+        display: flex;
+        align-items: flex-start;
       }
       .contenido {
-        padding: calc(var(--anchoMarco) + 2em) 100px 0 calc(var(--anchoMarco) + 5em);
+        padding: calc(var(--anchoMarco) + 2em) 0px 0 calc(var(--anchoMarco) + 5em);
+        overflow: auto;
       }
     }
     #muchachita {
       position: absolute;
       top: var(--anchoMarco);
       width: calc(100% - (var(--anchoMarco) * 2) - 4px);
-      height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
+      height: calc(100vh - (var(--anchoMarco) * 2) - 2px);
       overflow: hidden;
       z-index: 1;
       opacity: 0.5;
@@ -273,7 +279,8 @@ const { general } = await obtenerDatos(General);
   @media (min-width: $minPantallaGrande) {
     .contenido {
       padding: calc(var(--anchoMarco) + 2em) 100px 0 calc(var(--anchoMarco) + 5em);
-      margin-right: 30vw;
+      margin-right: 10vw;
+      max-width: 800px;
     }
   }
 </style>
