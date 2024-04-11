@@ -82,14 +82,24 @@ if (eventos && eventos.length) {
     padding: 0.3em 1.3em 0.5em 0.3em;
     margin-bottom: 1em;
   }
+  .tituloPagina{
+    padding: 0.5em 0.3em 0.7em 1em;
+    width: 100%;
+  }
+  .contenidoEvento{
+      padding: 0.5em 1.8em 0.5em 1.8em ;
+      font-size: 0.95em;
+  }
 
   .seccionProyecto {
     margin-top: 1em;
   }
 
   img{
-    margin-top: 10vh;
-    padding-right: 60px;
+    margin-top: 3vh;
+    max-width: calc(100vw - 106px);
+    height: auto;
+    margin-bottom: -5px;
   }
   .enlace {
     padding: 0.5em;
@@ -113,22 +123,42 @@ if (eventos && eventos.length) {
 
 // Teléfonos horizontal
 @media (min-width: $minCelular) {
-}
 
+  .contenidoEvento{
+      padding: 1em 3em 0.5em 3em;
+      font-size: 0.95em;
+  }
+img{
+    margin-top: 3vh;
+    max-width: calc(80vw);
+    height: auto;
+    margin-bottom: 1vh;
+  }
+
+}
 // Pantallas medianas (Tablets)
 @media (min-width: $minTablet) {
+ 
 }
 
-// Dispositivos grandes y pantallas medianas
+// Dispositivos grandes . Pantalla
 @media (min-width: $minPantalla) {
-
+  img{
+    max-width: 80vw;
+    display: inline;
+    margin-bottom: -6px;
   }
+
+.contenedorFluido{
+  width: 80vw;
+  }
+}
+
 // Pantallas grandes
 @media (min-width: $minPantallaGrande) {
 
   main{
     display:flex;
-    // align-items: center;
     flex-direction: row;
   }
   .tituloPagina{
@@ -140,20 +170,30 @@ if (eventos && eventos.length) {
     padding-bottom: 20px;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-   
+    
+  width: unset;
+  
   }
   h1{
       margin: 0;
     }
 
   .contenidoEvento{
-    margin: 8vh 5vw 5vh 6.5vw;
+    margin: 8vh 5vw 5vh 4vw;
     max-width: 40vw;
   }
+
+  img{
+    margin-top: 10vh;
+   
+    max-width: 30vw;
+
+  }
 }
-
-
 @media (min-width: $minPantallaGigante) {
+  img{
+    max-width: 36vw;
+  }
   
   }
 </style>
