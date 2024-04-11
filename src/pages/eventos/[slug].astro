@@ -46,8 +46,11 @@ if (eventos && eventos.length) {
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
+    <h1 class="tituloPagina">{pagina.titulo}</h1>
+    <div class="contenidoEvento">
+      <Fragment set:html={marked.parse(pagina.contenido)} />
+    </div>
     <section class="contenedorFluido">
-      <h1 class="tituloPagina">{pagina.titulo}</h1>
       <div>
         {
           pagina.imagen && pagina.imagen.id && (
@@ -66,10 +69,6 @@ if (eventos && eventos.length) {
         }
       </div>
     </section>
-
-    <div>
-      <Fragment set:html={marked.parse(pagina.contenido)} />
-    </div>
   </main>
 </Plantilla>
 
@@ -77,6 +76,7 @@ if (eventos && eventos.length) {
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
 
+  
   .titulo {
     font-size: 1.6em;
     padding: 0.3em 1.3em 0.5em 0.3em;
@@ -87,6 +87,10 @@ if (eventos && eventos.length) {
     margin-top: 1em;
   }
 
+  img{
+    margin-top: 10vh;
+    padding-right: 60px;
+  }
   .enlace {
     padding: 0.5em;
     background-color: $colorPrincipal;
@@ -105,5 +109,51 @@ if (eventos && eventos.length) {
     &.proceso {
       background-color: $colorOscuro2;
     }
+  }
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+}
+
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+}
+
+// Dispositivos grandes y pantallas medianas
+@media (min-width: $minPantalla) {
+
+  }
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
+
+  main{
+    display:flex;
+    // align-items: center;
+    flex-direction: row;
+  }
+  .tituloPagina{
+    // padding-left corresponde al lado derecho, o sea, la parte de abajo de la palabra.
+    padding-left: 14px; 
+  // padding-top corresponde al lado inferior, o sea, al comienzo de la frase
+    padding-top: 30px;
+    // padding-top corresponde al lado inferior, o sea, al comienzo de la frase
+    padding-bottom: 20px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+   
+  }
+  h1{
+      margin: 0;
+    }
+
+  .contenidoEvento{
+    margin: 8vh 5vw 5vh 6.5vw;
+    max-width: 40vw;
+  }
+}
+
+
+@media (min-width: $minPantallaGigante) {
+  
   }
 </style>
