@@ -43,8 +43,41 @@ const dimsImg = { ancho: '630', alto: '350' };
   </section>
 </div>
 
+<svg
+  class="cajaFiltroSVG"
+  x="-10%"
+  y="-10%"
+  width="120%"
+  height="120%"
+  filterUnits="objectBoundingBox"
+  primitiveUnits="userSpaceOnUse"
+  color-interpolation-filters="sRGB"
+>
+  <filter id="filtroSVG">
+    <feColorMatrix
+      type="matrix"
+      values="1 0 0 0 0
+    1 0 0 0 0
+    1 0 0 0 0
+    0 0 0 1 0"
+      in="SourceGraphic"
+      result="colormatrix"></feColorMatrix>
+    <feComponentTransfer in="colormatrix" result="componentTransfer">
+      <feFuncR type="table" tableValues="0.34 1"></feFuncR>
+      <feFuncG type="table" tableValues="0.34 1"></feFuncG>
+      <feFuncB type="table" tableValues="0.97 1"></feFuncB>
+      <feFuncA type="table" tableValues="0 1"></feFuncA>
+    </feComponentTransfer>
+    <feBlend mode="lighten" in="componentTransfer" in2="SourceGraphic" result="blend"></feBlend>
+  </filter>
+</svg>
+
 <style lang="scss" is:global>
   @import '../scss/_constantes.scss';
+
+  .cajaFiltroSVG {
+    display: none;
+  }
   .tarjeta {
     display: flex;
     flex-direction: column;
@@ -53,6 +86,12 @@ const dimsImg = { ancho: '630', alto: '350' };
       a {
         display: block;
         line-height: 0;
+      }
+
+      .perezoso {
+        &:hover {
+          filter: url(#filtroSVG);
+        }
       }
 
       img {
