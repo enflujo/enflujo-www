@@ -24,7 +24,6 @@ const dimsImg = { ancho: '630', alto: '350' };
               width={dimsImg.ancho}
               height={dimsImg.alto}
             />
-            <FiltroSVG />
           </>
         ) : (
           <img
@@ -45,6 +44,7 @@ const dimsImg = { ancho: '630', alto: '350' };
 
     <slot />
   </section>
+  <FiltroSVG />
 </div>
 
 <style lang="scss" is:global>
