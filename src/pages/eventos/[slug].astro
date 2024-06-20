@@ -46,8 +46,11 @@ if (eventos && eventos.length) {
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
   <main class="pagina">
+    <h1 class="tituloPagina">{pagina.titulo}</h1>
+    <div class="contenidoEvento">
+      <Fragment set:html={marked.parse(pagina.contenido)} />
+    </div>
     <section class="contenedorFluido">
-      <h1 class="tituloPagina">{pagina.titulo}</h1>
       <div>
         {
           pagina.imagen && pagina.imagen.id && (
@@ -66,10 +69,6 @@ if (eventos && eventos.length) {
         }
       </div>
     </section>
-
-    <div>
-      <Fragment set:html={marked.parse(pagina.contenido)} />
-    </div>
   </main>
 </Plantilla>
 
@@ -77,16 +76,31 @@ if (eventos && eventos.length) {
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
 
+  
   .titulo {
     font-size: 1.6em;
     padding: 0.3em 1.3em 0.5em 0.3em;
     margin-bottom: 1em;
+  }
+  .tituloPagina{
+    padding: 0.5em 0.3em 0.7em 1em;
+    width: 100%;
+  }
+  .contenidoEvento{
+      padding: 0.5em 1.8em 0.5em 1.8em ;
+      font-size: 0.95em;
   }
 
   .seccionProyecto {
     margin-top: 1em;
   }
 
+  img{
+    margin-top: 3vh;
+    max-width: calc(100vw - 106px);
+    height: auto;
+    margin-bottom: -5px;
+  }
   .enlace {
     padding: 0.5em;
     background-color: $colorPrincipal;
@@ -105,5 +119,81 @@ if (eventos && eventos.length) {
     &.proceso {
       background-color: $colorOscuro2;
     }
+  }
+
+// Teléfonos horizontal
+@media (min-width: $minCelular) {
+
+  .contenidoEvento{
+      padding: 1em 3em 0.5em 3em;
+      font-size: 0.95em;
+  }
+img{
+    margin-top: 3vh;
+    max-width: calc(80vw);
+    height: auto;
+    margin-bottom: 1vh;
+  }
+
+}
+// Pantallas medianas (Tablets)
+@media (min-width: $minTablet) {
+ 
+}
+
+// Dispositivos grandes . Pantalla
+@media (min-width: $minPantalla) {
+  img{
+    max-width: 80vw;
+    display: inline;
+    margin-bottom: -6px;
+  }
+
+.contenedorFluido{
+  width: 80vw;
+  }
+}
+
+// Pantallas grandes
+@media (min-width: $minPantallaGrande) {
+
+  main{
+    display:flex;
+    flex-direction: row;
+  }
+  .tituloPagina{
+    // padding-left corresponde al lado derecho, o sea, la parte de abajo de la palabra.
+    padding-left: 14px; 
+  // padding-top corresponde al lado inferior, o sea, al comienzo de la frase
+    padding-top: 30px;
+    // padding-top corresponde al lado inferior, o sea, al comienzo de la frase
+    padding-bottom: 20px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    
+  width: unset;
+  
+  }
+  h1{
+      margin: 0;
+    }
+
+  .contenidoEvento{
+    margin: 8vh 5vw 5vh 4vw;
+    max-width: 40vw;
+  }
+
+  img{
+    margin-top: 10vh;
+   
+    max-width: 30vw;
+
+  }
+}
+@media (min-width: $minPantallaGigante) {
+  img{
+    max-width: 36vw;
+  }
+  
   }
 </style>
