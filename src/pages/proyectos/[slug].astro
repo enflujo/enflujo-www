@@ -137,19 +137,62 @@ if (proyectos && proyectos.length) {
   const galeria = document.querySelector('.galeria');
   const imagenesGaleria = document.querySelectorAll('.imagenGaleria');
   const contenedorImgGrande = document.createElement('div') as HTMLDivElement;
+  const botonSiguiente = document.createElement('div') as HTMLDivElement;
+  const botonAnterior = document.createElement('div') as HTMLDivElement;
+
   contenedorImgGrande.classList.add('imagenGrande');
-  imagenesGaleria.forEach((imagen) => {
+  botonSiguiente.classList.add('botonGaleria');
+  botonAnterior.classList.add('botonGaleria');
+
+  botonSiguiente.id = 'botonSiguiente';
+  botonAnterior.id = 'botonAnterior';
+
+  botonSiguiente.innerText = '>';
+  botonAnterior.innerText = '<';
+
+  contenedorImgGrande.appendChild(botonAnterior);
+  contenedorImgGrande.appendChild(botonSiguiente);
+
+  let imagenActual: number;
+
+  botonSiguiente.addEventListener('click', () => {
+    if(imagenActual < imagenesGaleria.length-1) {
+      imagenActual++;
+    }
+  })
+
+  botonAnterior.addEventListener('click', () => {
+    if(imagenActual > 0)
+      imagenActual--;
+  })
+
+  imagenesGaleria.forEach((imagen, i) => {
     imagen.addEventListener('click', () => {
+      imagenActual = i
       const urlImagen = imagen.getAttribute('src');
       contenedorImgGrande.style.backgroundImage = `url("${urlImagen}")`;
       contenedorImgGrande.classList.toggle('visible');
     });
+
+    botonSiguiente.addEventListener('click', () => {
+      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
+      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+    })
+
+    botonAnterior.addEventListener('click', () => {
+      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
+      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+    })
   });
-  contenedorImgGrande.addEventListener('click', () => {
-    if (contenedorImgGrande.classList.contains('visible')) {
-      contenedorImgGrande.classList.remove('visible');
+
+  contenedorImgGrande.addEventListener('click', (event) => {
+    if ( event.target !== botonAnterior &&  event.target !== botonSiguiente) {
+      if (contenedorImgGrande.classList.contains('visible') ) {
+        contenedorImgGrande.classList.remove('visible');
+      }
     }
   });
+
   galeria.appendChild(contenedorImgGrande);
 </script>
 
@@ -314,6 +357,21 @@ if (proyectos && proyectos.length) {
       &.visible {
         display: block;
       }
+    }
+
+    .botonGaleria {
+      padding: 0.5em;
+      position: absolute;
+      font-size: 2em;
+      top: 40%;
+
+      &:hover {
+        color: $colorPrincipal;
+      }
+    }
+
+    #botonSiguiente {
+      right: 0;
     }
   }
 
