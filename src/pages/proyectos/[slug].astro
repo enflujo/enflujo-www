@@ -75,7 +75,7 @@ if (proyectos && proyectos.length) {
           <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=75&format=webp" />
           <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=400&quality=80&format=webp" />
           <source media="(min-width: 800px)" srcset="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" />
-          <img src="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" alt="${alt}" />
+          <img class='imagenGaleria' src="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" alt="${alt}" />
         </picture>
         `;
 
@@ -132,6 +132,70 @@ if (proyectos && proyectos.length) {
   </main>
 </Plantilla>
 
+<script>
+  // Ampliar fotos de galería
+  const galeria = document.querySelector('.galeria');
+  const imagenesGaleria = document.querySelectorAll('.imagenGaleria');
+  const contenedorImgGrande = document.createElement('div') as HTMLDivElement;
+  const botonSiguiente = document.createElement('div') as HTMLDivElement;
+  const botonAnterior = document.createElement('div') as HTMLDivElement;
+
+  contenedorImgGrande.classList.add('imagenGrande');
+  botonSiguiente.classList.add('botonGaleria');
+  botonAnterior.classList.add('botonGaleria');
+
+  botonSiguiente.id = 'botonSiguiente';
+  botonAnterior.id = 'botonAnterior';
+
+  botonSiguiente.innerText = '>';
+  botonAnterior.innerText = '<';
+
+  contenedorImgGrande.appendChild(botonAnterior);
+  contenedorImgGrande.appendChild(botonSiguiente);
+
+  let imagenActual: number;
+
+  botonSiguiente.addEventListener('click', () => {
+    if(imagenActual < imagenesGaleria.length-1) {
+      imagenActual++;
+    }
+  })
+
+  botonAnterior.addEventListener('click', () => {
+    if(imagenActual > 0)
+      imagenActual--;
+  })
+
+  imagenesGaleria.forEach((imagen, i) => {
+    imagen.addEventListener('click', () => {
+      imagenActual = i
+      const urlImagen = imagen.getAttribute('src');
+      contenedorImgGrande.style.backgroundImage = `url("${urlImagen}")`;
+      contenedorImgGrande.classList.toggle('visible');
+    });
+
+    botonSiguiente.addEventListener('click', () => {
+      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
+      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+    })
+
+    botonAnterior.addEventListener('click', () => {
+      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
+      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+    })
+  });
+
+  contenedorImgGrande.addEventListener('click', (event) => {
+    if ( event.target !== botonAnterior &&  event.target !== botonSiguiente) {
+      if (contenedorImgGrande.classList.contains('visible') ) {
+        contenedorImgGrande.classList.remove('visible');
+      }
+    }
+  });
+
+  galeria.appendChild(contenedorImgGrande);
+</script>
+
 <style lang="scss">
   @import '../../scss/_constantes.scss';
   @import '../../scss/_mixins.scss';
@@ -183,7 +247,7 @@ if (proyectos && proyectos.length) {
 
   .contenidoProyecto {
     padding: 0em 2em;
-   
+
     .contenedorVideo169 {
       width: 100%;
       padding-top: 56.25%;
@@ -199,34 +263,28 @@ if (proyectos && proyectos.length) {
     }
   }
 
-  
-
   @media (min-width: $minTablet) {
-   
-  .contenidoProyecto {
-    padding: 3em 4em;
-  }
+    .contenidoProyecto {
+      padding: 3em 4em;
+      width: 90vw;
     }
+  }
   @media (min-width: $minPantalla) {
     #portada {
       display: flex;
       flex-direction: row;
 
-    .contenidoPortada {
-      flex-basis: 50%;
-      padding: 4em 5%;
-      margin: auto;
+      .contenidoPortada {
+        flex-basis: 50%;
+        padding: 4em 5%;
+        margin: auto;
+      }
+    }
+    .contenidoProyecto {
+      padding: 3em 4em;
+      width: 90vw;
     }
   }
-  .contenidoProyecto {
-    padding: 3em 4em;
-  }
-    }
-
-    
-  
-
-
 </style>
 
 <style lang="scss" is:global>
@@ -262,27 +320,83 @@ if (proyectos && proyectos.length) {
     }
 
     .fotoSingular {
-      width: 50vw;
-      margin: 1em 0;
+      width: 40vw;
+      margin: 1em;
     }
 
     .galeria {
       margin: 1em 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .imagenGaleria {
+      cursor: pointer;
+      display: block;
+      position: relative;
+      width: auto;
+      margin: 0.5em;
+      max-height: 30vh;
+    }
+
+    .imagenGrande {
+      display: none;
+      position: absolute;
+      z-index: 9;
+      cursor: pointer;
+      border: 3px black solid;
+      left: 15%;
+      width: 70%;
+      background-color: rgba(255, 255, 255, 0.83);
+      height: 80vh;
+      background-position: center;
+      background-image: url(https://api.enflujo.com/assets/479f5d89-801a-4a70-a259-4386ac3028e5?height=500&quality=90&format=webp);
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      &.visible {
+        display: block;
+      }
+    }
+
+    .botonGaleria {
+      padding: 0.5em;
+      position: absolute;
+      font-size: 2em;
+      top: 40%;
+
+      &:hover {
+        color: $colorPrincipal;
+      }
+    }
+
+    #botonSiguiente {
+      right: 0;
+    }
+  }
+
+  @media (min-width: $minTablet) {
+    .contenidoProyecto {
+      .imagenGrande {
+        left: 10%;
+        width: 80%;
+      }
     }
   }
 
   @media (min-width: $minPantalla) {
     .contenidoProyecto {
-
-      
       p {
-        padding: 10px 20px;
-        max-width: 900px;
+        padding: 1em;
         margin-top: 0;
       }
 
       h2 {
         padding: 20px;
+      }
+      .imagenGrande {
+        left: 5vw;
+        width: 90%;
       }
     }
   }
