@@ -166,6 +166,7 @@ if (proyectos && proyectos.length) {
       imagenActual--;
   })
 
+  // Agrandar imagen de galería al hacer click
   imagenesGaleria.forEach((imagen, i) => {
     imagen.addEventListener('click', () => {
       imagenActual = i
@@ -174,6 +175,13 @@ if (proyectos && proyectos.length) {
       contenedorImgGrande.classList.toggle('visible');
     });
 
+    // Cerrar foto grande al hacer click
+    document.body.addEventListener('click', (evento) => {
+      if (evento.target !== botonAnterior &&  evento.target !== botonSiguiente && !galeria.contains(evento.target as Node)) { 
+        contenedorImgGrande.classList.remove('visible');  
+      }
+    });
+   
     botonSiguiente.addEventListener('click', () => {
       const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
       contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
@@ -185,8 +193,8 @@ if (proyectos && proyectos.length) {
     })
   });
 
-  contenedorImgGrande.addEventListener('click', (event) => {
-    if ( event.target !== botonAnterior &&  event.target !== botonSiguiente) {
+  contenedorImgGrande.addEventListener('click', (evento) => {
+    if ( evento.target !== botonAnterior &&  evento.target !== botonSiguiente) {
       if (contenedorImgGrande.classList.contains('visible') ) {
         contenedorImgGrande.classList.remove('visible');
       }
