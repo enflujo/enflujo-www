@@ -2,8 +2,9 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import Tarjeta from '@/componentes/Tarjeta.astro';
-import { Proyecto } from '@/tipos';
+import type { Proyecto } from '@/tipos';
 import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
+import type { CamposComunes } from '@/tipos';
 
 const Proyectos = gql`
   query {
@@ -39,8 +40,10 @@ const Proyectos = gql`
     }
   }
 `;
-const { proyectos, paginas } = await obtenerDatos(Proyectos);
+const { proyectos, paginas } = await obtenerDatos<{ proyectos: Proyecto[]; paginas: CamposComunes[] }>(Proyectos);
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
+
+if (!pagina) return Astro.redirect('/404');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
@@ -60,19 +63,19 @@ const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
     </div>
   </main>
 
-  <div id="videoFondo">
+  <!-- <div id="videoFondo">
     <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
-  </div>
+  </div> -->
 </Plantilla>
 
-<script>
+<!-- <script>
   const ventanita = document.getElementById('ventanita') as HTMLImageElement;
   const ws = new WebSocket(`wss://ventanita.enflujo.com/ventanita`);
 
   ws.onmessage = (evento) => {
     ventanita.src = `data:image/jpeg;base64,${evento.data}`;
   };
-</script>
+</script> -->
 
 <style lang="scss">
   @import '../../scss/_constantes.scss';
