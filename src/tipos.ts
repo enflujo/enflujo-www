@@ -49,12 +49,23 @@ export interface Evento extends CamposComunes {
 
 export interface Proyecto extends CamposComunes {
   id: number;
-  user_created: string;
-  fecha_inicio: string;
-  fecha_publicacion: string;
+  user_created?: string | Date;
+  fecha_inicio: string | Date;
+  fecha_publicacion: string | Date;
+  date_created?: string | Date;
   enlace: string;
   repos: Repo[];
   equipo: PersonaEquipo[];
   temas: { glosario_id: TerminoGlosario }[];
   terminado?: boolean;
+}
+
+export interface OpcionesImagenDirectus {
+  fit?: 'contain' | 'cover' | 'inside' | 'outside';
+  width: number;
+  height: number;
+  quality?: number;
+  withoutEnlargement?: boolean;
+  format?: 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif';
+  transforms?: any[];
 }

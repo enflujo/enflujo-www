@@ -1,8 +1,8 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
-import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import { formatoFecha, gql, obtenerDatos } from '@/utilidades/ayudas';
 import Tarjeta from '@/componentes/Tarjeta.astro';
-import { Evento } from '@/tipos';
+import type { CamposComunes, Evento } from '@/tipos';
 
 const Eventos = gql`
   query {
@@ -46,17 +46,9 @@ const Eventos = gql`
     }
   }
 `;
-const datos = await obtenerDatos(Eventos);
-const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
-
-const formatoFecha = (fecha) => {
-  return fecha.toLocaleString('es-CO', {
-    timezone: 'America/Bogota',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
+const { paginas, eventos } = await obtenerDatos<{ paginas: CamposComunes[]; eventos: Evento[] }>(Eventos);
+const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
+if (!pagina) return Astro.redirect('/404');
 
 function partesFecha(fecha: Date) {
   return {
@@ -67,17 +59,14 @@ function partesFecha(fecha: Date) {
 }
 
 function fecha(fecha_inicio: string, fecha_fin: string): string | null {
-  const inicio = fecha_inicio ? new Date(fecha_inicio) : null;
-  const fin = fecha_fin ? new Date(fecha_fin) : null;
-
   if (fecha_inicio && !fecha_fin) {
-    return formatoFecha(inicio);
+    return formatoFecha(new Date(fecha_inicio));
   } else if (fecha_fin && !fecha_inicio) {
-    return formatoFecha(fin);
+    return formatoFecha(new Date(fecha_fin));
   }
 
-  const partesInicio = partesFecha(inicio);
-  const partesFin = partesFecha(fin);
+  const partesInicio = partesFecha(new Date(fecha_inicio));
+  const partesFin = partesFecha(new Date(fecha_fin));
 
   if (partesInicio.año === partesFin.año && partesInicio.mes === partesFin.mes && partesInicio.dia === partesFin.dia) {
     return `${partesInicio.dia} de ${partesInicio.mes}, ${partesInicio.año}`;
@@ -99,7 +88,7 @@ function fecha(fecha_inicio: string, fecha_fin: string): string | null {
 
     <div class="contenedorTarjetas">
       {
-        datos.eventos.map((evento: Evento) => (
+        eventos.map((evento: Evento) => (
           <Tarjeta datos={evento} imagen={evento.imagen} coleccion="eventos">
             <div class="fecha">
               <p class="textoEstado">{fecha(evento.fecha_inicio, evento.fecha_fin)}</p>

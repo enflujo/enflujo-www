@@ -7,17 +7,22 @@ import { markedHighlight } from 'marked-highlight';
 import { highlightText } from '@speed-highlight/core';
 import type { ShjLanguage } from '@speed-highlight/core';
 import '@speed-highlight/core/themes/github-dim.css';
+import type { Proyecto } from '@/tipos';
 
 const marked = new Marked(
   markedHighlight({
     async: true,
     langPrefix: 'shj-lang-',
-    highlight(codigo, lenguaje: ShjLanguage) {
-      return highlightText(codigo, lenguaje, true);
+    highlight: (codigo: string, lenguaje: string) => {
+      return highlightText(codigo, lenguaje as ShjLanguage, true);
     },
   })
 );
 
+/**
+ * Esto es de Astro específicamente para crear las rutas dinámicamente, se tiene que llamar getStaticPaths()
+ * Documentación en: https://docs.astro.build/en/reference/api-reference/#getstaticpaths
+ */
 export async function getStaticPaths() {
   const Proyectos = gql`
     query {
@@ -26,7 +31,7 @@ export async function getStaticPaths() {
       }
     }
   `;
-  const { proyectos } = await obtenerDatos(Proyectos);
+  const { proyectos } = await obtenerDatos<{ proyectos: { slug: string }[] }>(Proyectos);
 
   return proyectos.map(({ slug }) => {
     return { params: { slug } };
@@ -56,16 +61,18 @@ const Proyecto = gql`
   }
 `;
 
-const { proyectos } = await obtenerDatos(Proyecto);
-let pagina;
+const { proyectos } = await obtenerDatos<{ proyectos: Proyecto[] }>(Proyecto);
+let pagina: Proyecto;
 
 if (proyectos && proyectos.length) {
   pagina = proyectos[0];
-  pagina.fecha_publicacion = pagina.fecha_publicacion ? new Date(pagina.fecha_publicacion) : null;
-  pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
+  if (pagina.fecha_publicacion) pagina.fecha_publicacion = new Date(pagina.fecha_publicacion);
+  if (pagina.date_created) pagina.fecha_publicacion = new Date(pagina.date_created);
+
   if (pagina.contenido && pagina.contenido.length) {
     const comando = /\/\/\/(.*?)\)/g;
     const imgsGaleria = pagina.contenido.match(comando);
+
     if (imgsGaleria) {
       imgsGaleria.forEach((elemento: string) => {
         const alt = elemento.match(/(?<=\[).+?(?=\])/);
@@ -83,6 +90,8 @@ if (proyectos && proyectos.length) {
       });
     }
   }
+} else {
+  return Astro.redirect('/404');
 }
 ---
 
@@ -94,9 +103,9 @@ if (proyectos && proyectos.length) {
           pagina.imagen && pagina.imagen.id && (
             <img
               src={urlImagen(pagina.imagen.id, {
-                width: '1200',
-                height: '630',
-                quality: '90',
+                width: 1200,
+                height: 630,
+                quality: 90,
                 format: 'webp',
               })}
               alt={pagina.imagen.title}
@@ -135,73 +144,79 @@ if (proyectos && proyectos.length) {
 <script>
   // Ampliar fotos de galería
   const galeria = document.querySelector('.galeria');
-  const imagenesGaleria = document.querySelectorAll('.imagenGaleria');
-  const contenedorImgGrande = document.createElement('div') as HTMLDivElement;
-  const botonSiguiente = document.createElement('div') as HTMLDivElement;
-  const botonAnterior = document.createElement('div') as HTMLDivElement;
 
-  contenedorImgGrande.classList.add('imagenGrande');
-  botonSiguiente.classList.add('botonGaleria');
-  botonAnterior.classList.add('botonGaleria');
+  if (galeria) {
+    const imagenesGaleria = document.querySelectorAll('.imagenGaleria');
+    const contenedorImgGrande = document.createElement('div');
+    const botonSiguiente = document.createElement('div');
+    const botonAnterior = document.createElement('div');
 
-  botonSiguiente.id = 'botonSiguiente';
-  botonAnterior.id = 'botonAnterior';
+    contenedorImgGrande.classList.add('imagenGrande');
+    botonSiguiente.classList.add('botonGaleria');
+    botonAnterior.classList.add('botonGaleria');
 
-  botonSiguiente.innerText = '>';
-  botonAnterior.innerText = '<';
+    botonSiguiente.id = 'botonSiguiente';
+    botonAnterior.id = 'botonAnterior';
 
-  contenedorImgGrande.appendChild(botonAnterior);
-  contenedorImgGrande.appendChild(botonSiguiente);
+    botonSiguiente.innerText = '>';
+    botonAnterior.innerText = '<';
 
-  let imagenActual: number;
+    contenedorImgGrande.appendChild(botonAnterior);
+    contenedorImgGrande.appendChild(botonSiguiente);
 
-  botonSiguiente.addEventListener('click', () => {
-    if(imagenActual < imagenesGaleria.length-1) {
-      imagenActual++;
-    }
-  })
+    let imagenActual: number;
 
-  botonAnterior.addEventListener('click', () => {
-    if(imagenActual > 0)
-      imagenActual--;
-  })
-
-  // Agrandar imagen de galería al hacer click
-  imagenesGaleria.forEach((imagen, i) => {
-    imagen.addEventListener('click', () => {
-      imagenActual = i
-      const urlImagen = imagen.getAttribute('src');
-      contenedorImgGrande.style.backgroundImage = `url("${urlImagen}")`;
-      contenedorImgGrande.classList.toggle('visible');
-    });
-
-    // Cerrar foto grande al hacer click
-    document.body.addEventListener('click', (evento) => {
-      if (evento.target !== botonAnterior &&  evento.target !== botonSiguiente && !galeria.contains(evento.target as Node)) { 
-        contenedorImgGrande.classList.remove('visible');  
+    botonSiguiente.addEventListener('click', () => {
+      if (imagenActual < imagenesGaleria.length - 1) {
+        imagenActual++;
       }
     });
-   
-    botonSiguiente.addEventListener('click', () => {
-      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
-      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
-    })
 
     botonAnterior.addEventListener('click', () => {
-      const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src')
-      contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
-    })
-  });
+      if (imagenActual > 0) imagenActual--;
+    });
 
-  contenedorImgGrande.addEventListener('click', (evento) => {
-    if ( evento.target !== botonAnterior &&  evento.target !== botonSiguiente) {
-      if (contenedorImgGrande.classList.contains('visible') ) {
-        contenedorImgGrande.classList.remove('visible');
+    // Agrandar imagen de galería al hacer click
+    imagenesGaleria.forEach((imagen, i) => {
+      imagen.addEventListener('click', () => {
+        imagenActual = i;
+        const urlImagen = imagen.getAttribute('src');
+        contenedorImgGrande.style.backgroundImage = `url("${urlImagen}")`;
+        contenedorImgGrande.classList.toggle('visible');
+      });
+
+      // Cerrar foto grande al hacer click
+      document.body.addEventListener('click', (evento) => {
+        if (
+          evento.target !== botonAnterior &&
+          evento.target !== botonSiguiente &&
+          !galeria.contains(evento.target as Node)
+        ) {
+          contenedorImgGrande.classList.remove('visible');
+        }
+      });
+
+      botonSiguiente.addEventListener('click', () => {
+        const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src');
+        contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+      });
+
+      botonAnterior.addEventListener('click', () => {
+        const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src');
+        contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
+      });
+    });
+
+    contenedorImgGrande.addEventListener('click', (evento) => {
+      if (evento.target !== botonAnterior && evento.target !== botonSiguiente) {
+        if (contenedorImgGrande.classList.contains('visible')) {
+          contenedorImgGrande.classList.remove('visible');
+        }
       }
-    }
-  });
+    });
 
-  galeria.appendChild(contenedorImgGrande);
+    galeria.appendChild(contenedorImgGrande);
+  }
 </script>
 
 <style lang="scss">
@@ -372,9 +387,9 @@ if (proyectos && proyectos.length) {
       font-size: 2em;
       display: flex;
       align-items: center;
-      padding: 0 .7em;
+      padding: 0 0.7em;
       height: 100%;
-    
+
       &:hover {
         color: $colorPrincipal;
       }
