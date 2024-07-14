@@ -1,21 +1,13 @@
 ---
-import { Proyecto } from '@/tipos';
+import type { Proyecto } from '@/tipos';
+import { formatoFecha } from '@/utilidades/ayudas';
 
 export type Props = {
   datos: Proyecto;
 };
 const { datos } = Astro.props;
 
-const formatoFecha = (fecha: Date) => {
-  return fecha.toLocaleString('es-CO', {
-    timeZone: 'America/Bogota',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
-const texto = (estado: boolean, fecha: string) =>
+const texto = (estado: boolean, fecha: string | Date) =>
   estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
 
 datos.terminado = !!datos.fecha_publicacion;
