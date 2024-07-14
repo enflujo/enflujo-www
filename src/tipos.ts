@@ -1,5 +1,5 @@
 export type PersonaEquipo = {
-  date_created: Date;
+  date_created: string | Date;
   nombre: string;
   slug: string;
   descripcion: string;
@@ -8,6 +8,12 @@ export type PersonaEquipo = {
   sitio_web: string;
   rol: string;
   foto: Imagen;
+  proyectos?: {
+    proyectos_id: {
+      titulo: string;
+      slug: string;
+    };
+  }[];
 };
 
 export type Red = {
@@ -68,4 +74,15 @@ export interface OpcionesImagenDirectus {
   withoutEnlargement?: boolean;
   format?: 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif';
   transforms?: any[];
+}
+
+export interface MetadatosGenerales {
+  nombre: string;
+  subtitulo: string;
+  contenido: string;
+  color: string;
+  redes: Red[];
+  // SEO
+  descripcion: string;
+  imagen: Imagen;
 }
