@@ -12,10 +12,10 @@ const dimsImg = { ancho: '630', alto: '350' };
           <img
             class="perezoso"
             src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-            data-src={urlImagen(imagen.id, {
-              width: '667',
-              height: '350',
-              quality: '90',
+            data-fuente={urlImagen(imagen.id, {
+              width: 667,
+              height: 350,
+              quality: 90,
               format: 'webp',
             })}
             alt={imagen.title}
@@ -44,7 +44,7 @@ const dimsImg = { ancho: '630', alto: '350' };
 </div>
 
 <style lang="scss" is:global>
-  @import '../scss/_constantes.scss';
+  @import '@/scss/_constantes.scss';
   .tarjeta {
     display: flex;
     flex-direction: column;
