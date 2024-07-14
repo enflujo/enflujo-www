@@ -1,5 +1,6 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
+import type { Evento } from '@/tipos';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import { marked } from 'marked';
 
@@ -11,7 +12,7 @@ export async function getStaticPaths() {
       }
     }
   `;
-  const { eventos } = await obtenerDatos(Eventos);
+  const { eventos } = await obtenerDatos<{eventos: {slug: string}[]}>(Eventos);
 
   return eventos.map(({ slug }) => {
     return { params: { slug } };
@@ -36,11 +37,13 @@ const Evento = gql`
   }
 `;
 
-const { eventos } = await obtenerDatos(Evento);
+const { eventos } = await obtenerDatos<{eventos: Evento[]}>(Evento);
 let pagina;
 
 if (eventos && eventos.length) {
   pagina = eventos[0];
+} else {
+  return Astro.redirect('/404');
 }
 ---
 
@@ -56,9 +59,9 @@ if (eventos && eventos.length) {
           pagina.imagen && pagina.imagen.id && (
             <img
               src={urlImagen(pagina.imagen.id, {
-                width: '1200',
-                height: '630',
-                quality: '90',
+                width: 1200,
+                height: 630,
+                quality: 90,
                 format: 'webp',
               })}
               alt={pagina.imagen.title}
@@ -73,8 +76,8 @@ if (eventos && eventos.length) {
 </Plantilla>
 
 <style lang="scss">
-  @import '../../scss/_constantes.scss';
-  @import '../../scss/_mixins.scss';
+  @import '@/scss/_constantes.scss';
+  @import '@/scss/_mixins.scss';
 
   
   .titulo {
