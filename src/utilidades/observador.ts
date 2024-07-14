@@ -6,7 +6,12 @@
  * @param {Object} opciones Opciones del "Intersection Observer API"
  * @returns instancia del observador
  */
-export const duranteInterseccion = (elemento, accion, desconectarInmediatamente = true, opciones) => {
+export const duranteInterseccion = (
+  elemento: HTMLElement,
+  accion: (elemento: Element) => void,
+  desconectarInmediatamente = true,
+  opciones: IntersectionObserverInit
+) => {
   const observador = new IntersectionObserver(([elementoObservado]) => {
     if (elementoObservado && elementoObservado.isIntersecting) {
       accion(elementoObservado.target);
