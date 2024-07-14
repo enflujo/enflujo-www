@@ -1,5 +1,4 @@
 import type { OpcionesImagenDirectus } from '@/tipos';
-import type { SettingsStorageAssetPreset } from '@directus/types';
 export const apiBase = 'https://api.enflujo.com';
 export const apiGraqhql = `${apiBase}/graphql`;
 
@@ -22,7 +21,7 @@ export async function obtenerDatos<Esquema>(query: string, sistema = false) {
 /**
  * Ayuda a crear el título con estilos propios.
  *
- * @param {string} tituloPagina El nombre o título de la página actual, se puede dejar vacío para la Maloca.
+ * @param tituloPagina El nombre o título de la página actual, se puede dejar vacío para la Maloca.
  * @returns Título para el encabezado con estilos personalizados.
  */
 export const crearTitulo = (tituloPagina: string) => {
@@ -92,10 +91,10 @@ export const gradosARadianes = (grados: number) => grados * (Math.PI / 180);
 /**
  * Calcula distancia en kilómetros entre dos puntos/coordenadas.
  *
- * @param {number} lat1 Latitud del punto 1.
- * @param {number} lon1 Longitud del punto 1.
- * @param {number} lat2 Latitud del punto 2.
- * @param {number} lon2 Longitud del punto 2.
+ * @param lat1 Latitud del punto 1.
+ * @param lon1 Longitud del punto 1.
+ * @param lat2 Latitud del punto 2.
+ * @param lon2 Longitud del punto 2.
  * @returns Distancia en kilómetros entre los dos puntos.
  */
 export const distanciaEntreCoordenadas = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -121,3 +120,13 @@ export const formatoFecha = (fecha: Date) => {
     day: 'numeric',
   });
 };
+
+/**
+ * Esta función intercambia la fuente de la imagen por la que se define en el dataset
+ *
+ * @param imagen Imagen que se quiere revelar cuando está a la vista
+ */
+export function cuandoImagenVisible(imagen: Element) {
+  const { fuente } = (imagen as HTMLImageElement).dataset;
+  if (fuente) (imagen as HTMLImageElement).src = fuente;
+}
