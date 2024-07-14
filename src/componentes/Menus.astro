@@ -99,6 +99,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   @import '@/scss/_constantes.scss';
 
   $menuRayaAncho: 30px;
+  $menuRayaAnchoCelular: 25px;
   $menuRayaAlto: 2px;
   $menuRayaRadio: 2px;
   $menuRayaEspacio: 8px;
@@ -131,8 +132,8 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     position: fixed;
     right: 0;
     top: 0;
-    width: var(--anchoMarco);
-    height: var(--anchoMarco);
+    width: 45px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -141,7 +142,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   }
 
   .menuRaya {
-    width: $menuRayaAncho;
+    width: $menuRayaAnchoCelular;
     height: $menuRayaAlto;
     background-color: $menuRayaColor;
     border-radius: $menuRayaRadio;
@@ -150,7 +151,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     &::after {
       content: '';
       position: absolute;
-      width: $menuRayaAncho;
+      width: $menuRayaAnchoCelular;
       height: $menuRayaAlto;
       background-color: $menuRayaColor;
       border-radius: $menuRayaRadio;
@@ -278,9 +279,33 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   @media (min-width: $minCelular) {
     .menuBtn {
       width: var(--anchoMarco);
+      height: var(--anchoMarco);
       right: 0;
       top: 0;
       cursor: pointer;
+    }
+    .menuRaya {
+      width: $menuRayaAncho;
+      height: $menuRayaAlto;
+      background-color: $menuRayaColor;
+      border-radius: $menuRayaRadio;
+      transition: all 0.2s ease-in-out;
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        width: $menuRayaAncho;
+        height: $menuRayaAlto;
+        background-color: $menuRayaColor;
+        border-radius: $menuRayaRadio;
+        transition: all 0.5s ease-in-out;
+      }
+      &::before {
+        transform: translate(0, -$menuRayaEspacio);
+      }
+      &::after {
+        transform: translate(0, $menuRayaEspacio);
+      }
     }
 
     .navegacion {
@@ -335,6 +360,10 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     .abierto {
       #menuContenido {
         width: 45vw;
+      }
+      #menuBtn {
+        width: var(--anchoMarco);
+        height: var(--anchoMarco);
       }
     }
   }

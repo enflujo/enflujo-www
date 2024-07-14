@@ -22,8 +22,8 @@ const { clase } = Astro.props;
     &.menuSuperior {
       fill: #fff;
       background-color: var(--colorPrincipal);
-      width: var(--anchoMarco);
-      height: var(--anchoMarco);
+      width: 40px;
+      height: 40px;
       padding: 8px;
     }
 
@@ -34,6 +34,14 @@ const { clase } = Astro.props;
 
   @media (min-width: $minCelular) {
     .enflujoLogo {
+      &.menuSuperior {
+        fill: #fff;
+        background-color: var(--colorPrincipal);
+        width: var(--anchoMarco);
+        height: var(--anchoMarco);
+        padding: 8px;
+      }
+
       &.inicio {
         fill: var(--colorPrincipal);
         width: 80px;
