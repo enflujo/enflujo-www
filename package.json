@@ -31,7 +31,6 @@
     "typescript": "^5.5.3"
   },
   "devDependencies": {
-    "@directus/types": "^11.2.0",
     "@types/marked": "^6.0.0",
     "graphql": "^16.9.0",
     "postcss": "^8.4.39",
