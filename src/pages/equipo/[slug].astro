@@ -3,6 +3,7 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import type { PersonaEquipo } from '@/tipos';
 
 export async function getStaticPaths() {
   const Equipo = gql`
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
       }
     }
   `;
-  const { equipo } = await obtenerDatos(Equipo);
+  const { equipo } = await obtenerDatos<{ equipo: { slug: string }[] }>(Equipo);
 
   return equipo.map(({ slug }) => {
     return { params: { slug } };
@@ -46,33 +47,34 @@ const Persona = gql`
   }
 `;
 
-const { equipo } = await obtenerDatos(Persona);
-let pagina;
+const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
+let persona: PersonaEquipo;
 
 if (equipo && equipo.length) {
-  pagina = equipo[0];
-  pagina.date_created = pagina.date_created ? new Date(pagina.date_created) : null;
-  pagina.foto = pagina.foto ? pagina.foto : { id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: pagina.titulo };
+  persona = equipo[0];
+  if (persona.date_created) persona.date_created = new Date(persona.date_created);
+  persona.foto = persona.foto ? persona.foto : { id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: persona.nombre };
+} else {
+  return Astro.redirect('/404');
 }
 ---
 
-<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
+<Plantilla titulo={persona.nombre} descripcion={persona.descripcion} imagen={persona.foto}>
   <main class="pagina paginaMiembro">
     <section class="resumen contenedorFluido">
       {
-        pagina.foto.id && (
+        persona.foto.id && (
           <div class="seccionImagen">
-            <EnflujoImagen imgId={pagina.foto.id} ancho="300" alto="300" titulo={pagina.foto.title} />
+            <EnflujoImagen imgId={persona.foto.id} ancho="300" alto="300" titulo={persona.foto.title} />
           </div>
         )
       }
 
       <div class="columna2">
-        <h1 class="nombre">{pagina.nombre}</h1>
-        <p class="rol">{pagina.rol}</p>
-        {pagina.redes && <EquipoRedes sitioWeb={pagina.sitio_web} redes={pagina.redes} />}
-
-        {pagina.descripcion && <div class="bio" set:html={pagina.descripcion} />}
+        <h1 class="nombre">{persona.nombre}</h1>
+        <p class="rol">{persona.rol}</p>
+        {persona.redes && <EquipoRedes sitioWeb={persona.sitio_web} redes={persona.redes} />}
+        {persona.descripcion && <div class="bio" set:html={persona.descripcion} />}
       </div>
     </section>
 
@@ -80,9 +82,9 @@ if (equipo && equipo.length) {
       <h2 class="tituloSeccion">Proyectos</h2>
 
       {
-        pagina.proyectos && pagina.proyectos.length && (
+        persona.proyectos && persona.proyectos.length && (
           <ul>
-            {pagina.proyectos.map((proyecto) => (
+            {persona.proyectos.map((proyecto) => (
               <li>
                 <a href={`/proyectos/${proyecto.proyectos_id.slug}`}>{proyecto.proyectos_id.titulo}</a>
               </li>
@@ -95,8 +97,8 @@ if (equipo && equipo.length) {
 </Plantilla>
 
 <style lang="scss">
-  @import '../../scss/_constantes.scss';
-  @import '../../scss/_mixins.scss';
+  @import '@/scss/_constantes.scss';
+  @import '@/scss/_mixins.scss';
 
   section {
     margin-bottom: 1em;

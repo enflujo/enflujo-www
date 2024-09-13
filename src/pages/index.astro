@@ -2,6 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import Logo from '@/componentes/svg/Logo.astro';
+import type { MetadatosGenerales } from '@/tipos';
 
 const General = gql`
   query {
@@ -22,7 +23,7 @@ const General = gql`
   }
 `;
 
-const { general } = await obtenerDatos(General);
+const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General);
 ---
 
 <Plantilla descripcion={general.descripcion} imagen={general.imagen}>
@@ -43,10 +44,8 @@ const { general } = await obtenerDatos(General);
   </main>
 </Plantilla>
 
-<script></script>
-
 <style lang="scss">
-  @import '../scss/_constantes.scss';
+  @import '@/scss/_constantes.scss';
 
   #muchachita {
     position: absolute;
