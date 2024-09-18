@@ -7,8 +7,8 @@
 }
 
 main {
-  border: 3px solid;
-  margin: 50px;
+  border: 2px solid;
+  margin: 40px;
   min-height: calc(100vh - 100px);
   min-width: 200px;
 }
@@ -69,6 +69,7 @@ h3 {
 .contenedorTarjetas {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   flex-wrap: wrap;
   justify-content: space-around;
 }
