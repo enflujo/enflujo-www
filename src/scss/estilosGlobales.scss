@@ -69,7 +69,7 @@ h3 {
 .contenedorTarjetas {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   justify-content: space-around;
 }
