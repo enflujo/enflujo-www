@@ -1,5 +1,6 @@
 ---
 import { urlImagen } from '@/utilidades/ayudas';
+import FiltroSVG from './FiltroSVG.astro';
 const { datos, imagen, coleccion } = Astro.props;
 const dimsImg = { ancho: '630', alto: '350' };
 ---
@@ -41,10 +42,12 @@ const dimsImg = { ancho: '630', alto: '350' };
 
     <slot />
   </section>
+  <FiltroSVG />
 </div>
 
 <style lang="scss" is:global>
   @import '@/scss/_constantes.scss';
+
   .tarjeta {
     display: flex;
     flex-direction: column;
@@ -53,6 +56,12 @@ const dimsImg = { ancho: '630', alto: '350' };
       a {
         display: block;
         line-height: 0;
+      }
+
+      .perezoso {
+        &:hover {
+          filter: url(#filtroSVG_colorEnFlujo);
+        }
       }
 
       img {
