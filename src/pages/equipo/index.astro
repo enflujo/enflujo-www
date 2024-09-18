@@ -2,7 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import Perfil from '@/componentes/Perfil.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
-import { PersonaEquipo } from '@/tipos';
+import type { CamposComunes, PersonaEquipo } from '@/tipos';
 
 const Equipo = gql`
   query {
@@ -33,13 +33,15 @@ const Equipo = gql`
     }
   }
 `;
-const datos = await obtenerDatos(Equipo);
-const pagina = datos.paginas.length && datos.paginas[0].slug ? datos.paginas[0] : null;
-const activos = [];
+const { paginas, equipo } = await obtenerDatos<{ paginas: CamposComunes[]; equipo: PersonaEquipo[] }>(Equipo);
+const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
+if (!pagina) return Astro.redirect('/404');
+
+const activos: PersonaEquipo[] = [];
 const inactivos: PersonaEquipo[] = [];
 
-if (datos.equipo && datos.equipo.length) {
-  datos.equipo.forEach((miembro: PersonaEquipo) => {
+if (equipo && equipo.length) {
+  equipo.forEach((miembro: PersonaEquipo) => {
     if (miembro.activo) {
       activos.push(miembro);
     } else {
@@ -75,8 +77,8 @@ if (datos.equipo && datos.equipo.length) {
 </Plantilla>
 
 <style lang="scss">
-  @import '../../scss/_constantes.scss';
-  @import '../../scss/_mixins.scss';
+  @import '@/scss/_constantes.scss';
+  @import '@/scss/_mixins.scss';
 
   .tituloSeccion {
     font-family: $fuenteMono;

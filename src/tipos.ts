@@ -1,5 +1,5 @@
 export type PersonaEquipo = {
-  date_created: Date;
+  date_created: string | Date;
   nombre: string;
   slug: string;
   descripcion: string;
@@ -8,6 +8,12 @@ export type PersonaEquipo = {
   sitio_web: string;
   rol: string;
   foto: Imagen;
+  proyectos?: {
+    proyectos_id: {
+      titulo: string;
+      slug: string;
+    };
+  }[];
 };
 
 export type Red = {
@@ -49,12 +55,34 @@ export interface Evento extends CamposComunes {
 
 export interface Proyecto extends CamposComunes {
   id: number;
-  user_created: string;
-  fecha_inicio: string;
-  fecha_publicacion: string;
+  user_created?: string | Date;
+  fecha_inicio: string | Date;
+  fecha_publicacion: string | Date;
+  date_created?: string | Date;
   enlace: string;
   repos: Repo[];
   equipo: PersonaEquipo[];
   temas: { glosario_id: TerminoGlosario }[];
   terminado?: boolean;
+}
+
+export interface OpcionesImagenDirectus {
+  fit?: 'contain' | 'cover' | 'inside' | 'outside';
+  width: number;
+  height: number;
+  quality?: number;
+  withoutEnlargement?: boolean;
+  format?: 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif';
+  transforms?: any[];
+}
+
+export interface MetadatosGenerales {
+  nombre: string;
+  subtitulo: string;
+  contenido: string;
+  color: string;
+  redes: Red[];
+  // SEO
+  descripcion: string;
+  imagen: Imagen;
 }

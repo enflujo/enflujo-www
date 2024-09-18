@@ -6,7 +6,7 @@ import { apiBase, crearTitulo, gql, obtenerDatos, quitarExtension } from '@/util
 const { titulo, descripcion, imagen } = Astro.props;
 const ruta = new URL(Astro.url.pathname, Astro.site);
 const tituloPagina = crearTitulo(titulo);
-const img = { url: null, titulo: '', ancho: '1200', alto: '630' };
+const img = { url: '', titulo: '', ancho: '1200', alto: '630' };
 
 if (imagen && imagen.id) {
   const nombreArchivo = quitarExtension(imagen.filename_download || 'EnFlujo');
@@ -25,7 +25,7 @@ const General = gql`
   }
 `;
 
-const { general } = await obtenerDatos(General);
+const { general } = await obtenerDatos<{ general: { color: string } }>(General);
 const colorPrincipal = general.color;
 ---
 
@@ -66,6 +66,7 @@ const colorPrincipal = general.color;
     {
       import.meta.env.PROD && (
         <script
+          is:inline
           async
           defer
           data-website-id="569a36fc-18d4-4ee4-a40c-7c7a9a35b3a1"
@@ -92,29 +93,28 @@ const colorPrincipal = general.color;
       <span id="marcoDer" class="seccionMarco"></span>
     </div>
     <!-- <canvas id="lienzo"></canvas> -->
-    <script src="./programa.js"></script>
+    <script src="./programa.ts"></script>
   </body>
 </html>
 
 <script>
   import { duranteInterseccion } from '@/utilidades/observador';
-  import { calcularDiferenciaFecha } from '@/utilidades/ayudas';
-  const imagenes = document.querySelectorAll('.perezoso');
+  import { calcularDiferenciaFecha, cuandoImagenVisible } from '@/utilidades/ayudas';
+  const imagenes = document.querySelectorAll<HTMLImageElement>('.perezoso');
 
-  const cuandoEsVisible = (imagen: HTMLImageElement) => {
-    imagen.src = imagen.dataset.src;
-  };
-
-  imagenes.forEach((imagen: HTMLImageElement) => {
-    duranteInterseccion(imagen, cuandoEsVisible, true, { threshold: 0.1 });
+  imagenes.forEach((imagen) => {
+    duranteInterseccion(imagen, cuandoImagenVisible, true, { threshold: 0.1 });
   });
 
-  const fechasEnFlujo = document.querySelectorAll('.notaEnFlujo');
+  const fechasEnFlujo = document.querySelectorAll<HTMLParagraphElement | HTMLSpanElement>('.notaEnFlujo');
 
   if (fechasEnFlujo.length) {
-    fechasEnFlujo.forEach((elemento: HTMLElement) => {
-      const fechaInicio = new Date(elemento.dataset.fecha);
-      elemento.innerText = `hace ${calcularDiferenciaFecha(fechaInicio)}`;
+    fechasEnFlujo.forEach((elemento) => {
+      const { fecha } = elemento.dataset;
+
+      if (fecha) {
+        elemento.innerText = `hace ${calcularDiferenciaFecha(new Date(fecha))}`;
+      }
     });
   }
 </script>
@@ -135,7 +135,7 @@ const colorPrincipal = general.color;
 
 <style lang="scss">
   @use 'sass:color';
-  @import '../scss/_constantes.scss';
+  @import '@/scss/_constantes.scss';
 
   #contenedor {
     display: flex;

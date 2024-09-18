@@ -13,7 +13,7 @@ type Pagina = {
   titulo: string;
 };
 
-const Paginas = gql`
+const DatosMenu = gql`
   query {
     general {
       redes
@@ -25,7 +25,7 @@ const Paginas = gql`
     }
   }
 `;
-const { general, paginas } = await obtenerDatos(Paginas);
+const { general, paginas } = await obtenerDatos<{ general: { redes: Red[] }; paginas: Pagina[] }>(DatosMenu);
 const rutaActual = Astro.url.pathname.slice(1).split('/');
 ---
 
@@ -81,20 +81,22 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
   const menu = document.getElementById('menuPrincipal');
   const menuBtn = document.getElementById('menuBtn');
 
-  menuBtn.onclick = () => {
-    menu.classList.toggle('abierto');
-  };
+  if (menu && menuBtn) {
+    menuBtn.onclick = () => {
+      menu.classList.toggle('abierto');
+    };
 
-  document.body.onclick = (evento) => {
-    if (!(menu === evento.target || menu.contains(evento.target as Node))) {
-      menu.classList.remove('abierto');
-    }
-  };
+    document.body.onclick = (evento) => {
+      if (!(menu === evento.target || menu.contains(evento.target as Node))) {
+        menu.classList.remove('abierto');
+      }
+    };
+  }
 </script>
 
 <style lang="scss" is:global>
   @use 'sass:color';
-  @import '../scss/_constantes.scss';
+  @import '@/scss/_constantes.scss';
 
   $menuRayaAncho: 30px;
   $menuRayaAnchoCelular: 25px;
