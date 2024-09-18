@@ -22,7 +22,7 @@ if (!miembro.foto) {
     <a class="nombre" href={`/equipo/${miembro.slug}`}>{miembro.nombre}</a>
     <p class="rol">{miembro.rol}</p>
 
-    {miembro.redes && <EquipoRedes sitioWeb={miembro.sitio_web} redes={miembro.redes} />}
+    <EquipoRedes sitioWeb={miembro.sitio_web} redes={miembro.redes} />
   </div>
 </div>
 

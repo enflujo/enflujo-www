@@ -13,7 +13,8 @@ const { sitioWeb, redes } = Astro.props;
     )
   }
   {
-    redes.length &&
+    redes &&
+      redes.length &&
       redes.map(
         (obj: Red) =>
           obj.url && (
