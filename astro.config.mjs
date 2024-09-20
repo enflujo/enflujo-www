@@ -18,5 +18,12 @@ export default defineConfig({
   ],
   vite: {
     plugins: [graphql()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
   },
 });
