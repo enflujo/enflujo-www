@@ -4,6 +4,8 @@ import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
 import { gql, obtenerDatos } from '@/utilidades/ayudas';
 import type { PersonaEquipo } from '@/tipos';
+import { Schema } from 'astro-seo-schema';
+import type { Person } from 'schema-dts';
 
 export async function getStaticPaths() {
   const Equipo = gql`
@@ -49,17 +51,41 @@ const Persona = gql`
 
 const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
 let persona: PersonaEquipo;
+const seo: Person = {
+  '@type': 'Person',
+};
 
 if (equipo && equipo.length) {
   persona = equipo[0];
   if (persona.date_created) persona.date_created = new Date(persona.date_created);
-  persona.foto = persona.foto ? persona.foto : { id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: persona.nombre };
+  if (persona.foto) {
+    seo.image = `https://api.enflujo.com/assets/${persona.foto.id}/foto-perfil-${persona.slug}.jpg`;
+  } else {
+    persona.foto = { id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: persona.nombre };
+  }
+
+  seo.name = persona.nombre;
+  if (persona.sitio_web) seo.url = persona.sitio_web;
+  if (persona.redes && persona.redes.length) {
+    seo.sameAs = persona.redes.map((red) => red.url);
+  }
+
+  if (persona.rol) {
+    seo.jobTitle = persona.rol;
+  }
 } else {
   return Astro.redirect('/404');
 }
 ---
 
 <Plantilla titulo={persona.nombre} descripcion={persona.descripcion} imagen={persona.foto}>
+  <Schema
+    slot="cabeza"
+    item={{
+      '@context': 'https://schema.org',
+      ...seo,
+    }}
+  />
   <main class="pagina paginaMiembro">
     <section class="resumen contenedorFluido">
       {
@@ -78,11 +104,10 @@ if (equipo && equipo.length) {
       </div>
     </section>
 
-    <section class="contenedorFluido contenido">
-      <h2 class="tituloSeccion">Proyectos</h2>
-
-      {
-        persona.proyectos && persona.proyectos.length && (
+    {
+      persona.proyectos && persona.proyectos.length && (
+        <section class="contenedorFluido contenido">
+          <h2 class="tituloSeccion">Proyectos</h2>
           <ul>
             {persona.proyectos.map((proyecto) => (
               <li>
@@ -90,9 +115,9 @@ if (equipo && equipo.length) {
               </li>
             ))}
           </ul>
-        )
-      }
-    </section>
+        </section>
+      )
+    }
   </main>
 </Plantilla>
 

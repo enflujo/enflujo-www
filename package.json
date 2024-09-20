@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "revisar": "astro check",
     "lint": "prettier --check .",
@@ -24,11 +24,13 @@
     "@enflujo/alquimia": "^2.0.0",
     "@rollup/plugin-graphql": "^2.0.4",
     "@speed-highlight/core": "^1.2.6",
-    "astro": "^4.15.7",
+    "astro": "^4.15.8",
     "astro-robots-txt": "^1.0.0",
+    "astro-seo-schema": "^4.0.2",
     "autoprefixer": "^10.4.20",
     "marked": "^14.1.2",
     "marked-highlight": "^2.1.4",
+    "schema-dts": "^1.1.2",
     "typescript": "^5.5.3"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "graphql": "^16.9.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
-    "sass": "^1.79.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "sass": "^1.79.3"
   }
 }

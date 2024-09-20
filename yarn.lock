@@ -32,7 +32,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/compiler@npm:^2.10.3":
+"@astrojs/compiler@npm:^2.10.3, @astrojs/compiler@npm:^2.9.1":
   version: 2.10.3
   resolution: "@astrojs/compiler@npm:2.10.3"
   checksum: 10c0/35e7a6e9d197924a3203afd3bd7bff39c8d4271516816c30173cca872302312c3748eefc5a5832523f49b98743115628a1b96922d7d96588a8d96e110a106b88
@@ -1513,9 +1513,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^4.15.7":
-  version: 4.15.7
-  resolution: "astro@npm:4.15.7"
+"astro-seo-schema@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "astro-seo-schema@npm:4.0.2"
+  peerDependencies:
+    astro: ^4.0.0
+    schema-dts: ^1.1.0
+  checksum: 10c0/e7f534c35e96466441a8fa2b0d53c0f06c789755e6a432b6c79ac9c00f4d71159a3b8231a13c1f0a221540c611dde1593ffadc11582f6b33f7cc15b51b48fbfc
+  languageName: node
+  linkType: hard
+
+"astro@npm:^4.15.8":
+  version: 4.15.8
+  resolution: "astro@npm:4.15.8"
   dependencies:
     "@astrojs/compiler": "npm:^2.10.3"
     "@astrojs/internal-helpers": "npm:0.4.1"
@@ -1563,7 +1573,6 @@ __metadata:
     ora: "npm:^8.1.0"
     p-limit: "npm:^6.1.0"
     p-queue: "npm:^8.0.1"
-    path-to-regexp: "npm:6.2.2"
     preferred-pm: "npm:^4.0.0"
     prompts: "npm:^2.4.2"
     rehype: "npm:^13.0.1"
@@ -1589,7 +1598,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10c0/793d9c3480fd5d4d9cef304fc611cf5813af40a5b06514ca32621d8c385c02010f7bf0c915dad2956d9b66709298e420cba11cf48bd7c0b60a0150f907c6cc7c
+  checksum: 10c0/8c8b1c0af59452cd4450e3ebd868ac85e0054ebac41b21ab57210cd3390f3e88ceb5f8c988806395eef1f133a4683c022361312a5a183602b575c86a946f2a50
   languageName: node
   linkType: hard
 
@@ -2109,15 +2118,18 @@ __metadata:
     "@rollup/plugin-graphql": "npm:^2.0.4"
     "@speed-highlight/core": "npm:^1.2.6"
     "@types/marked": "npm:^6.0.0"
-    astro: "npm:^4.15.7"
+    astro: "npm:^4.15.8"
     astro-robots-txt: "npm:^1.0.0"
+    astro-seo-schema: "npm:^4.0.2"
     autoprefixer: "npm:^10.4.20"
     graphql: "npm:^16.9.0"
     marked: "npm:^14.1.2"
     marked-highlight: "npm:^2.1.4"
     postcss: "npm:^8.4.47"
     prettier: "npm:^3.3.3"
-    sass: "npm:^1.79.1"
+    prettier-plugin-astro: "npm:^0.14.1"
+    sass: "npm:^1.79.3"
+    schema-dts: "npm:^1.1.2"
     typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft
@@ -4031,13 +4043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:6.2.2":
-  version: 6.2.2
-  resolution: "path-to-regexp@npm:6.2.2"
-  checksum: 10c0/4b60852d3501fd05ca9dd08c70033d73844e5eca14e41f499f069afa8364f780f15c5098002f93bd42af8b3514de62ac6e82a53b5662de881d2b08c9ef21ea6b
-  languageName: node
-  linkType: hard
-
 "picocolors@npm:^1.0.0, picocolors@npm:^1.0.1, picocolors@npm:^1.1.0":
   version: 1.1.0
   resolution: "picocolors@npm:1.1.0"
@@ -4097,6 +4102,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-plugin-astro@npm:^0.14.1":
+  version: 0.14.1
+  resolution: "prettier-plugin-astro@npm:0.14.1"
+  dependencies:
+    "@astrojs/compiler": "npm:^2.9.1"
+    prettier: "npm:^3.0.0"
+    sass-formatter: "npm:^0.7.6"
+  checksum: 10c0/f812607d422ff36df1bf58534a96590a861dedf41e70f8f36fa9546b91def65b17f4507e1c9212dab56cbbae2f4ab5ff6e7e31370b9198261360c6444daa297c
+  languageName: node
+  linkType: hard
+
 "prettier@npm:2.8.7":
   version: 2.8.7
   resolution: "prettier@npm:2.8.7"
@@ -4106,7 +4122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.3.3":
+"prettier@npm:^3.0.0, prettier@npm:^3.3.3":
   version: 3.3.3
   resolution: "prettier@npm:3.3.3"
   bin:
@@ -4462,6 +4478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"s.color@npm:0.0.15":
+  version: 0.0.15
+  resolution: "s.color@npm:0.0.15"
+  checksum: 10c0/50532b1307a65ac5e1076f5b556f5ce7e5c8ea3ff1c73810a226a0109efe84ff196e10017cd906c78a87d9600a26ca7016ac78896232aa05949a98bf2100adf1
+  languageName: node
+  linkType: hard
+
 "safer-buffer@npm:>= 2.1.2 < 3.0.0":
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
@@ -4469,16 +4492,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.79.1":
-  version: 1.79.1
-  resolution: "sass@npm:1.79.1"
+"sass-formatter@npm:^0.7.6":
+  version: 0.7.9
+  resolution: "sass-formatter@npm:0.7.9"
+  dependencies:
+    suf-log: "npm:^2.5.3"
+  checksum: 10c0/172eb326121ace1a48e689a1419efab2d780623631d106ac306ac2a055e96813bda36044f20bc4cc28d761427efc136a08d07153d1b8a8ccf0a032dca5fdce3c
+  languageName: node
+  linkType: hard
+
+"sass@npm:^1.79.3":
+  version: 1.79.3
+  resolution: "sass@npm:1.79.3"
   dependencies:
     chokidar: "npm:^4.0.0"
     immutable: "npm:^4.0.0"
     source-map-js: "npm:>=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 10c0/187bc885bad2e81e5414a146c9e14a28f622b5aba5c1425f4dd6d8ef2045b66c69de93689503886a8d2cc55d6bcce97b05ee87b074628fefd03e762789f931d0
+  checksum: 10c0/ad171bbbb2d7a789cc47803a59dcf2d0ac92ede34b538bb3fd683b6391a9ac3dc3eabaac264fc9582c770c4e435b85840e011785b7adfc0ac002b51ba91179c9
   languageName: node
   linkType: hard
 
@@ -4486,6 +4518,15 @@ __metadata:
   version: 1.4.1
   resolution: "sax@npm:1.4.1"
   checksum: 10c0/6bf86318a254c5d898ede6bd3ded15daf68ae08a5495a2739564eb265cd13bcc64a07ab466fb204f67ce472bb534eb8612dac587435515169593f4fffa11de7c
+  languageName: node
+  linkType: hard
+
+"schema-dts@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "schema-dts@npm:1.1.2"
+  peerDependencies:
+    typescript: ">=4.1.0"
+  checksum: 10c0/bcca8719b1bb1cd71ba2b01a5126b3579e917a2f193e10fcffe020fa42fef911776ed9d2197c9f376780e703994b3ab854db3f962c47064f7282f41eff0f1d24
   languageName: node
   linkType: hard
 
@@ -4804,6 +4845,15 @@ __metadata:
   version: 3.0.0
   resolution: "strip-bom@npm:3.0.0"
   checksum: 10c0/51201f50e021ef16672593d7434ca239441b7b760e905d9f33df6e4f3954ff54ec0e0a06f100d028af0982d6f25c35cd5cda2ce34eaebccd0250b8befb90d8f1
+  languageName: node
+  linkType: hard
+
+"suf-log@npm:^2.5.3":
+  version: 2.5.3
+  resolution: "suf-log@npm:2.5.3"
+  dependencies:
+    s.color: "npm:0.0.15"
+  checksum: 10c0/67edce59cce30964b2bec4f2e726c980c1e83d266adb186e3a92f8d267916cd2ae38f8e5aa14af9df675837708d93b212a7e3241505abec948d7fd3705781f0a
   languageName: node
   linkType: hard
 
