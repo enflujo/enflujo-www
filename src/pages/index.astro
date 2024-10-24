@@ -33,6 +33,7 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
     </div>
 
     <div id="contenedorTextoInicio">
+      <div id="cuadroBlanco"></div>
       <div id="lado1" class="lado">
         <Logo clase="inicio" />
         <div class="titulos">
@@ -49,10 +50,22 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 <style lang="scss">
   @import '@/scss/_constantes.scss';
 
+  #cuadroBlanco {
+    background-color: rgb(255, 255, 255);
+    z-index: 99;
+    height: 42px;
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    margin-top: -42px;
+    margin-left: -2px;
+    border-bottom: 2px solid #000;
+  }
+
   #muchachita {
     position: absolute;
     top: 40px;
-    width: calc(100% - (80px) - 3px);
+    width: calc(100% - (80px) - 4px);
     height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
     overflow: hidden;
     z-index: 1;
@@ -72,6 +85,7 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
   #lado1 {
     padding: 2em 1em 1em 1em;
     display: flex;
+    z-index: 9;
   }
 
   .seccion {
@@ -112,6 +126,7 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
   .contenido {
     padding: 1.5em 1.8em 5em;
     font-size: 0.95em;
+    z-index: 9;
   }
 
   #ante {
@@ -120,6 +135,9 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 
   // Teléfonos horizontal
   @media (min-width: $minCelular) {
+    #cuadroBlanco {
+      display: none;
+    }
     #muchachita {
       position: absolute;
       top: var(--anchoMarco);
