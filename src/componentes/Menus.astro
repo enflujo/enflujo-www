@@ -286,13 +286,21 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
 
   // Pantallas medianas (Tablets)
   @media (min-width: $minCelular) {
-    .menuBtn {
+    #menuBtn {
+      position: fixed;
+      right: 2px;
+      top: 0;
       width: var(--anchoMarco);
       height: var(--anchoMarco);
-      right: 0;
-      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
+      z-index: 99;
+      background-color: #fff;
+      border-radius: 0px 0px 0px 2px;
     }
+
     .menuRaya {
       width: $menuRayaAncho;
       height: $menuRayaAlto;
