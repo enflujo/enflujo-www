@@ -143,6 +143,12 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     border-radius: 0px 0px 0px 2px;
   }
 
+  .abierto {
+    #menuBtn {
+      background-color: #ffffff00;
+    }
+  }
+
   .menuRaya {
     width: $menuRayaAnchoCelular;
     height: $menuRayaAlto;
@@ -233,6 +239,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
       .menuRaya {
         height: 0;
         width: 0;
+
         &::before {
           transform: rotate(45deg) translate(-12px, 12px);
         }
