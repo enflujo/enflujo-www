@@ -49,18 +49,6 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 <style lang="scss">
   @import '@/scss/_constantes.scss';
 
-  #cuadroBlanco {
-    background-color: rgb(255, 255, 255);
-    z-index: 99;
-    height: 42px;
-    position: sticky;
-    top: 0px;
-    left: 0px;
-    margin-top: -42px;
-    margin-left: -2px;
-    border-bottom: 2px solid #000;
-  }
-
   #muchachita {
     position: absolute;
     top: 40px;
@@ -134,9 +122,6 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 
   // Teléfonos horizontal
   @media (min-width: $minCelular) {
-    #cuadroBlanco {
-      display: none;
-    }
     #muchachita {
       position: absolute;
       top: var(--anchoMarco);
