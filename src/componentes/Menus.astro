@@ -130,15 +130,16 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
 
   #menuBtn {
     position: fixed;
-    right: 0;
+    right: 2px;
     top: 0;
-    width: 45px;
-    height: 45px;
+    width: 42px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     z-index: 99;
+    border-radius: 0px 0px 0px 2px;
   }
 
   .menuRaya {
@@ -210,7 +211,20 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     z-index: 999;
 
     .paginas {
-      display: none;
+      display: flex;
+      width: calc(100% - 80px);
+      border-bottom: 2px solid black;
+      height: 40px;
+      align-items: center;
+      padding-left: 1em;
+      background-color: rgba(255, 255, 255, 1);
+      position: fixed;
+      top: 0;
+      left: 40px;
+
+      li {
+        display: none;
+      }
     }
   }
 
@@ -231,6 +245,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
       .menuRaya {
         height: 0;
         width: 0;
+
         &::before {
           transform: rotate(45deg) translate(-12px, 12px);
         }
@@ -277,13 +292,19 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
 
   // Pantallas medianas (Tablets)
   @media (min-width: $minCelular) {
-    .menuBtn {
+    #menuBtn {
+      position: fixed;
+      right: 2px;
+      top: 0;
       width: var(--anchoMarco);
       height: var(--anchoMarco);
-      right: 0;
-      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
+      z-index: 99;
     }
+
     .menuRaya {
       width: $menuRayaAncho;
       height: $menuRayaAlto;
@@ -316,17 +337,12 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
       height: 50px;
 
       .paginas {
-        display: flex;
-        width: calc(100% - 100px);
-        border-bottom: 3px solid black;
         height: 50px;
-        align-items: center;
-        padding-left: 1em;
-        flex: auto;
-        background-color: rgba(255, 255, 255, 1);
-        position: fixed;
-        top: 0;
+        width: calc(100% - 100px);
         left: 50px;
+        li {
+          display: block;
+        }
       }
     }
 
