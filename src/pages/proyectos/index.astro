@@ -63,19 +63,19 @@ if (!pagina) return Astro.redirect('/404');
     </div>
   </main>
 
-  <!-- <div id="videoFondo">
+  <div id="videoFondo">
     <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
-  </div> -->
+  </div>
 </Plantilla>
 
-<!-- <script>
+<script>
   const ventanita = document.getElementById('ventanita') as HTMLImageElement;
   const ws = new WebSocket(`wss://ventanita.enflujo.com/ventanita`);
 
   ws.onmessage = (evento) => {
     ventanita.src = `data:image/jpeg;base64,${evento.data}`;
   };
-</script> -->
+</script>
 
 <style lang="scss">
   @import '@/scss/_constantes.scss';
