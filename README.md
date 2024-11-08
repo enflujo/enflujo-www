@@ -23,7 +23,7 @@ yarn install
 yarn dev
 ```
 
-Inicia un servidor local (con hot-reloading) en [localhost:3000](http://localhost:3000)
+Inicia un servidor local (con hot-reloading) en [localhost:3000](http://localhost:4321)
 
 ## Construir para producción
 
