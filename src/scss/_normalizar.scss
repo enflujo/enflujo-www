@@ -1,9 +1,5 @@
 @use 'sass:color';
-
-::selection {
-  background-color: color.scale($colorPrincipal, $lightness: 50%);
-  color: rgb(255, 255, 255);
-}
+@use './constantes' as *;
 
 html {
   box-sizing: border-box;

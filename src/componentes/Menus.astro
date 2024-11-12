@@ -96,7 +96,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
 
 <style lang="scss" is:global>
   @use 'sass:color';
-  @import '@/scss/_constantes.scss';
+  @use '@/scss/constantes' as *;
 
   $menuRayaAncho: 30px;
   $menuRayaAnchoCelular: 25px;

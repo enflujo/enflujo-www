@@ -1,9 +1,15 @@
-@import './constantes';
-@import './normalizar';
-@import './mixins';
+@use 'sass:color';
+@use './constantes' as *;
+@use './mixins' as *;
+@use './normalizar';
 
 :root {
   --anchoMarco: 50px;
+}
+
+::selection {
+  background-color: color.scale($colorPrincipal, $lightness: 50%);
+  color: rgb(255, 255, 255);
 }
 
 main {
@@ -11,6 +17,7 @@ main {
   margin: 40px;
   min-height: calc(100vh - 100px);
   min-width: 200px;
+  z-index: 2;
 }
 
 .contenedorFluido {

@@ -78,9 +78,9 @@ if (!pagina) return Astro.redirect('/404');
 </script>
 
 <style lang="scss">
-  @import '@/scss/_constantes.scss';
+  @use '@/scss/constantes' as *;
   main {
-    z-index: 2;
+    position: relative;
   }
 
   #videoFondo {
@@ -93,6 +93,7 @@ if (!pagina) return Astro.redirect('/404');
     width: calc(100% - (var(--anchoMarco) * 2) - 4px);
     height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
     overflow: hidden;
+    z-index: 1;
 
     img {
       width: 100%;

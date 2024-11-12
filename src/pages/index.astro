@@ -47,12 +47,12 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 </Plantilla>
 
 <style lang="scss">
-  @import '@/scss/_constantes.scss';
+  @use '@/scss/constantes' as *;
 
   #muchachita {
     position: absolute;
     top: 40px;
-    width: calc(100% - (80px) - 4px);
+    width: calc(100% - 80px - 4px);
     height: calc(100vh - (var(--anchoMarco) * 2) - 4px);
     overflow: hidden;
     z-index: 1;
@@ -125,7 +125,7 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
     #muchachita {
       position: absolute;
       top: var(--anchoMarco);
-      width: 49vw;
+      width: calc(100% - $anchoMarco * 2);
       height: 77vh;
       overflow: hidden;
       z-index: 1;
@@ -173,13 +173,6 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
   }
   // Pantallas medianas (Tablets)
   @media (min-width: $minTablet) {
-    #muchachita {
-      img {
-        width: 100%;
-        height: auto;
-      }
-    }
-
     #contenedorTextoInicio {
       #lado1 {
         padding: calc(var(--anchoMarco) + 2em) 0 0 calc(var(--anchoMarco) + 1em);
