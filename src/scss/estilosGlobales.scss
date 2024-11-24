@@ -5,6 +5,7 @@
 
 :root {
   --anchoMarco: 50px;
+  --colorPrincipal: #5757f7;
 }
 
 ::selection {
@@ -28,23 +29,7 @@ main {
 
 .contenido {
   ul {
-    margin-left: 1em;
-
-    li {
-      margin-bottom: 0.5em;
-      line-height: 1.5;
-
-      &::before {
-        content: '';
-        width: 0.3em;
-        height: 0.3em;
-        background-color: var(--colorPrincipal);
-        display: block;
-        position: absolute;
-        margin-left: -0.8em;
-        margin-top: 0.6em;
-      }
-    }
+    @include lista;
   }
 }
 

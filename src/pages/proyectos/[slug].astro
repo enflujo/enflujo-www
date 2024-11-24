@@ -57,6 +57,12 @@ const Proyecto = gql`
         id
         title
       }
+      colegas {
+        colegas_id {
+          nombre
+          enlace
+        }
+      }
     }
   }
 `;
@@ -79,10 +85,10 @@ if (proyectos && proyectos.length) {
         const id = elemento.match(/(?<=\().+?(?=\))/);
 
         const html = `<picture>
-          <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=75&format=webp" />
-          <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=400&quality=80&format=webp" />
-          <source media="(min-width: 800px)" srcset="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" />
-          <img class='imagenGaleria' src="https://api.enflujo.com/assets/${id}?height=500&quality=90&format=webp" alt="${alt}" />
+          <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=150&quality=75&format=webp" />
+          <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=80&format=webp" />
+          <source media="(min-width: 800px)" srcset="https://api.enflujo.com/assets/${id}?height=250&quality=90&format=webp" />
+          <img class='imagenGaleria' src="https://api.enflujo.com/assets/${id}?height=250&quality=90&format=webp" alt="${alt}" />
         </picture>
         `;
 
@@ -138,88 +144,76 @@ if (proyectos && proyectos.length) {
         </div>
       )
     }
+    <div id="visualizadorImagen">
+      <span id="botonAnterior" class="botonGaleria">&lt;</span>
+      <div id="imagenGrande"></div>
+      <div class="botonesDerecha">
+        <span id="cerrar">X</span>
+        <span id="botonSiguiente" class="botonGaleria">&gt;</span>
+      </div>
+    </div>
   </main>
 </Plantilla>
 
 <script>
-  // Ampliar fotos de galería
-  const galeria = document.querySelector('.galeria');
+  const galerias = document.querySelectorAll<HTMLDivElement>('.galeria');
 
-  if (galeria) {
-    const imagenesGaleria = document.querySelectorAll('.imagenGaleria');
-    const contenedorImgGrande = document.createElement('div');
-    const botonSiguiente = document.createElement('div');
-    const botonAnterior = document.createElement('div');
+  if (galerias && galerias.length) {
+    const visualizador = document.querySelector<HTMLDivElement>('#visualizadorImagen');
+    const contenedorImgGrande = document.querySelector<HTMLDivElement>('#imagenGrande');
+    const botonSiguiente = document.querySelector<HTMLDivElement>('#botonSiguiente');
+    const botonAnterior = document.querySelector<HTMLDivElement>('#botonAnterior');
 
-    contenedorImgGrande.classList.add('imagenGrande');
-    botonSiguiente.classList.add('botonGaleria');
-    botonAnterior.classList.add('botonGaleria');
+    galerias.forEach((galeria) => {
+      if (!visualizador) return;
+      const imagenesGaleria = galeria.querySelectorAll('.imagenGaleria');
 
-    botonSiguiente.id = 'botonSiguiente';
-    botonAnterior.id = 'botonAnterior';
+      if (!botonAnterior || !botonSiguiente || !contenedorImgGrande) return;
 
-    botonSiguiente.innerText = '>';
-    botonAnterior.innerText = '<';
+      let imagenActual: number;
 
-    contenedorImgGrande.appendChild(botonAnterior);
-    contenedorImgGrande.appendChild(botonSiguiente);
-
-    let imagenActual: number;
-
-    botonSiguiente.addEventListener('click', () => {
-      if (imagenActual < imagenesGaleria.length - 1) {
-        imagenActual++;
+      function cargarImg() {
+        const url = imagenesGaleria[imagenActual].getAttribute('src');
+        if (!url || !contenedorImgGrande) return;
+        const secciones = url.split('?');
+        const urlNuevaImagen = `${secciones[0]}&height=800&quality=90&format=webp`;
+        contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
       }
-    });
 
-    botonAnterior.addEventListener('click', () => {
-      if (imagenActual > 0) imagenActual--;
-    });
+      botonSiguiente.onclick = () => {
+        imagenActual = (imagenActual + 1) % imagenesGaleria.length;
+        cargarImg();
+      };
 
-    // Agrandar imagen de galería al hacer click
-    imagenesGaleria.forEach((imagen, i) => {
-      imagen.addEventListener('click', () => {
-        imagenActual = i;
-        const urlImagen = imagen.getAttribute('src');
-        contenedorImgGrande.style.backgroundImage = `url("${urlImagen}")`;
-        contenedorImgGrande.classList.toggle('visible');
+      botonAnterior.onclick = () => {
+        imagenActual = imagenActual > 0 ? imagenActual - 1 : imagenesGaleria.length - 1;
+        cargarImg();
+      };
+
+      imagenesGaleria.forEach((imagen, i) => {
+        imagen.addEventListener('click', () => {
+          if (!visualizador) return;
+          imagenActual = i;
+          cargarImg();
+          visualizador.classList.add('visible');
+        });
       });
+    });
 
-      // Cerrar foto grande al hacer click
-      document.body.addEventListener('click', (evento) => {
-        if (
-          evento.target !== botonAnterior &&
-          evento.target !== botonSiguiente &&
-          !galeria.contains(evento.target as Node)
-        ) {
-          contenedorImgGrande.classList.remove('visible');
+    if (visualizador) {
+      visualizador.addEventListener('click', (evento) => {
+        if (evento.target !== botonAnterior && evento.target !== botonSiguiente) {
+          if (visualizador.classList.contains('visible')) {
+            visualizador.classList.remove('visible');
+          }
         }
       });
-
-      botonSiguiente.addEventListener('click', () => {
-        const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src');
-        contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
-      });
-
-      botonAnterior.addEventListener('click', () => {
-        const urlNuevaImagen = imagenesGaleria[imagenActual].getAttribute('src');
-        contenedorImgGrande.style.backgroundImage = `url("${urlNuevaImagen}")`;
-      });
-    });
-
-    contenedorImgGrande.addEventListener('click', (evento) => {
-      if (evento.target !== botonAnterior && evento.target !== botonSiguiente) {
-        if (contenedorImgGrande.classList.contains('visible')) {
-          contenedorImgGrande.classList.remove('visible');
-        }
-      }
-    });
-
-    galeria.appendChild(contenedorImgGrande);
+    }
   }
 </script>
 
 <style lang="scss">
+  @use 'sass:color';
   @use '@/scss/constantes' as *;
 
   .seccionProyecto {
@@ -229,7 +223,7 @@ if (proyectos && proyectos.length) {
   .enlace,
   .enlace:link {
     padding: 0.5em;
-    background-color: $colorPrincipal;
+    background-color: var(--colorPrincipal);
     font-weight: $fuentePrincipalPeso;
     color: white;
     width: 50%;
@@ -282,6 +276,67 @@ if (proyectos && proyectos.length) {
         width: 100%;
         height: 100%;
       }
+    }
+  }
+
+  #visualizadorImagen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    height: 100%;
+    width: 100%;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.98);
+
+    &.visible {
+      display: flex;
+    }
+  }
+
+  #imagenGrande {
+    width: 100%;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .botonesDerecha {
+    display: flex;
+    flex-direction: column;
+
+    #botonSiguiente {
+      height: 100%;
+    }
+  }
+
+  #cerrar {
+    font-size: 1.5em;
+    padding: 0.5em;
+    text-align: center;
+    background-color: var(--colorPrincipal);
+    color: white;
+    margin-bottom: 3px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color.scale($colorPrincipal, $lightness: 70%);
+    }
+  }
+
+  .botonGaleria {
+    cursor: pointer;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    padding: 0 0.7em;
+    background-color: var(--colorPrincipal);
+    color: white;
+    transition: all 0.3s ease-out;
+
+    &:hover {
+      background-color: color.scale($colorPrincipal, $lightness: 70%);
     }
   }
 
@@ -354,56 +409,11 @@ if (proyectos && proyectos.length) {
 
     .imagenGaleria {
       cursor: pointer;
-      display: block;
-      position: relative;
-      width: auto;
       margin: 0.5em;
-      max-height: 30vh;
-    }
-
-    .imagenGrande {
-      display: none;
-      position: absolute;
-      z-index: 9;
-      cursor: pointer;
-      border: 3px black solid;
-      left: 15%;
-      width: 70%;
-      background-color: rgba(255, 255, 255, 0.83);
-      height: 80vh;
-      background-position: center;
-      background-image: url(https://api.enflujo.com/assets/479f5d89-801a-4a70-a259-4386ac3028e5?height=500&quality=90&format=webp);
-      background-repeat: no-repeat;
-      background-size: contain;
-
-      &.visible {
-        display: block;
-      }
-    }
-
-    .botonGaleria {
-      position: absolute;
-      font-size: 2em;
-      display: flex;
-      align-items: center;
-      padding: 0 0.7em;
-      height: 100%;
+      max-height: 250px;
 
       &:hover {
-        color: $colorPrincipal;
-      }
-    }
-
-    #botonSiguiente {
-      right: 0;
-    }
-  }
-
-  @media (min-width: $minTablet) {
-    .contenidoProyecto {
-      .imagenGrande {
-        left: 10%;
-        width: 80%;
+        opacity: 0.8;
       }
     }
   }
@@ -417,10 +427,6 @@ if (proyectos && proyectos.length) {
 
       h2 {
         padding: 20px;
-      }
-      .imagenGrande {
-        left: 5vw;
-        width: 90%;
       }
     }
   }
