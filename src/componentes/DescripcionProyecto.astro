@@ -26,7 +26,7 @@ datos.terminado = !!datos.fecha_publicacion;
 
 {
   datos.repos && (
-    <div class="repos">
+    <div class="descripcion repos">
       <p class="interTitulo">Código:</p>
       {datos.repos.map((repo) => (
         <div class="repo">
@@ -40,21 +40,58 @@ datos.terminado = !!datos.fecha_publicacion;
   )
 }
 
+{
+  datos.colegas && datos.colegas.length > 0 && (
+    <div class="descripcion colegas">
+      <p class="interTitulo">Colaborador{datos.colegas.length > 1 ? 'es' : ''}:</p>
+      <ul class="listaColegas">
+        {datos.colegas.map(({ colegas_id }) => (
+          <li class="colega">
+            {colegas_id.enlace && (
+              <a class="enlaceExterno" href={colegas_id.enlace} target="_blank" rel="external">
+                {colegas_id.nombre}
+              </a>
+            )}
+            {!colegas_id.enlace && colegas_id.nombre}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 <style lang="scss">
+  @use '@/scss/mixins' as *;
+
+  .descripcion {
+    font-size: 0.85em;
+  }
+
+  .seccionDescripcion {
+    font-size: 1em;
+  }
+
+  .textoEstado {
+    margin: 0.3em 0 0 0;
+  }
+
+  .notaEnFlujo {
+    margin-top: 0;
+  }
+
+  .interTitulo {
+    margin: 0 0.3em 0 0;
+    line-height: 1.25;
+  }
+
   .repos {
     display: flex;
-    align-items: flex-end;
-    flex: 1;
+    align-items: center;
     margin: 1.5em 0;
     flex-wrap: wrap;
 
-    .interTitulo {
-      margin: 0 0.75em 0.25em 0;
-      width: auto;
-      line-height: 1.25;
-    }
     .repo {
-      margin-right: 2em;
+      margin-right: 1em;
       display: flex;
       align-items: center;
     }
@@ -62,7 +99,16 @@ datos.terminado = !!datos.fecha_publicacion;
       width: 15px;
     }
     .repoNombre {
-      margin-left: 0.5em;
+      margin-left: 0.2em;
+    }
+  }
+
+  .listaColegas {
+    margin-top: 0.8em;
+    @include lista;
+
+    li {
+      line-height: 1;
     }
   }
 </style>

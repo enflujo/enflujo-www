@@ -64,6 +64,7 @@ export interface Proyecto extends CamposComunes {
   equipo: PersonaEquipo[];
   temas: { glosario_id: TerminoGlosario }[];
   terminado?: boolean;
+  colegas?: { colegas_id: { nombre: string; enlace?: string } }[];
 }
 
 export interface OpcionesImagenDirectus {
