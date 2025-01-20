@@ -58,15 +58,15 @@ if (!pagina) return Astro.redirect('/404');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
-  <main id='archivoProyectos' class='pagina'>
-    <section class='inicioPagina'>
-      <h1 class='tituloPagina'>{pagina.titulo}</h1>
+  <main id="archivoProyectos" class="pagina">
+    <section class="inicioPagina">
+      <h1 class="tituloPagina">{pagina.titulo}</h1>
     </section>
 
-    <div class='contenedorTarjetas'>
+    <div class="contenedorTarjetas">
       {
         proyectos.map((proyecto: Proyecto) => (
-          <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion='proyectos'>
+          <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
             <DescripcionProyecto datos={proyecto} />
           </Tarjeta>
         ))
@@ -74,8 +74,8 @@ if (!pagina) return Astro.redirect('/404');
     </div>
   </main>
 
-  <div id='videoFondo'>
-    <img id='ventanita' src='' alt='Es una ventanita de EnFlujo' />
+  <div id="videoFondo">
+    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
   </div>
 </Plantilla>
 
@@ -88,7 +88,7 @@ if (!pagina) return Astro.redirect('/404');
   };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
   @use '@/scss/constantes' as *;
   main {
     position: relative;
