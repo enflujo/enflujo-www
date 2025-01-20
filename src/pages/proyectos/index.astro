@@ -43,19 +43,30 @@ const Proyectos = gql`
 const { proyectos, paginas } = await obtenerDatos<{ proyectos: Proyecto[]; paginas: CamposComunes[] }>(Proyectos);
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
 
+proyectos.sort((a, b) => {
+  let fechaA = a.fecha_publicacion || a.fecha_inicio || a.date_created;
+  let fechaB = b.fecha_publicacion || b.fecha_inicio || b.date_created;
+
+  if (fechaA && fechaB) {
+    return new Date(fechaB).getTime() - new Date(fechaA).getTime();
+  }
+
+  return 0;
+});
+
 if (!pagina) return Astro.redirect('/404');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
-  <main id="archivoProyectos" class="pagina">
-    <section class="inicioPagina">
-      <h1 class="tituloPagina">{pagina.titulo}</h1>
+  <main id='archivoProyectos' class='pagina'>
+    <section class='inicioPagina'>
+      <h1 class='tituloPagina'>{pagina.titulo}</h1>
     </section>
 
-    <div class="contenedorTarjetas">
+    <div class='contenedorTarjetas'>
       {
         proyectos.map((proyecto: Proyecto) => (
-          <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
+          <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion='proyectos'>
             <DescripcionProyecto datos={proyecto} />
           </Tarjeta>
         ))
@@ -63,8 +74,8 @@ if (!pagina) return Astro.redirect('/404');
     </div>
   </main>
 
-  <div id="videoFondo">
-    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
+  <div id='videoFondo'>
+    <img id='ventanita' src='' alt='Es una ventanita de EnFlujo' />
   </div>
 </Plantilla>
 
@@ -77,7 +88,7 @@ if (!pagina) return Astro.redirect('/404');
   };
 </script>
 
-<style lang="scss">
+<style lang='scss'>
   @use '@/scss/constantes' as *;
   main {
     position: relative;
