@@ -1,7 +1,15 @@
 // Stacks de fuentes nativas a los diferentes sistemas para no cargar fuentes externas
 // $fuentePrincipal: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
 //   'Helvetica Neue', sans-serif;
+@font-face {
+  font-family: 'EnFlujo';
+  src: url('/fuentes/EnFlujoRegular.otf') format('truetype-variations');
+  font-weight: 400;
+  font-display: swap;
+}
+
 $fuenteMono: ibm-plex-mono, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$fuenteEnFlujo: EnFlujo, 'Liberation Mono', 'Courier New', monospace;
 $fuentePrincipal: $fuenteMono;
 $fuentePrincipalPeso: 400;
 $fuentePrincipalBold: 700;
