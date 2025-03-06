@@ -1,14 +1,17 @@
 ---
+interface Props {
+  titulo: string;
+  ancho: number;
+  alto: number;
+  resolucion?: number;
+  imgId: string;
+}
+
 const { titulo, ancho, alto, resolucion, imgId } = Astro.props;
 import { urlImagen } from '@/utilidades/ayudas';
 
 function fuente() {
-  return urlImagen(imgId, {
-    width: ancho,
-    height: alto,
-    quality: resolucion || 80,
-    format: 'webp',
-  });
+  return urlImagen(imgId, { width: ancho, height: alto, quality: resolucion || 80, format: 'webp' });
 }
 ---
 

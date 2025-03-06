@@ -12,29 +12,21 @@ export type PersonaEquipo = {
     proyectos_id: {
       titulo: string;
       slug: string;
+      imagen: Imagen;
+      fecha_publicacion: string | Date;
+      fecha_inicio: string | Date;
+      date_created?: string | Date;
     };
   }[];
 };
 
-export type Red = {
-  red: string;
-  usuario: string;
-  url: string;
-};
+export type Red = { red: string; usuario: string; url: string };
 
-export type Imagen = {
-  id: string;
-  title: string;
-};
+export type Imagen = { id: string; title: string };
 
-export type Repo = {
-  nombre: string;
-  url: string;
-};
+export type Repo = { nombre: string; url: string };
 
-export type TerminoGlosario = {
-  titulo: string;
-};
+export type TerminoGlosario = { titulo: string };
 
 export interface CamposComunes {
   estado: string;

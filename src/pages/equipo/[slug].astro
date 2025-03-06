@@ -2,7 +2,7 @@
 import Plantilla from '@/plantillas/Plantilla.astro';
 import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
-import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import { formatoFecha, gql, obtenerDatos } from '@/utilidades/ayudas';
 import type { PersonaEquipo } from '@/tipos';
 import { Schema } from 'astro-seo-schema';
 import type { Person } from 'schema-dts';
@@ -39,6 +39,13 @@ const Persona = gql`
         proyectos_id {
           titulo
           slug
+          fecha_publicacion
+          fecha_inicio
+          date_created
+          imagen {
+            id
+            title
+          }
         }
       }
       foto {
@@ -51,9 +58,7 @@ const Persona = gql`
 
 const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
 let persona: PersonaEquipo;
-const seo: Person = {
-  '@type': 'Person',
-};
+const seo: Person = { '@type': 'Person' };
 
 if (equipo && equipo.length) {
   persona = equipo[0];
@@ -73,25 +78,35 @@ if (equipo && equipo.length) {
   if (persona.rol) {
     seo.jobTitle = persona.rol;
   }
+
+  if (persona.proyectos) {
+    persona.proyectos.sort((a, b) => {
+      let fechaA = a.proyectos_id.fecha_publicacion || a.proyectos_id.fecha_inicio || a.proyectos_id.date_created;
+      let fechaB = b.proyectos_id.fecha_publicacion || b.proyectos_id.fecha_inicio || b.proyectos_id.date_created;
+
+      if (fechaA && fechaB) {
+        return new Date(fechaB).getTime() - new Date(fechaA).getTime();
+      }
+
+      return 0;
+    });
+  }
 } else {
   return Astro.redirect('/404');
 }
+
+const texto = (estado: boolean, fecha: string | Date) =>
+  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
 ---
 
 <Plantilla titulo={persona.nombre} descripcion={persona.descripcion} imagen={persona.foto}>
-  <Schema
-    slot="cabeza"
-    item={{
-      '@context': 'https://schema.org',
-      ...seo,
-    }}
-  />
+  <Schema slot="cabeza" item={{ '@context': 'https://schema.org', ...seo }} />
   <main class="pagina paginaMiembro">
     <section class="resumen contenedorFluido">
       {
         persona.foto.id && (
           <div class="seccionImagen">
-            <EnflujoImagen imgId={persona.foto.id} ancho="300" alto="300" titulo={persona.foto.title} />
+            <EnflujoImagen imgId={persona.foto.id} ancho={300} alto={300} titulo={persona.foto.title} />
           </div>
         )
       }
@@ -108,10 +123,36 @@ if (equipo && equipo.length) {
       persona.proyectos && persona.proyectos.length && (
         <section class="contenedorFluido contenido">
           <h2 class="tituloSeccion">Proyectos</h2>
-          <ul>
+          <ul id="listaProyectos">
             {persona.proyectos.map((proyecto) => (
               <li>
-                <a href={`/proyectos/${proyecto.proyectos_id.slug}`}>{proyecto.proyectos_id.titulo}</a>
+                <a href={`/proyectos/${proyecto.proyectos_id.slug}`}>
+                  <EnflujoImagen
+                    imgId={proyecto.proyectos_id.imagen.id}
+                    ancho={100}
+                    alto={100}
+                    titulo={proyecto.proyectos_id.imagen.title}
+                  />
+                </a>
+
+                <div class="informacion">
+                  <a href={`/proyectos/${proyecto.proyectos_id.slug}`}>
+                    <h3 class="nombreProyecto">{proyecto.proyectos_id.titulo}</h3>
+                  </a>
+
+                  <div class="fecha">
+                    <p class="textoEstado">
+                      {texto(
+                        !!proyecto.proyectos_id.fecha_publicacion,
+                        proyecto.proyectos_id.fecha_publicacion || proyecto.proyectos_id.fecha_inicio
+                      )}
+                    </p>
+                    <p
+                      class="notaEnFlujo"
+                      data-fecha={proyecto.proyectos_id.fecha_publicacion || proyecto.proyectos_id.fecha_inicio}
+                    />
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -167,6 +208,42 @@ if (equipo && equipo.length) {
   .bio {
     font-size: 0.9em;
     padding-bottom: 2em;
+  }
+
+  #listaProyectos {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      margin-right: 1em;
+      border: 1px dotted;
+      display: flex;
+      align-items: center;
+
+      .fecha {
+        padding: 0em;
+        font-size: 0.85em;
+        font-weight: 700;
+        font-style: italic;
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .informacion {
+        padding: 0.5em;
+        font-size: 0.8em;
+      }
+
+      .nombreProyecto {
+      }
+
+      &::before {
+        width: 0;
+      }
+    }
   }
 
   // Teléfonos horizontal
