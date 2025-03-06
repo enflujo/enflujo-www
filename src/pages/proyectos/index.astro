@@ -44,8 +44,8 @@ const { proyectos, paginas } = await obtenerDatos<{ proyectos: Proyecto[]; pagin
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
 
 proyectos.sort((a, b) => {
-  let fechaA = a.fecha_publicacion || a.fecha_inicio || a.date_created;
-  let fechaB = b.fecha_publicacion || b.fecha_inicio || b.date_created;
+  const fechaA = a.fecha_publicacion || a.fecha_inicio || a.date_created;
+  const fechaB = b.fecha_publicacion || b.fecha_inicio || b.date_created;
 
   if (fechaA && fechaB) {
     return new Date(fechaB).getTime() - new Date(fechaA).getTime();
