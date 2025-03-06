@@ -10,13 +10,7 @@ if (!miembro.foto) {
 
 <div class="perfil">
   <a href={`/equipo/${miembro.slug}`}>
-    <EnflujoImagen
-      class={`foto${!miembro.activo ? ' inactivo' : ''}`}
-      imgId={miembro.foto.id}
-      ancho="200"
-      alto="200"
-      titulo={miembro.nombre}
-    />
+    <EnflujoImagen imgId={miembro.foto.id} ancho={200} alto={200} titulo={miembro.nombre} />
   </a>
   <div>
     <a class="nombre" href={`/equipo/${miembro.slug}`}>{miembro.nombre}</a>
@@ -44,12 +38,6 @@ if (!miembro.foto) {
   .rol {
     font-size: 0.85em;
     font-weight: $fuentePrincipalBold;
-  }
-
-  .foto {
-    &.inactivo {
-      filter: grayscale(100%);
-    }
   }
 
   .redes {

@@ -5,9 +5,10 @@ interface Props {
   alto: number;
   resolucion?: number;
   imgId: string;
+  clases?: string;
 }
 
-const { titulo, ancho, alto, resolucion, imgId } = Astro.props;
+const { titulo, ancho, alto, resolucion, imgId, clases } = Astro.props;
 import { urlImagen } from '@/utilidades/ayudas';
 
 function fuente() {
@@ -16,7 +17,7 @@ function fuente() {
 ---
 
 <img
-  class="perezoso"
+  class={`perezoso${clases ? ` ${clases}` : ''}`}
   src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${ancho} ${alto}'%3E%3C/svg%3E`}
   data-fuente={fuente()}
   alt={titulo}
