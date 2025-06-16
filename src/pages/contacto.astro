@@ -1,0 +1,92 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import type { CamposComunes } from '@/tipos';
+import { gql, obtenerDatos } from '@/utilidades/ayudas';
+
+const Pagina = gql`
+  query {
+    paginas(filter: { slug: { _eq: "contacto" } }, limit: 1) {
+      titulo
+      descripcion
+      imagen {
+        id
+        title
+        filename_download
+        width
+        height
+      }
+    }
+  }
+`;
+
+const { paginas } = await obtenerDatos<{
+  paginas: CamposComunes[];
+}>(Pagina);
+const pagina = paginas[0];
+---
+
+<Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
+  <main id="contacto" class="pagina">
+    <h1 class="tituloPagina">{pagina.titulo}</h1>
+
+    <div class="contenidoCentrado">
+      <p>Esta no es una página de contacto.</p>
+
+      <p>O si lo es, pero no la que estás buscando.</p>
+
+      <p>Los modos de contacto con nosotros suceden dentro del espacio del laboratorio:</p>
+
+      <p>
+        Nos puedes enviar un <a href="https://fax.enflujo.com/" target="_blank">fax</a>, lo recibimos instantáneamente
+        por medio de una impresora de recibos que siempre está conectada a internet. La imagen en vivo de la transmisión
+        se puede ver aquí (si ves una pantalla negra es porque las luces del espacio están apagadas y no estamos):
+      </p>
+
+      <img id="transmision" src="https://fax-camara.enflujo.com/" alt="transmisión" />
+
+      <p>Puedes venir al laboratorio, estamos acá:</p>
+
+      <p>
+        Puedes llamar al teléfono, llamas al número de la Universidad de los Andes y marcas la extensión: 3456 (no es
+        inventada, realmente son los números del 3 al 6)
+      </p>
+
+      <p>
+        Para escribirnos un mensaje, puedes hacerlo por <a href="https://www.instagram.com/labenflujo/" target="_blank"
+          >Instagram.</a
+        >
+      </p>
+
+      <p>
+        Si necesitas enviarnos un correo, puedes hacerlo a enflujo@uniandes.edu.co - Deliberadamente está de último en
+        nuestras opciones de contacto.
+      </p>
+    </div>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  main {
+    p {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      line-height: 1.5;
+    }
+
+    #transmision {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      margin-top: 1rem;
+    }
+  }
+
+  .contenidoCentrado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>
