@@ -76,25 +76,16 @@ if (proyectos && proyectos.length) {
   if (pagina.date_created) pagina.fecha_publicacion = new Date(pagina.date_created);
 
   if (pagina.contenido && pagina.contenido.length) {
-    const comando = /\/\/\/(.*?)\)/g;
-    const imgsGaleria = pagina.contenido.match(comando);
+    const comando = /\/\/\/\[([^\]]+)\]\(([^)]+)\)/g;
 
-    if (imgsGaleria) {
-      imgsGaleria.forEach((elemento: string) => {
-        const alt = elemento.match(/(?<=\[).+?(?=\])/);
-        const id = elemento.match(/(?<=\().+?(?=\))/);
-
-        const html = `<picture>
+    pagina.contenido = pagina.contenido.replace(comando, (match, alt, id) => {
+      return `<picture>
           <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=150&quality=75&format=webp" />
           <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=80&format=webp" />
           <source media="(min-width: 800px)" srcset="https://api.enflujo.com/assets/${id}?height=250&quality=90&format=webp" />
           <img class='imagenGaleria' src="https://api.enflujo.com/assets/${id}?height=250&quality=90&format=webp" alt="${alt}" />
-        </picture>
-        `;
-
-        pagina.contenido = pagina.contenido.replace(elemento, html);
-      });
-    }
+        </picture>`;
+    });
   }
 } else {
   return Astro.redirect('/404');
