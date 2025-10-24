@@ -1,6 +1,6 @@
 {
   "name": "enflujo-www",
-  "packageManager": "yarn@4.9.1",
+  "packageManager": "yarn@4.10.3",
   "version": "1.1.0",
   "type": "module",
   "private": true,
@@ -19,26 +19,26 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/sitemap": "3.4.1",
+    "@astrojs/check": "^0.9.5",
+    "@astrojs/sitemap": "3.6.0",
     "@enflujo/alquimia": "^2.0.0",
     "@rollup/plugin-graphql": "^2.0.5",
     "@speed-highlight/core": "^1.2.7",
-    "astro": "5.9.3",
+    "astro": "5.15.1",
     "astro-robots-txt": "^1.0.0",
-    "astro-seo-schema": "^5.0.0",
+    "astro-seo-schema": "^5.1.0",
     "autoprefixer": "^10.4.21",
     "marked": "^15.0.12",
-    "marked-highlight": "^2.2.1",
+    "marked-highlight": "^2.2.2",
     "schema-dts": "^1.1.5",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@types/marked": "^6.0.0",
     "graphql": "^16.11.0",
-    "postcss": "^8.5.5",
-    "prettier": "^3.5.3",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
-    "sass": "^1.89.2"
+    "sass": "^1.93.2"
   }
 }
