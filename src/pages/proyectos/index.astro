@@ -75,17 +75,15 @@ if (!pagina) return Astro.redirect('/404');
   </main>
 
   <div id="videoFondo">
-    <img id="ventanita" src="" alt="Es una ventanita de EnFlujo" />
+    <video id="ventanita" autoplay muted playsinline preload="metadata" aria-label="Es una ventanita de EnFlujo"
+    ></video>
   </div>
 </Plantilla>
 
 <script>
-  const ventanita = document.getElementById('ventanita') as HTMLImageElement;
-  const ws = new WebSocket(`wss://ventanita.enflujo.com/ventanita`);
+  import { iniciarVideoHls } from '@/utilidades/hls';
 
-  ws.onmessage = (evento) => {
-    ventanita.src = `data:image/jpeg;base64,${evento.data}`;
-  };
+  void iniciarVideoHls('#ventanita', 'https://ventanita.enflujo.com/hls/ventanita/index.m3u8');
 </script>
 
 <style lang="scss">
@@ -106,9 +104,10 @@ if (!pagina) return Astro.redirect('/404');
     overflow: hidden;
     z-index: 1;
 
-    img {
+    video {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
     }
   }
 

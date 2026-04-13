@@ -29,7 +29,13 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
 <Plantilla descripcion={general.descripcion} imagen={general.imagen}>
   <main id="inicio">
     <div id="muchachita">
-      <img src="https://muchachita.enflujo.com/" alt="Video en vivo del laboratorio EnFlujo" />
+      <video
+        id="muchachitaVideo"
+        autoplay
+        muted
+        playsinline
+        preload="metadata"
+        aria-label="Video en vivo del laboratorio EnFlujo"></video>
     </div>
 
     <div id="contenedorTextoInicio">
@@ -46,6 +52,12 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
   </main>
 </Plantilla>
 
+<script>
+  import { iniciarVideoHls } from '@/utilidades/hls';
+
+  void iniciarVideoHls('#muchachitaVideo', 'https://ventanita.enflujo.com/hls/muchachita/index.m3u8');
+</script>
+
 <style lang="scss">
   @use '@/scss/constantes' as *;
 
@@ -59,9 +71,10 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
     opacity: 1;
     pointer-events: none;
 
-    img {
+    video {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
@@ -131,9 +144,10 @@ const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General)
       z-index: 1;
       opacity: 0.5;
 
-      img {
+      video {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
