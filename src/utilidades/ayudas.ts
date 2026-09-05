@@ -114,9 +114,7 @@ export const distanciaEntreCoordenadas = (lat1: number, lon1: number, lat2: numb
 
 export const formatoFecha = (fecha: string | Date) => {
   const valor =
-    typeof fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fecha)
-      ? new Date(`${fecha}T12:00:00Z`)
-      : new Date(fecha);
+    typeof fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? new Date(`${fecha}T12:00:00Z`) : new Date(fecha);
 
   return valor.toLocaleString('es-CO', {
     timeZone: 'America/Bogota',
@@ -125,4 +123,3 @@ export const formatoFecha = (fecha: string | Date) => {
     day: 'numeric',
   });
 };
-
