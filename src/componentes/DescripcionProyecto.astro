@@ -8,7 +8,7 @@ export type Props = {
 const { datos } = Astro.props;
 
 const texto = (estado: boolean, fecha: string | Date) =>
-  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
+  estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso';
 
 datos.terminado = !!datos.fecha_publicacion;
 ---
@@ -61,7 +61,7 @@ datos.terminado = !!datos.fecha_publicacion;
 }
 
 <style lang="scss">
-  @use '@/scss/mixins' as *;
+  @use 'scss/mixins' as *;
 
   .descripcion {
     font-size: 0.85em;

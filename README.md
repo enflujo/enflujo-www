@@ -11,6 +11,15 @@ Creado con [Astro](https://astro.build/)
 
 ## Instalación
 
+El proyecto usa Node.js 24 LTS. Con `nvm`:
+
+```bash
+nvm install
+nvm use
+```
+
+TypeScript se mantiene en la rama 6 mientras `astro check` incorpora soporte para TypeScript 7. El avance se puede consultar en el [seguimiento oficial de Astro](https://github.com/withastro/roadmap/discussions/1321).
+
 Instalar dependencias:
 
 ```bash

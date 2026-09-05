@@ -112,8 +112,13 @@ export const distanciaEntreCoordenadas = (lat1: number, lon1: number, lat2: numb
   return radio * c;
 };
 
-export const formatoFecha = (fecha: Date) => {
-  return fecha.toLocaleString('es-CO', {
+export const formatoFecha = (fecha: string | Date) => {
+  const valor =
+    typeof fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fecha)
+      ? new Date(`${fecha}T12:00:00Z`)
+      : new Date(fecha);
+
+  return valor.toLocaleString('es-CO', {
     timeZone: 'America/Bogota',
     year: 'numeric',
     month: 'long',
@@ -121,12 +126,3 @@ export const formatoFecha = (fecha: Date) => {
   });
 };
 
-/**
- * Esta función intercambia la fuente de la imagen por la que se define en el dataset
- *
- * @param imagen Imagen que se quiere revelar cuando está a la vista
- */
-export function cuandoImagenVisible(imagen: Element) {
-  const { fuente } = (imagen as HTMLImageElement).dataset;
-  if (fuente) (imagen as HTMLImageElement).src = fuente;
-}

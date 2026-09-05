@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import graphql from '@rollup/plugin-graphql';
 import robotsTxt from 'astro-robots-txt';
+import { fileURLToPath } from 'node:url';
 // import compress from 'astro-compress';
 
 // https://astro.build/config
@@ -17,11 +17,11 @@ export default defineConfig({
     // }),
   ],
   vite: {
-    plugins: [graphql()],
     css: {
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler',
+          loadPaths: [fileURLToPath(new URL('./src', import.meta.url))],
         },
       },
     },

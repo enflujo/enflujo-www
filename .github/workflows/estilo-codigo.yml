@@ -14,18 +14,18 @@ jobs:
 
     steps:
       - name: 🐯 Obtener código del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
+      - name: 🐝 Usar Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
       - name: 🐜 Activar Corepack
         run: corepack enable
-
-      - name: 🐝 Usar Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-          cache: 'yarn'
 
       - name: 🦒 Instalar dependencias
         run: |
@@ -33,3 +33,6 @@ jobs:
 
       - name: 👀 Buscar errores
         run: yarn lint
+
+      - name: 🔎 Revisar tipos y construir el sitio
+        run: yarn build

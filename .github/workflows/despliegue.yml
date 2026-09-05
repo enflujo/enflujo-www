@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: 🐯 Obtener código del repositorio
-        uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DOMINIO_AZURE }}
           username: ${{ secrets.USUARIO_AZURE }}
@@ -24,5 +24,8 @@ jobs:
             source ~/.nvm/nvm.sh
             cd ${{ secrets.RUTA }}
             git pull origin main
-            yarn
+            nvm install
+            nvm use
+            corepack enable
+            yarn install --immutable
             yarn build

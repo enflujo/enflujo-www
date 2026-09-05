@@ -1,9 +1,20 @@
 {
   "name": "enflujo-www",
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.18.0",
   "version": "1.1.0",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependenciesMeta": {
+    "@parcel/watcher": {
+      "built": true
+    },
+    "esbuild": {
+      "built": true
+    }
+  },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1 --port 3000",
     "build": "astro check && astro build",
@@ -19,26 +30,22 @@
     "server:restart": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
-    "@astrojs/sitemap": "3.7.2",
+    "@astrojs/sitemap": "3.7.4",
     "@enflujo/alquimia": "^2.0.0",
-    "@rollup/plugin-graphql": "^2.0.5",
-    "@speed-highlight/core": "^1.2.15",
-    "astro": "5.18.1",
+    "@speed-highlight/core": "^2.1.0",
+    "astro": "7.3.1",
     "astro-robots-txt": "^1.0.0",
-    "astro-seo-schema": "^5.2.0",
-    "autoprefixer": "^10.5.0",
-    "marked": "^17.0.6",
-    "marked-highlight": "^2.2.4",
-    "schema-dts": "^1.1.5",
-    "typescript": "^5.9.3"
+    "autoprefixer": "^10.5.4",
+    "marked": "^18.0.11",
+    "marked-highlight": "^2.2.4"
   },
   "devDependencies": {
-    "@types/marked": "^6.0.0",
-    "graphql": "^16.13.2",
-    "postcss": "^8.5.9",
-    "prettier": "^3.8.2",
+    "@astrojs/check": "^0.9.10",
+    "postcss": "^8.5.28",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
-    "sass": "^1.99.0"
+    "sass": "^1.103.1",
+    "schema-dts": "^2.0.0",
+    "typescript": "^6.0.3"
   }
 }

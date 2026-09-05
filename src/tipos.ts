@@ -3,6 +3,7 @@ export type PersonaEquipo = {
   nombre: string;
   slug: string;
   descripcion: string;
+  biografia: string;
   activo: boolean;
   redes: Red[];
   sitio_web: string;

@@ -12,8 +12,7 @@ const dimsImg = { ancho: '630', alto: '350' };
         imagen ? (
           <img
             class="perezoso"
-            src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${dimsImg.ancho} ${dimsImg.alto}'%3E%3C/svg%3E`}
-            data-fuente={urlImagen(imagen.id, {
+            src={urlImagen(imagen.id, {
               width: 667,
               height: 350,
               quality: 90,
@@ -22,6 +21,8 @@ const dimsImg = { ancho: '630', alto: '350' };
             alt={imagen.title}
             width={dimsImg.ancho}
             height={dimsImg.alto}
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <img
@@ -46,7 +47,7 @@ const dimsImg = { ancho: '630', alto: '350' };
 </div>
 
 <style lang="scss" is:global>
-  @use '@/scss/constantes' as *;
+  @use 'scss/constantes' as *;
 
   .tarjeta {
     display: flex;

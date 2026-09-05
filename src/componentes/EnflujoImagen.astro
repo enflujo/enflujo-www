@@ -18,20 +18,10 @@ function fuente() {
 
 <img
   class={`perezoso${clases ? ` ${clases}` : ''}`}
-  src={`data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0 0 ${ancho} ${alto}'%3E%3C/svg%3E`}
-  data-fuente={fuente()}
+  src={fuente()}
   alt={titulo}
   width={ancho}
   height={alto}
+  loading="lazy"
+  decoding="async"
 />
-
-<script>
-  import { cuandoImagenVisible } from '@/utilidades/ayudas';
-  import { duranteInterseccion } from '@/utilidades/observador';
-
-  const imagenes = document.querySelectorAll<HTMLImageElement>('.perezoso');
-
-  imagenes.forEach((imagen: HTMLImageElement) => {
-    duranteInterseccion(imagen, cuandoImagenVisible, true, { threshold: 0.1 });
-  });
-</script>

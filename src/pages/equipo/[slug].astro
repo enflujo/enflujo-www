@@ -4,8 +4,7 @@ import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
 import { formatoFecha, gql, obtenerDatos } from '@/utilidades/ayudas';
 import type { PersonaEquipo } from '@/tipos';
-import { Schema } from 'astro-seo-schema';
-import type { Person } from 'schema-dts';
+import type { Person, WithContext } from 'schema-dts';
 
 export async function getStaticPaths() {
   const Equipo = gql`
@@ -31,6 +30,7 @@ const Persona = gql`
       slug
       rol
       descripcion
+      biografia
       date_created
       sitio_web
       activo
@@ -58,7 +58,7 @@ const Persona = gql`
 
 const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
 let persona: PersonaEquipo;
-const seo: Person = { '@type': 'Person' };
+const seo: WithContext<Person> = { '@context': 'https://schema.org', '@type': 'Person' };
 
 if (equipo && equipo.length) {
   persona = equipo[0];
@@ -95,12 +95,14 @@ if (equipo && equipo.length) {
   return Astro.redirect('/404');
 }
 
+const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
+
 const texto = (estado: boolean, fecha: string | Date) =>
-  estado ? `Publicado el ${formatoFecha(new Date(fecha))}` : 'En proceso';
+  estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso';
 ---
 
 <Plantilla titulo={persona.nombre} descripcion={persona.descripcion} imagen={persona.foto}>
-  <Schema slot="cabeza" item={{ '@context': 'https://schema.org', ...seo }} />
+  <script is:inline slot="cabeza" type="application/ld+json" set:html={seoJson} />
   <main class="pagina paginaMiembro">
     <section class="resumen contenedorFluido">
       {
@@ -115,7 +117,7 @@ const texto = (estado: boolean, fecha: string | Date) =>
         <h1 class="nombre">{persona.nombre}</h1>
         <p class="rol">{persona.rol}</p>
         {persona.redes && <EquipoRedes sitioWeb={persona.sitio_web} redes={persona.redes} />}
-        {persona.descripcion && <div class="bio" set:html={persona.descripcion} />}
+        {persona.biografia && <div class="bio" set:html={persona.biografia} />}
       </div>
     </section>
 
@@ -163,7 +165,7 @@ const texto = (estado: boolean, fecha: string | Date) =>
 </Plantilla>
 
 <style lang="scss">
-  @use '@/scss/constantes' as *;
+  @use 'scss/constantes' as *;
 
   section {
     margin-bottom: 1em;

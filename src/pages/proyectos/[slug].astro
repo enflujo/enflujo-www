@@ -4,7 +4,7 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
-import { highlightText } from '@speed-highlight/core';
+import { highlightHTML } from '@speed-highlight/core';
 import type { ShjLanguage } from '@speed-highlight/core';
 import '@speed-highlight/core/themes/github-dim.css';
 import type { Proyecto } from '@/tipos';
@@ -14,7 +14,7 @@ const marked = new Marked(
     async: true,
     langPrefix: 'shj-lang-',
     highlight: (codigo: string, lenguaje: string) => {
-      return highlightText(codigo, lenguaje as ShjLanguage, true);
+      return highlightHTML(codigo, lenguaje as ShjLanguage, { block: false });
     },
   })
 );
@@ -72,13 +72,12 @@ let pagina: Proyecto;
 
 if (proyectos && proyectos.length) {
   pagina = proyectos[0];
-  if (pagina.fecha_publicacion) pagina.fecha_publicacion = new Date(pagina.fecha_publicacion);
-  if (pagina.date_created) pagina.fecha_publicacion = new Date(pagina.date_created);
+  if (!pagina.fecha_publicacion && pagina.date_created) pagina.fecha_publicacion = pagina.date_created;
 
   if (pagina.contenido && pagina.contenido.length) {
     const comando = /\/\/\/\[([^\]]+)\]\(([^)]+)\)/g;
 
-    pagina.contenido = pagina.contenido.replace(comando, (match, alt, id) => {
+    pagina.contenido = pagina.contenido.replace(comando, (_coincidencia, alt, id) => {
       return `<picture>
           <source media="(max-width: 396px)" srcset="https://api.enflujo.com/assets/${id}?height=150&quality=75&format=webp" />
           <source media="(max-width: 799px)" srcset="https://api.enflujo.com/assets/${id}?height=200&quality=80&format=webp" />
@@ -90,6 +89,8 @@ if (proyectos && proyectos.length) {
 } else {
   return Astro.redirect('/404');
 }
+
+const contenidoHtml = pagina.contenido ? await marked.parse(pagina.contenido) : '';
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
@@ -129,9 +130,9 @@ if (proyectos && proyectos.length) {
     </div>
 
     {
-      pagina.contenido && (
+      contenidoHtml && (
         <div class="contenidoProyecto">
-          <Fragment set:html={marked.parse(pagina.contenido)} />
+          <Fragment set:html={contenidoHtml} />
         </div>
       )
     }
@@ -205,7 +206,7 @@ if (proyectos && proyectos.length) {
 
 <style lang="scss">
   @use 'sass:color';
-  @use '@/scss/constantes' as *;
+  @use 'scss/constantes' as *;
 
   .seccionProyecto {
     margin-top: 1em;
@@ -356,7 +357,7 @@ if (proyectos && proyectos.length) {
 </style>
 
 <style lang="scss" is:global>
-  @use '@/scss/constantes' as *;
+  @use 'scss/constantes' as *;
 
   .contenidoProyecto {
     ul {
