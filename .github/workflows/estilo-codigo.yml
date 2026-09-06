@@ -18,14 +18,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🐜 Activar Corepack
+        run: corepack enable
+
       - name: 🐝 Usar Node
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: 🐜 Activar Corepack
-        run: corepack enable
 
       - name: 🦒 Instalar dependencias
         run: |
