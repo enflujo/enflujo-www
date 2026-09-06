@@ -8,6 +8,7 @@ import { highlightHTML } from '@speed-highlight/core';
 import type { ShjLanguage } from '@speed-highlight/core';
 import '@speed-highlight/core/themes/github-dim.css';
 import type { Proyecto } from '@/tipos';
+import type { Graph } from 'schema-dts';
 
 const marked = new Marked(
   markedHighlight({
@@ -48,7 +49,6 @@ const Proyecto = gql`
       descripcion
       contenido
       fecha_publicacion
-      date_created
       fecha_inicio
       enlace
       estado
@@ -72,7 +72,6 @@ let pagina: Proyecto;
 
 if (proyectos && proyectos.length) {
   pagina = proyectos[0];
-  if (!pagina.fecha_publicacion && pagina.date_created) pagina.fecha_publicacion = pagina.date_created;
 
   if (pagina.contenido && pagina.contenido.length) {
     const comando = /\/\/\/\[([^\]]+)\]\(([^)]+)\)/g;
@@ -91,9 +90,43 @@ if (proyectos && proyectos.length) {
 }
 
 const contenidoHtml = pagina.contenido ? await marked.parse(pagina.contenido) : '';
+const urlPagina = new URL(Astro.url.pathname, Astro.site).href;
+const idPagina = new URL('#pagina', urlPagina).href;
+const idProyecto = new URL('#proyecto', urlPagina).href;
+const fechaPublicacion = pagina.fecha_publicacion;
+const fechaInicio = pagina.fecha_inicio;
+const seo: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': idPagina,
+      url: urlPagina,
+      name: pagina.titulo,
+      inLanguage: 'es',
+      isPartOf: { '@id': new URL('/#sitio', Astro.site).href },
+      publisher: { '@id': new URL('/#organizacion', Astro.site).href },
+      mainEntity: { '@id': idProyecto },
+    },
+    {
+      '@type': 'CreativeWork',
+      '@id': idProyecto,
+      url: urlPagina,
+      name: pagina.titulo,
+      description: pagina.descripcion?.trim() || undefined,
+      image: pagina.imagen?.id ? urlImagen(pagina.imagen.id, 'og-imagen') : undefined,
+      dateCreated: fechaInicio instanceof Date ? fechaInicio.toISOString() : fechaInicio || undefined,
+      datePublished: fechaPublicacion instanceof Date ? fechaPublicacion.toISOString() : fechaPublicacion || undefined,
+      creativeWorkStatus: fechaPublicacion ? 'Terminado' : 'En proceso',
+      mainEntityOfPage: { '@id': idPagina },
+    },
+  ],
+};
+const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
+  <script is:inline slot="cabeza" type="application/ld+json" set:html={seoJson} />
   <main class="pagina">
     <div id="portada">
       <div class="imagen">

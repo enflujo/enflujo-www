@@ -4,7 +4,7 @@ import EnflujoImagen from '@/componentes/EnflujoImagen.astro';
 import EquipoRedes from '@/componentes/EquipoRedes.astro';
 import { formatoFecha, gql, obtenerDatos } from '@/utilidades/ayudas';
 import type { PersonaEquipo } from '@/tipos';
-import type { Person, WithContext } from 'schema-dts';
+import type { Graph, Person } from 'schema-dts';
 
 export async function getStaticPaths() {
   const Equipo = gql`
@@ -35,7 +35,7 @@ const Persona = gql`
       sitio_web
       activo
       redes
-      proyectos(sort: ["-proyectos_id.fecha_publicacion"]) {
+      proyectos(filter: { proyectos_id: { estado: { _eq: "publicado" } } }, sort: ["-proyectos_id.fecha_publicacion"]) {
         proyectos_id {
           titulo
           slug
@@ -58,28 +58,40 @@ const Persona = gql`
 
 const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
 let persona: PersonaEquipo;
-const seo: WithContext<Person> = { '@context': 'https://schema.org', '@type': 'Person' };
+const urlPagina = new URL(Astro.url.pathname, Astro.site).href;
+const idPagina = new URL('#pagina', urlPagina).href;
+const idPersona = new URL('#persona', urlPagina).href;
+const seoPersona: Person = {
+  '@type': 'Person',
+  '@id': idPersona,
+  url: urlPagina,
+  mainEntityOfPage: { '@id': idPagina },
+};
 
 if (equipo && equipo.length) {
   persona = equipo[0];
   if (persona.date_created) persona.date_created = new Date(persona.date_created);
-  if (persona.foto) {
-    seo.image = `https://api.enflujo.com/assets/${persona.foto.id}/foto-perfil-${persona.slug}.jpg`;
+  if (persona.foto?.id) {
+    seoPersona.image = `https://api.enflujo.com/assets/${persona.foto.id}/foto-perfil-${persona.slug}.jpg`;
   } else {
     persona.foto = { id: '10440743-5d64-4117-b906-fbfb05f2bab5', title: persona.nombre };
   }
 
-  seo.name = persona.nombre;
-  if (persona.sitio_web) seo.url = persona.sitio_web;
-  if (persona.redes && persona.redes.length) {
-    seo.sameAs = persona.redes.map((red) => red.url);
-  }
+  seoPersona.name = persona.nombre;
+  seoPersona.description = persona.descripcion?.trim() || undefined;
+  const enlaces = [persona.sitio_web, ...(persona.redes ?? []).map((red) => red.url)]
+    .filter((url) => typeof url === 'string')
+    .map((url) => url.trim())
+    .filter((url) => URL.canParse(url) && /^https?:/.test(url));
+  const redes = [...new Set(enlaces)];
+  if (redes.length) seoPersona.sameAs = redes;
 
   if (persona.rol) {
-    seo.jobTitle = persona.rol;
+    seoPersona.jobTitle = persona.rol;
   }
 
   if (persona.proyectos) {
+    persona.proyectos = persona.proyectos.filter(({ proyectos_id }) => proyectos_id);
     persona.proyectos.sort((a, b) => {
       let fechaA = a.proyectos_id.fecha_publicacion || a.proyectos_id.fecha_inicio || a.proyectos_id.date_created;
       let fechaB = b.proyectos_id.fecha_publicacion || b.proyectos_id.fecha_inicio || b.proyectos_id.date_created;
@@ -95,6 +107,22 @@ if (equipo && equipo.length) {
   return Astro.redirect('/404');
 }
 
+const seo: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ProfilePage',
+      '@id': idPagina,
+      url: urlPagina,
+      name: persona.nombre,
+      inLanguage: 'es',
+      isPartOf: { '@id': new URL('/#sitio', Astro.site).href },
+      publisher: { '@id': new URL('/#organizacion', Astro.site).href },
+      mainEntity: { '@id': idPersona },
+    },
+    seoPersona,
+  ],
+};
 const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
 
 const texto = (estado: boolean, fecha: string | Date) =>

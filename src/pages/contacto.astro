@@ -5,7 +5,7 @@ import { gql, obtenerDatos } from '@/utilidades/ayudas';
 
 const Pagina = gql`
   query {
-    paginas(filter: { slug: { _eq: "contacto" } }, limit: 1) {
+    paginas(filter: { slug: { _eq: "contacto" }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       descripcion
       imagen {
@@ -23,6 +23,7 @@ const { paginas } = await obtenerDatos<{
   paginas: CamposComunes[];
 }>(Pagina);
 const pagina = paginas[0];
+if (!pagina) return Astro.redirect('/404');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>

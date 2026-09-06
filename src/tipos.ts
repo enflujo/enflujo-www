@@ -44,6 +44,7 @@ export interface Evento extends CamposComunes {
   fecha_fin: string;
   enlace: string;
   ciudad: string;
+  organizador?: { colegas_id: { nombre: string } | null }[];
 }
 
 export interface Proyecto extends CamposComunes {

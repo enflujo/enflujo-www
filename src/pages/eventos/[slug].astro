@@ -3,6 +3,7 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 import type { Evento } from '@/tipos';
 import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import { marked } from 'marked';
+import type { Graph, Organization } from 'schema-dts';
 
 export async function getStaticPaths() {
   const Eventos = gql`
@@ -29,6 +30,13 @@ const Evento = gql`
       descripcion
       contenido
       enlace
+      fecha_inicio
+      fecha_fin
+      organizador {
+        colegas_id {
+          nombre
+        }
+      }
       imagen {
         id
         title
@@ -38,16 +46,54 @@ const Evento = gql`
 `;
 
 const { eventos } = await obtenerDatos<{ eventos: Evento[] }>(Evento);
-let pagina;
+let pagina: Evento;
 
 if (eventos && eventos.length) {
   pagina = eventos[0];
 } else {
   return Astro.redirect('/404');
 }
+
+const urlPagina = new URL(Astro.url.pathname, Astro.site).href;
+const idPagina = new URL('#pagina', urlPagina).href;
+const idEvento = new URL('#evento', urlPagina).href;
+// El archivo muestra días; no atribuimos una zona horaria a las horas de Directus.
+const fechaCalendario = (fecha: string) => fecha?.split('T')[0] || undefined;
+const organizadores: Organization[] = (pagina.organizador ?? []).flatMap(({ colegas_id }) =>
+  colegas_id?.nombre?.trim() ? [{ '@type': 'Organization', name: colegas_id.nombre.trim() }] : []
+);
+const seo: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': idPagina,
+      url: urlPagina,
+      name: pagina.titulo,
+      isPartOf: { '@id': new URL('/#sitio', Astro.site).href },
+      publisher: { '@id': new URL('/#organizacion', Astro.site).href },
+      mainEntity: { '@id': idEvento },
+    },
+    {
+      '@type': 'Event',
+      '@id': idEvento,
+      url: urlPagina,
+      name: pagina.titulo,
+      description: pagina.descripcion?.trim() || undefined,
+      startDate: fechaCalendario(pagina.fecha_inicio),
+      endDate: fechaCalendario(pagina.fecha_fin),
+      image: pagina.imagen?.id ? urlImagen(pagina.imagen.id, 'og-imagen') : undefined,
+      organizer: organizadores.length ? organizadores : undefined,
+      // `lugar` solo identifica una ciudad o región, no el recinto ni el acceso virtual.
+      mainEntityOfPage: { '@id': idPagina },
+    },
+  ],
+};
+const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>
+  <script is:inline slot="cabeza" type="application/ld+json" set:html={seoJson} />
   <main class="pagina">
     <h1 class="tituloPagina">{pagina.titulo}</h1>
     <div class="contenidoEvento">

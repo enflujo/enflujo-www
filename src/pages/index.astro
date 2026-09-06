@@ -1,8 +1,9 @@
 ---
 import Plantilla from '@/plantillas/Plantilla.astro';
-import { gql, obtenerDatos } from '@/utilidades/ayudas';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import Logo from '@/componentes/svg/Logo.astro';
 import type { MetadatosGenerales } from '@/tipos';
+import type { Graph } from 'schema-dts';
 
 const General = gql`
   query {
@@ -12,6 +13,7 @@ const General = gql`
       descripcion
       contenido
       color
+      redes
       imagen {
         id
         title
@@ -24,9 +26,41 @@ const General = gql`
 `;
 
 const { general } = await obtenerDatos<{ general: MetadatosGenerales }>(General);
+const urlSitio = new URL('/', Astro.site).href;
+const idOrganizacion = new URL('#organizacion', urlSitio).href;
+const descripcion = general.descripcion?.trim() || undefined;
+const imagen = general.imagen?.id
+  ? urlImagen(general.imagen.id, 'og-imagen')
+  : new URL('/imgs/og-EnFlujo-predeterminado.jpg', urlSitio).href;
+const redes = (general.redes ?? []).map((red) => red.url).filter((url) => URL.canParse(url) && /^https?:/.test(url));
+const seo: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': new URL('#sitio', urlSitio).href,
+      url: urlSitio,
+      name: general.nombre,
+      description: descripcion,
+      inLanguage: 'es',
+      publisher: { '@id': idOrganizacion },
+    },
+    {
+      '@type': 'ResearchOrganization',
+      '@id': idOrganizacion,
+      url: urlSitio,
+      name: general.nombre,
+      description: descripcion,
+      image: imagen,
+      sameAs: redes.length ? redes : undefined,
+    },
+  ],
+};
+const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
 ---
 
 <Plantilla descripcion={general.descripcion} imagen={general.imagen}>
+  <script is:inline slot="cabeza" type="application/ld+json" set:html={seoJson} />
   <main id="inicio">
     <div id="muchachita">
       <video

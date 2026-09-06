@@ -3,6 +3,7 @@ import Plantilla from '@/plantillas/Plantilla.astro';
 ---
 
 <Plantilla titulo="..:: 404 ::.." descripcion="Te perdiste, esta página no existe">
+  <meta slot="cabeza" name="robots" content="noindex" />
   <main class="error404">404 &#128573;</main>
 </Plantilla>
 
