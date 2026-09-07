@@ -1,0 +1,314 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos, urlImagen, formatoFecha } from '@/utilidades/ayudas';
+import { Marked } from 'marked';
+import Tarjeta from '@/componentes/Tarjeta.astro';
+import DescripcionProyecto from '@/componentes/DescripcionProyecto.astro';
+import type { Graph } from 'schema-dts';
+
+type Proyecto = {
+  titulo: string;
+  slug: string;
+  descripcion: string;
+  fecha_publicacion: string | Date;
+  fecha_inicio: string | Date;
+  repos: { nombre: string; url: string }[];
+  colegas: { colegas_id: { nombre: string; enlace?: string } }[];
+  imagen?: { id: string; title: string };
+};
+
+type Linea = {
+  titulo: string;
+  slug: string;
+  descripcion?: string;
+  introduccion?: string;
+  fecha_revision?: string | Date;
+  imagen?: { id: string; title: string };
+  secciones?: { titulo_seccion?: string; contenido_seccion?: string }[];
+  proyectos?: { proyectos_id: Proyecto }[];
+};
+
+const marked = new Marked();
+
+export async function getStaticPaths() {
+  const Consulta = gql`
+    query {
+      lineas_trabajo(filter: { estado: { _eq: "publicado" } }) {
+        slug
+      }
+    }
+  `;
+  const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: { slug: string }[] }>(Consulta);
+  return lineas.map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const Consulta = gql`
+  query {
+    lineas_trabajo(filter: { slug: { _eq: "${slug}" }, estado: { _eq: "publicado" } }, limit: 1) {
+      titulo
+      slug
+      descripcion
+      introduccion
+      fecha_revision
+      secciones
+      imagen {
+        id
+        title
+      }
+      proyectos {
+        proyectos_id {
+          titulo
+          slug
+          descripcion
+          estado
+          fecha_publicacion
+          fecha_inicio
+          repos
+          colegas {
+            colegas_id {
+              nombre
+              enlace
+            }
+          }
+          imagen {
+            id
+            title
+          }
+        }
+      }
+    }
+  }
+`;
+
+const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: Linea[] }>(Consulta);
+const linea = lineas[0];
+if (!linea) return Astro.redirect('/404');
+
+const html = async (texto?: string) => (texto ? marked.parse(texto) : '');
+const idSeccion = (titulo: string) =>
+  titulo
+    .toLocaleLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+const secciones = (linea.secciones ?? []).filter((seccion) => seccion.titulo_seccion?.trim());
+const seccionesRenderizadas = await Promise.all(
+  secciones.map(async (seccion) => ({
+    titulo: seccion.titulo_seccion?.trim() ?? '',
+    id: idSeccion(seccion.titulo_seccion?.trim() ?? ''),
+    contenido: await html(seccion.contenido_seccion),
+  }))
+);
+const urlPagina = new URL(Astro.url.pathname, Astro.site).href;
+const seo: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${urlPagina}#pagina`,
+      url: urlPagina,
+      name: linea.titulo,
+      description: linea.descripcion?.trim() || undefined,
+      inLanguage: 'es',
+      isPartOf: { '@id': new URL('/#sitio', Astro.site).href },
+    },
+  ],
+};
+const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
+---
+
+<Plantilla titulo={linea.titulo} descripcion={linea.descripcion} imagen={linea.imagen}>
+  <script is:inline slot="cabeza" type="application/ld+json" set:html={seoJson} />
+  <main class="pagina lineaPagina">
+    <header class="heroLinea">
+      <div class="textoHero">
+        <h1>{linea.titulo}</h1>
+        {linea.introduccion && <div class="introduccion" set:html={await html(linea.introduccion)} />}
+        {linea.fecha_revision && <p class="revision">Revisión editorial: {formatoFecha(linea.fecha_revision)}</p>}
+      </div>
+      {
+        linea.imagen?.id && (
+          <img
+            src={urlImagen(linea.imagen.id, { width: 1400, height: 900, quality: 90, format: 'webp' })}
+            alt={linea.imagen.title}
+            width="1400"
+            height="900"
+          />
+        )
+      }
+    </header>
+
+    <nav class="indice" aria-label="En esta línea">
+      {seccionesRenderizadas.map((seccion) => <a href={`#${seccion.id}`}>{seccion.titulo}</a>)}
+    </nav>
+
+    {
+      seccionesRenderizadas.map((seccion) => (
+        <section id={seccion.id} class="seccionTexto dosColumnas">
+          <div>
+            <h2>{seccion.titulo}</h2>
+            {seccion.contenido && <div set:html={seccion.contenido} />}
+          </div>
+        </section>
+      ))
+    }
+
+    {
+      linea.proyectos?.length && (
+        <section id="investigaciones" class="investigaciones">
+          <div class="contenedorTarjetas">
+            {linea.proyectos.map(({ proyectos_id: proyecto }) => (
+              <Tarjeta datos={proyecto} imagen={proyecto.imagen} coleccion="proyectos">
+                <DescripcionProyecto datos={proyecto} />
+              </Tarjeta>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="participar dosColumnas">
+      <div>
+        <div class="acciones">
+          <a href="mailto:enflujo@uniandes.edu.co?subject=Apoyar%20la%20línea%20de%20archivo%20audiovisual"
+            >Conversar sobre un apoyo</a
+          >
+          <a href="mailto:enflujo@uniandes.edu.co?subject=Colaborar%20con%20archivo%20audiovisual"
+            >Colaborar en la investigación</a
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @use 'scss/constantes' as *;
+  .lineaPagina {
+    padding-bottom: 7em;
+  }
+  .heroLinea {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    min-height: 72vh;
+    border-bottom: 2px solid;
+  }
+  .textoHero {
+    padding: clamp(3em, 8vw, 8em) clamp(1.5em, 5vw, 6em) clamp(3em, 6vw, 5em);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .heroLinea > img {
+    width: 100%;
+    height: 100%;
+    min-height: 460px;
+    object-fit: cover;
+  }
+  .ceja {
+    color: $colorPrincipal;
+    font-size: 0.75em;
+    font-weight: $fuentePrincipalBold;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: $fuenteMono;
+    font-size: clamp(2.8em, 7vw, 7em);
+    line-height: 0.95;
+    margin: 0.25em 0 0.4em;
+  }
+  h2 {
+    font-size: clamp(1.5em, 3vw, 2.6em);
+    line-height: 1.1;
+    padding: 0;
+    margin-top: 0;
+  }
+  h3 {
+    font-size: 1.1em;
+  }
+  .introduccion,
+  .seccionTexto > div,
+  .seccionProceso > div,
+  .participar > div {
+    font-size: 1.05em;
+    line-height: 1.55;
+  }
+  .revision {
+    font-size: 0.75em;
+    margin-top: 3em;
+  }
+  .indice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em 2em;
+    padding: 1em clamp(1.5em, 5vw, 6em);
+    border-bottom: 2px solid;
+    font-size: 0.8em;
+  }
+  .indice a:hover,
+  .acciones a:hover {
+    color: $colorPrincipal;
+  }
+  .dosColumnas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: min(100% - 2em, 1180px);
+    margin: clamp(5em, 10vw, 9em) auto;
+    padding: 0;
+  }
+  .dosColumnas > div {
+    width: 100%;
+  }
+  .seccionProceso,
+  .investigaciones {
+    width: min(100% - 2em, 1180px);
+    margin: clamp(5em, 10vw, 9em) auto;
+    padding: 0;
+  }
+  .participar {
+    border-top: 2px solid;
+    padding-top: 2em;
+    margin-top: clamp(4em, 8vw, 7em);
+  }
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 2em;
+  }
+  .acciones a {
+    border: 2px solid;
+    padding: 0.7em 1em;
+  }
+  @media (max-width: $minTablet) {
+    .heroLinea {
+      grid-template-columns: 1fr;
+    }
+    .textoHero {
+      padding: 4em 1.2em 3em;
+    }
+    .heroLinea > img {
+      min-height: 300px;
+    }
+    .dosColumnas {
+      grid-template-columns: 1fr;
+      gap: 0.5em;
+    }
+    .dosColumnas {
+      width: calc(100% - 2em);
+      margin-top: 6em;
+    }
+    .seccionProceso,
+    .investigaciones {
+      width: calc(100% - 2em);
+    }
+  }
+
+  @media (max-width: ($minCelular - 1px)) {
+    .lineaPagina {
+      margin: 40px 12px 20px;
+    }
+  }
+</style>

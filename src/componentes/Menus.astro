@@ -23,9 +23,26 @@ const DatosMenu = gql`
       slug
       titulo
     }
+
+    lineas_trabajo(filter: { estado: { _eq: "publicado" } }, sort: ["orden", "titulo"]) {
+      slug
+      titulo
+    }
   }
 `;
-const { general, paginas } = await obtenerDatos<{ general: { redes: Red[] }; paginas: Pagina[] }>(DatosMenu);
+const {
+  general,
+  paginas,
+  lineas_trabajo: lineas,
+} = await obtenerDatos<{
+  general: { redes: Red[] };
+  paginas: Pagina[];
+  lineas_trabajo: Pagina[];
+}>(DatosMenu);
+const paginasMenu =
+  paginas.some((pagina) => pagina.slug === 'lineas') || !lineas.length
+    ? paginas
+    : [...paginas, { slug: 'lineas', titulo: 'Líneas de trabajo' }];
 const rutaActual = Astro.url.pathname.slice(1).split('/');
 ---
 
@@ -36,7 +53,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     </a>
     <ul class="paginas">
       {
-        paginas.map((pagina: Pagina) => (
+        paginasMenu.map((pagina: Pagina) => (
           <li>
             <a href={`/${pagina.slug}`} class={`navBtn${rutaActual.includes(pagina.slug) ? ' activo' : ''}`}>
               {pagina.titulo}
@@ -51,7 +68,7 @@ const rutaActual = Astro.url.pathname.slice(1).split('/');
     <nav id="menuContenido">
       <a href="/" class="navBtn">Inicio</a>
       {
-        paginas.map((pagina: Pagina) => (
+        paginasMenu.map((pagina: Pagina) => (
           <a href={`/${pagina.slug}`} class={`navBtn${rutaActual.includes(pagina.slug) ? ' activo' : ''}`}>
             {pagina.titulo}
           </a>

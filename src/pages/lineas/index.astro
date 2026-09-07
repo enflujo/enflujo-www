@@ -1,0 +1,139 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
+
+type Linea = {
+  titulo: string;
+  slug: string;
+  descripcion?: string;
+  imagen?: { id: string; title: string };
+};
+
+const Consulta = gql`
+  query {
+    lineas_trabajo(filter: { estado: { _eq: "publicado" } }, sort: ["orden", "titulo"]) {
+      titulo
+      slug
+      descripcion
+      imagen {
+        id
+        title
+      }
+    }
+  }
+`;
+
+const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: Linea[] }>(Consulta);
+---
+
+<Plantilla titulo="Líneas de trabajo" descripcion="Áreas de investigación y práctica de EnFlujo.">
+  <main class="pagina lineas">
+    <header class="encabezadoPagina">
+      <p class="ceja">EnFlujo / Investigación continua</p>
+      <h1 class="tituloPagina">Líneas de trabajo</h1>
+      <p class="bajada">Áreas de investigación, herramientas y procesos que sostenemos en el tiempo.</p>
+    </header>
+
+    <div class="listaLineas">
+      {
+        lineas.map((linea) => (
+          <a class="linea" href={`/lineas/${linea.slug}`}>
+            {linea.imagen?.id && (
+              <img
+                src={urlImagen(linea.imagen.id, { width: 900, height: 520, quality: 88, format: 'webp' })}
+                alt={linea.imagen.title}
+                loading="lazy"
+              />
+            )}
+            <span class="contenidoLinea">
+              <span class="estado">Línea de trabajo</span>
+              <h2>{linea.titulo}</h2>
+              {linea.descripcion && <span>{linea.descripcion}</span>}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  @use 'scss/constantes' as *;
+
+  .lineas {
+    padding: 3em 5vw 7em;
+  }
+
+  .encabezadoPagina {
+    max-width: 780px;
+    margin-bottom: 5em;
+  }
+
+  .ceja,
+  .estado {
+    color: $colorPrincipal;
+    font-size: 0.75em;
+    font-weight: $fuentePrincipalBold;
+    text-transform: uppercase;
+  }
+
+  .bajada {
+    max-width: 38em;
+    font-size: 1.15em;
+    line-height: 1.5;
+  }
+
+  .listaLineas {
+    display: grid;
+    gap: 3em;
+  }
+
+  .linea {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(240px, 0.75fr);
+    border-top: 2px solid;
+    padding-top: 1em;
+    gap: 2em;
+
+    &:hover h2 {
+      color: $colorPrincipal;
+    }
+
+    img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+  }
+
+  .contenidoLinea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+      margin: 0.35em 0;
+      padding: 0;
+      font-size: clamp(1.5em, 3vw, 2.5em);
+    }
+
+    > span:last-child {
+      line-height: 1.5;
+    }
+  }
+
+  @media (max-width: $minTablet) {
+    .lineas {
+      padding: 2em 1.2em 5em;
+    }
+
+    .encabezadoPagina {
+      margin-bottom: 3em;
+    }
+
+    .linea {
+      grid-template-columns: 1fr;
+      gap: 1em;
+    }
+  }
+</style>

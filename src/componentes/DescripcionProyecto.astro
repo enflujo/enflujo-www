@@ -3,20 +3,22 @@ import type { Proyecto } from '@/tipos';
 import { formatoFecha } from '@/utilidades/ayudas';
 
 export type Props = {
-  datos: Proyecto;
+  datos: Pick<Proyecto, 'descripcion' | 'fecha_publicacion' | 'fecha_inicio' | 'repos' | 'colegas'> & {
+    terminado?: boolean;
+  };
 };
 const { datos } = Astro.props;
 
 const texto = (estado: boolean, fecha: string | Date) =>
   estado ? `Publicado el ${formatoFecha(fecha)}` : 'En proceso';
 
-datos.terminado = !!datos.fecha_publicacion;
+const terminado = datos.terminado ?? !!datos.fecha_publicacion;
 ---
 
 <div class="descripcion seccionDescripcion">
   <div class="fecha">
     <p class="textoEstado">
-      {texto(datos.terminado, datos.fecha_publicacion || datos.fecha_inicio)}
+      {texto(terminado, datos.fecha_publicacion || datos.fecha_inicio)}
     </p>
     <p class="notaEnFlujo" data-fecha={datos.fecha_publicacion || datos.fecha_inicio}></p>
   </div>
