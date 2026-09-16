@@ -1,0 +1,271 @@
+---
+import QRCode from 'qrcode';
+import Logo from '@/componentes/svg/Logo.astro';
+
+interface Props {
+  identificador: string;
+  titulo: string;
+  slug: string;
+}
+
+const { identificador, titulo, slug } = Astro.props;
+// Siempre apuntar al sitio publicado, incluso al imprimir desde localhost.
+const enlace = new URL(`/archivo-audiovisual/${encodeURIComponent(slug)}/`, Astro.site).href;
+const qr = await QRCode.toDataURL(enlace, {
+  errorCorrectionLevel: 'Q',
+  margin: 4,
+  width: 768,
+  color: { dark: '#000000', light: '#ffffff' },
+});
+---
+
+<section class="impresionMaterial" aria-labelledby="tituloImpresion">
+  <div class="herramientasImpresion">
+    <h2 id="tituloImpresion">Ficha</h2>
+    <button type="button" data-imprimir-material hidden>Imprimir ficha con QR</button>
+    <button type="button" data-descargar-ficha={identificador} hidden>Descargar como imagen</button>
+    <p class="estadoDescarga" role="status" aria-live="polite"></p>
+    <noscript><p>Usa la opción Imprimir del navegador para imprimir esta tarjeta.</p></noscript>
+  </div>
+
+  <article class="tarjetaImpresion" aria-label={`Ficha imprimible de ${identificador}`}>
+    <div class="marcaLaboratorio">
+      <div class="logoLaboratorio"><Logo /></div>
+      <div><p class="nombreLaboratorio">Laboratorio EnFlujo</p><p class="lineaLaboratorio">Archivo audiovisual</p></div>
+    </div>
+    <div class="datosTarjeta">
+      <div class="identidadMaterial">
+        <p class="etiquetaIdentificador">Identificador</p>
+        <p class="codigoImpresion">{identificador}</p>
+        <p class="tituloImpresion">{titulo}</p>
+      </div>
+      <div class="accesoQR">
+        <img
+          class="codigoQR"
+          src={qr}
+          alt={`QR para consultar la ficha de ${identificador}`}
+          width="768"
+          height="768"
+        />
+        <p>Escanea para consultar<br />la ficha del material</p>
+      </div>
+    </div>
+    <a class="enlaceImpresion" href={enlace}>{enlace}</a>
+  </article>
+</section>
+
+<script>
+  import { descargarFicha } from '@/utilidades/descargarFicha';
+
+  document.querySelectorAll<HTMLButtonElement>('[data-descargar-ficha]').forEach((boton) => {
+    boton.hidden = false;
+    boton.addEventListener('click', async () => {
+      const seccion = boton.closest('.impresionMaterial')!;
+      const tarjeta = seccion.querySelector<HTMLElement>('.tarjetaImpresion')!;
+      const estado = seccion.querySelector<HTMLElement>('.estadoDescarga')!;
+      boton.disabled = true;
+      boton.setAttribute('aria-busy', 'true');
+      estado.textContent = 'Preparando imagen…';
+      try {
+        await descargarFicha(tarjeta, boton.dataset.descargarFicha || 'material');
+        estado.textContent = 'Imagen preparada. Revisa las descargas de tu navegador.';
+      } catch (error) {
+        console.error('No se pudo descargar la ficha:', error);
+        estado.textContent = 'No se pudo generar la imagen. Inténtalo de nuevo o usa la opción de imprimir.';
+      } finally {
+        boton.disabled = false;
+        boton.removeAttribute('aria-busy');
+      }
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-imprimir-material]').forEach((boton) => {
+    boton.hidden = false;
+    boton.addEventListener('click', async () => {
+      const qr = document.querySelector<HTMLImageElement>('.codigoQR');
+      if (qr) await qr.decode();
+      window.print();
+    });
+  });
+</script>
+
+<style>
+  .impresionMaterial {
+    padding: clamp(1.5rem, 5vw, 5rem);
+    border-bottom: 2px solid;
+  }
+  .herramientasImpresion {
+    margin-bottom: 1.5rem;
+    max-width: 70ch;
+  }
+  h2 {
+    padding: 0;
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+  }
+  .herramientasImpresion p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  button {
+    font: inherit;
+    border: 1px solid;
+    padding: 0.8rem 1rem;
+    min-height: 44px;
+    cursor: pointer;
+    margin: 1rem 0;
+  }
+  button:hover {
+    background: #000;
+    color: #fff;
+  }
+  button + button {
+    margin-left: 0.5rem;
+  }
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .estadoDescarga:empty {
+    display: none;
+  }
+  button:focus-visible {
+    outline: 3px solid var(--colorPrincipal);
+    outline-offset: 4px;
+  }
+  .tarjetaImpresion {
+    width: 140mm;
+    max-width: 100%;
+    padding: 7mm;
+    border: 0.3mm solid #000;
+    background: #fff;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    break-inside: avoid;
+  }
+  .marcaLaboratorio {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    padding-bottom: 4mm;
+    border-bottom: 0.3mm solid #000;
+  }
+  .logoLaboratorio {
+    width: 12mm;
+    flex: 0 0 12mm;
+  }
+  .logoLaboratorio :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .nombreLaboratorio {
+    font-size: 16pt;
+    line-height: 1.15;
+    font-weight: bold;
+  }
+  .lineaLaboratorio {
+    font-size: 10pt;
+    margin-top: 2mm;
+  }
+  .datosTarjeta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 38mm;
+    gap: 4mm;
+    align-items: center;
+    margin: 5mm 0;
+  }
+  .etiquetaIdentificador {
+    font-size: 9pt;
+    margin-bottom: 2mm;
+  }
+  .codigoImpresion {
+    font:
+      bold 16pt/1.2 'Courier New',
+      monospace;
+    overflow-wrap: anywhere;
+  }
+  .tituloImpresion {
+    font-size: 11pt;
+    line-height: 1.4;
+    margin-top: 3mm;
+    overflow-wrap: anywhere;
+  }
+  .codigoQR {
+    display: block;
+    width: 38mm;
+    height: 38mm;
+    max-width: none;
+  }
+  .accesoQR p {
+    font-size: 8pt;
+    line-height: 1.3;
+    text-align: center;
+    margin-top: 1mm;
+  }
+  .enlaceImpresion,
+  .enlaceImpresion:link {
+    display: block;
+    color: #000;
+    font:
+      9pt/1.5 'Courier New',
+      monospace;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    border-top: 0.3mm solid #000;
+    padding-top: 3mm;
+  }
+  @media screen and (max-width: 575px) {
+    .tarjetaImpresion {
+      padding: 5mm;
+    }
+    .datosTarjeta {
+      grid-template-columns: 1fr;
+    }
+    .accesoQR {
+      justify-self: center;
+    }
+  }
+  @media print {
+    .impresionMaterial {
+      padding: 0;
+      border: 0;
+    }
+    .herramientasImpresion {
+      display: none;
+    }
+    .tarjetaImpresion {
+      max-width: 100%;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+</style>
+
+<style is:global>
+  @media print {
+    @page {
+      size: auto;
+      margin: 12mm;
+    }
+    html,
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+    }
+    body > :not(main),
+    body > main > :not(.impresionMaterial) {
+      display: none !important;
+    }
+    body > main.fichaArchivo {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
+      width: auto !important;
+      background: #fff !important;
+    }
+  }
+</style>

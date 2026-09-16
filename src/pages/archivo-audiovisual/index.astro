@@ -1,0 +1,501 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import { urlImagen } from '@/utilidades/ayudas';
+import { nombreSoporte, obtenerFichas } from '@/utilidades/archivoAudiovisual';
+import { camposFiltro, normalizar, ordenarEntradas } from '@/utilidades/filtrosArchivo';
+import type { EntradaFiltro } from '@/utilidades/filtrosArchivo';
+
+const materiales = await obtenerFichas();
+const etiquetas = {
+  soporte: 'Soporte',
+  procedencia: 'Procedencia',
+  institucion: 'Institución',
+  motivo: 'Motivo del ingreso',
+};
+const motivos: Record<string, string> = {
+  inspecion: 'Inspección',
+  inspeccion: 'Inspección',
+  digitalizacion: 'Digitalización',
+  catalogacion: 'Catalogación',
+  restauracion: 'Restauración',
+};
+const datosFiltro: EntradaFiltro[] = materiales.map((material) => {
+  const nombres = (relaciones: typeof material.procedencia) => {
+    const valores =
+      relaciones?.flatMap((relacion) =>
+        relacion.colegas_id?.nombre?.trim() ? [relacion.colegas_id.nombre.trim()] : []
+      ) ?? [];
+    return valores.length ? [...new Set(valores)] : ['Sin registrar'];
+  };
+  const campos = {
+    soporte: [nombreSoporte(material.soporte)],
+    procedencia: nombres(material.procedencia),
+    institucion: nombres(material.institucion),
+    motivo: material.motivo?.length
+      ? material.motivo.map((motivo) => motivos[motivo] ?? motivo.replaceAll('_', ' '))
+      : ['Sin registrar'],
+  };
+  return {
+    id: material.id,
+    titulo: material.titulo || 'Sin título registrado',
+    identificador: material.identificador || '',
+    fecha: material.fecha_creacion || '',
+    campos,
+    busqueda: normalizar(
+      [material.identificador, material.titulo, material.descripcion, ...Object.values(campos).flat()].join(' ')
+    ),
+  };
+});
+const filtrosPorId = new Map(datosFiltro.map((dato) => [dato.id, dato]));
+const ordenInicial = new Map(ordenarEntradas(datosFiltro, 'identificador').map((dato, indice) => [dato.id, indice]));
+materiales.sort((a, b) => ordenInicial.get(a.id)! - ordenInicial.get(b.id)!);
+const descripcion =
+  'Explora los materiales de la colección de Archivo Audiovisual de EnFlujo: películas, soportes y descripciones de un catálogo en construcción.';
+---
+
+<Plantilla titulo="Colección de Archivo Audiovisual" descripcion={descripcion}>
+  <main class="pagina coleccionArchivo">
+    <section class="catalogo" aria-labelledby="tituloCatalogo">
+      <a class="volver" href="/lineas/archivo-audiovisual/">← Archivo audiovisual</a>
+      <div class="encabezadoCatalogo">
+        <h1 id="tituloCatalogo">Explorar la colección</h1>
+        <p id="cantidadMateriales" role="status" aria-live="polite" aria-atomic="true">
+          {materiales.length}
+          {materiales.length === 1 ? 'material' : 'materiales'}
+        </p>
+      </div>
+
+      <form id="controlesArchivo" class="controles" hidden role="search" aria-label="Buscar materiales">
+        <label class="busqueda"
+          >Buscar en la colección
+          <input
+            id="buscarMaterial"
+            name="q"
+            type="search"
+            placeholder="Título, identificador, descripción o procedencia"
+            autocomplete="off"
+          />
+        </label>
+        <label
+          >Ordenar por
+          <select id="ordenMaterial" name="orden">
+            <option value="identificador">Identificador</option>
+            <option value="titulo">Título: A–Z</option>
+            <option value="recientes">Registro más reciente</option>
+          </select>
+        </label>
+        <fieldset class="vistas">
+          <legend>Vista</legend>
+          <div>
+            <button type="button" data-vista="lista" aria-pressed="true" aria-controls="materiales">Lista</button>
+            <button type="button" data-vista="galeria" aria-pressed="false" aria-controls="materiales">Galería</button>
+          </div>
+        </fieldset>
+        <div class="camposFiltro">
+          {
+            camposFiltro.map((campo) => {
+              const opciones = [...new Set(datosFiltro.flatMap((dato) => dato.campos[campo]))].sort((a, b) =>
+                a.localeCompare(b, 'es')
+              );
+              return (
+                <label>
+                  {etiquetas[campo]}
+                  <select name={campo} data-etiqueta={etiquetas[campo]}>
+                    <option value="">Todas las opciones</option>
+                    {opciones.map((opcion) => (
+                      <option value={opcion}>{opcion}</option>
+                    ))}
+                  </select>
+                </label>
+              );
+            })
+          }
+        </div>
+        <div class="resumenFiltros">
+          <div id="filtrosActivos" aria-label="Filtros activos" hidden></div>
+          <button id="limpiarFiltros" type="button" disabled>Limpiar filtros</button>
+        </div>
+      </form>
+
+      <ul id="materiales" class="materiales" data-vista="lista">
+        {
+          materiales.map((material) => {
+            const codigo = material.identificador || 'Sin identificador';
+            const titulo = material.titulo?.trim() || 'Sin título registrado';
+            const soporte = nombreSoporte(material.soporte);
+            return (
+              <li
+                id={`material-${material.id}`}
+                class="material"
+                data-filtro={JSON.stringify(filtrosPorId.get(material.id))}
+              >
+                <article aria-labelledby={`titulo-${material.id}`}>
+                  <a
+                    class="imagenMaterial"
+                    href={`/archivo-audiovisual/${encodeURIComponent(material.slug)}/`}
+                    aria-label={`Ver ficha: ${titulo}`}
+                    tabindex="-1"
+                  >
+                    {material.imagen?.id ? (
+                      <img
+                        src={urlImagen(material.imagen.id, {
+                          width: 800,
+                          height: 600,
+                          fit: 'inside',
+                          quality: 85,
+                          format: 'webp',
+                        })}
+                        alt={material.imagen.title || titulo}
+                        width="800"
+                        height="600"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div class="sinImagen">
+                        <span aria-hidden="true">[ AV ]</span>
+                        <p>Sin imagen disponible</p>
+                      </div>
+                    )}
+                  </a>
+                  <div class="textoMaterial">
+                    <a
+                      class="identificador"
+                      href={`/archivo-audiovisual/${encodeURIComponent(material.slug)}/`}
+                      aria-label={`Enlace al material ${codigo}`}
+                    >
+                      {codigo}
+                    </a>
+                    <h3 id={`titulo-${material.id}`}>
+                      <a href={`/archivo-audiovisual/${encodeURIComponent(material.slug)}/`}>{titulo}</a>
+                    </h3>
+                    <dl>
+                      <div>
+                        <>
+                          <dt>Soporte</dt>
+                          <dd>{soporte}</dd>
+                        </>
+                      </div>
+                    </dl>
+                    <p class="procedencia">
+                      Procedencia: {filtrosPorId.get(material.id)!.campos.procedencia.join(', ')}
+                    </p>
+                    <p class:list={['descripcion', { pendiente: !material.descripcion?.trim() }]}>
+                      {material.descripcion?.trim() || 'Descripción pendiente.'}
+                    </p>
+                  </div>
+                </article>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <div id="sinResultados" class="vacio" hidden>
+        <p>No encontramos materiales con esta búsqueda.</p>
+        <button id="limpiarBusqueda" type="button">Limpiar búsqueda y filtros</button>
+      </div>
+      {materiales.length === 0 && <p class="vacio">Aún no hay materiales publicados en la colección.</p>}
+    </section>
+  </main>
+</Plantilla>
+
+<script src="../../utilidades/controlFiltrosArchivo.ts"></script>
+
+<style lang="scss">
+  @use 'scss/constantes' as *;
+
+  .coleccionArchivo {
+    background: #fff;
+    padding-bottom: 0;
+  }
+  .catalogo,
+  .pieColeccion {
+    padding: clamp(1.5rem, 5vw, 5rem);
+  }
+  .catalogo {
+    padding-top: 1.5rem;
+  }
+  .volver {
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .encabezadoCatalogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  h1 {
+    padding: 0;
+    font-size: clamp(1.25rem, 2.4vw, 2rem);
+  }
+  #cantidadMateriales {
+    font-size: 0.8rem;
+  }
+  .controles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+  .camposFiltro {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+  .camposFiltro label {
+    min-width: 0;
+  }
+  .camposFiltro select {
+    width: 100%;
+  }
+  .resumenFiltros,
+  #filtrosActivos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .resumenFiltros {
+    width: 100%;
+    justify-content: space-between;
+  }
+  #filtrosActivos {
+    flex: 1;
+  }
+  #filtrosActivos :global(button) {
+    font: inherit;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 44px;
+    border: 1px solid;
+    background: #eeeefe;
+    color: #25255e;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+  }
+  #filtrosActivos :global(button:hover) {
+    background: #000;
+    color: #fff;
+  }
+  #filtrosActivos :global(button:focus-visible) {
+    outline: 3px solid var(--colorPrincipal);
+    outline-offset: 3px;
+  }
+  #limpiarFiltros {
+    font-size: 0.75rem;
+  }
+  button:disabled {
+    cursor: default;
+    opacity: 0.45;
+    background: #fff;
+    color: #000;
+  }
+  .procedencia {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+  label,
+  legend {
+    font-size: 0.75rem;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .busqueda {
+    flex: 1 1 260px;
+  }
+  input,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+    border: 1px solid;
+    border-radius: 0;
+    background: #fff;
+    padding: 0.8rem;
+    min-height: 44px;
+  }
+  input {
+    width: 100%;
+  }
+  select {
+    max-width: 100%;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:hover,
+  button[aria-pressed='true'] {
+    background: #000;
+    color: #fff;
+  }
+  legend {
+    margin-bottom: 0.5rem;
+  }
+  .vistas > div {
+    display: flex;
+  }
+  .vistas button {
+    font-size: 0.75rem;
+  }
+  :is(a, button, input, select):focus-visible {
+    outline: 3px solid var(--colorPrincipal);
+    outline-offset: 4px;
+  }
+  .materiales {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+  .material {
+    min-width: 0;
+    border-bottom: 2px solid;
+    scroll-margin-top: 5rem;
+  }
+
+  article {
+    height: 100%;
+  }
+  .imagenMaterial {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: #f0f0ee;
+    overflow: hidden;
+  }
+  .imagenMaterial img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .sinImagen {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #666;
+    background: repeating-linear-gradient(135deg, transparent, transparent 12px, #e6e6e3 12px, #e6e6e3 13px);
+  }
+  .sinImagen span {
+    font-size: 2.5rem;
+    letter-spacing: 0.15em;
+  }
+  .sinImagen p {
+    font-size: 0.75rem;
+    background: #f0f0ee;
+    padding: 0.25rem;
+  }
+  .textoMaterial {
+    padding: 1.25rem 0 1.5rem;
+    overflow-wrap: anywhere;
+  }
+  .identificador {
+    font-size: 0.75rem;
+  }
+  h3 {
+    margin: 0.65rem 0 1rem;
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+  dl {
+    font-size: 0.75rem;
+  }
+  dl > div {
+    display: flex;
+    gap: 0.75rem;
+  }
+  dt {
+    color: #595959;
+  }
+  .descripcion {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin-top: 1rem;
+    white-space: pre-line;
+  }
+  .pendiente {
+    color: #666;
+    font-style: italic;
+  }
+  .materiales[data-vista='lista'] {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .materiales[data-vista='lista'] article {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+  }
+  .materiales[data-vista='lista'] .textoMaterial {
+    padding: 0;
+  }
+  .materiales[data-vista='lista'] .sinImagen span {
+    font-size: 1.5rem;
+  }
+  .materiales[data-vista='lista'] .sinImagen p {
+    font-size: 0.6rem;
+  }
+  .vacio {
+    padding: 3rem 0;
+    line-height: 1.6;
+  }
+  .vacio button {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
+  .pieColeccion {
+    border-top: 2px solid;
+    line-height: 1.6;
+  }
+  .pieColeccion p {
+    margin-bottom: 0.5rem;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  @media (max-width: 1100px) {
+    .camposFiltro {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .materiales {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 767px) {
+    .materiales {
+      grid-template-columns: 1fr;
+    }
+    .materiales[data-vista='lista'] article {
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 1rem;
+    }
+    .materiales[data-vista='lista'] .sinImagen span {
+      font-size: 0.85rem;
+    }
+    .materiales[data-vista='lista'] .sinImagen p {
+      display: none;
+    }
+  }
+  @media (max-width: 575px) {
+    .camposFiltro {
+      grid-template-columns: 1fr;
+    }
+    .coleccionArchivo {
+      margin: 40px 12px 20px;
+    }
+  }
+</style>

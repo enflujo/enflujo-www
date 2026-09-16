@@ -142,7 +142,25 @@ const seoJson = JSON.stringify(seo).replaceAll('<', '\\u003c');
 
     <nav class="indice" aria-label="En esta línea">
       {seccionesRenderizadas.map((seccion) => <a href={`#${seccion.id}`}>{seccion.titulo}</a>)}
+      {linea.slug === 'archivo-audiovisual' && <a href="/archivo-audiovisual/">Explorar la colección →</a>}
     </nav>
+
+    {
+      linea.slug === 'archivo-audiovisual' && (
+        <section class="dosColumnas">
+          <div>
+            <h2>Los materiales del archivo</h2>
+            <p>
+              Conoce las películas y otros materiales que llegan al laboratorio, sus soportes y las descripciones que
+              vamos construyendo durante el registro y la inspección.
+            </p>
+            <div class="acciones">
+              <a href="/archivo-audiovisual/">Explorar la colección →</a>
+            </div>
+          </div>
+        </section>
+      )
+    }
 
     {
       seccionesRenderizadas.map((seccion) => (

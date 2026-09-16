@@ -1,0 +1,322 @@
+---
+import Plantilla from '@/plantillas/Plantilla.astro';
+import FichaImprimible from '@/componentes/FichaImprimible.astro';
+import { apiBase, formatoFecha, urlImagen } from '@/utilidades/ayudas';
+import { nombreSoporte, obtenerFichas } from '@/utilidades/archivoAudiovisual';
+import type { FichaAudiovisual, MedioArchivo } from '@/utilidades/archivoAudiovisual';
+
+export async function getStaticPaths() {
+  const fichas = await obtenerFichas();
+  return fichas.map((material) => ({ params: { slug: material.slug }, props: { material } }));
+}
+
+interface Props {
+  material: FichaAudiovisual;
+}
+const { material } = Astro.props;
+const titulo = material.titulo?.trim() || 'Sin título registrado';
+const codigo = material.identificador || 'Sin identificador';
+const etiquetas: Record<string, string> = {
+  inspecion: 'Inspección',
+  inspeccion: 'Inspección',
+  digitalizacion: 'Digitalización',
+  catalogacion: 'Catalogación',
+  restauracion: 'Restauración',
+  temporal: 'Temporal',
+  permanente: 'Permanente',
+  donacion: 'Donación',
+  deposito: 'Depósito',
+  prestamo: 'Préstamo',
+};
+const etiqueta = (valor: string) => etiquetas[valor] ?? valor.replaceAll('_', ' ');
+const nombres = (relaciones: FichaAudiovisual['institucion']) =>
+  relaciones
+    ?.map((relacion) => relacion.colegas_id?.nombre)
+    .filter(Boolean)
+    .join(', ') || 'No registrado';
+const datos = [
+  ['Soporte', nombreSoporte(material.soporte)],
+  ['Tipo de ingreso', material.tipo_ingreso ? etiqueta(material.tipo_ingreso) : 'No registrado'],
+  ['Motivo del ingreso', material.motivo?.map(etiqueta).join(', ') || 'No registrado'],
+  ['Institución', nombres(material.institucion)],
+  ['Procedencia', nombres(material.procedencia)],
+  ['Remitente', nombres(material.persona_remitente)],
+  [
+    'Recibido por',
+    material.persona_recibe
+      ?.map((persona) => persona.equipo_id?.nombre)
+      .filter(Boolean)
+      .join(', ') || 'No registrado',
+  ],
+];
+const medios = [
+  ...new Map(
+    [material.imagen, ...(material.fotos ?? []).map((foto) => foto.directus_files_id)]
+      .filter((medio): medio is MedioArchivo => Boolean(medio?.id))
+      .map((medio) => [medio.id, medio])
+  ).values(),
+];
+---
+
+<Plantilla
+  titulo={`${titulo} · ${codigo}`}
+  descripcion={material.descripcion || `Ficha de ${titulo} en la colección de Archivo Audiovisual de EnFlujo.`}
+  imagen={material.imagen}
+>
+  <main class="pagina fichaArchivo">
+    <header>
+      <nav aria-label="Ruta de navegación">
+        <a href={`/archivo-audiovisual/#material-${material.id}`}>← Volver a la colección</a>
+        <a href="/lineas/archivo-audiovisual/">Línea de Archivo Audiovisual</a>
+      </nav>
+      <p class="codigo">{codigo}</p>
+      <h1>{titulo}</h1>
+      <p class="descripcion">{material.descripcion?.trim() || 'Descripción pendiente.'}</p>
+      <button class="botonImprimir" type="button" data-imprimir-material hidden>Imprimir ficha con QR</button>
+    </header>
+
+    <div class="cuerpoFicha">
+      <section aria-labelledby="datosMaterial">
+        <h2 id="datosMaterial">Datos del material</h2>
+        <dl>
+          {
+            datos.map(([nombre, valor]) => (
+              <div>
+                <>
+                  <dt>{nombre}</dt>
+                  <dd>{valor}</dd>
+                </>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+      <section class="observaciones" aria-labelledby="observacionesMaterial">
+        <h2 id="observacionesMaterial">Observaciones</h2>
+        {
+          material.observaciones?.trim() ? (
+            <div class="contenido" set:html={material.observaciones} />
+          ) : (
+            <p>Aún no se han registrado observaciones.</p>
+          )
+        }
+      </section>
+    </div>
+
+    <section class="medios" aria-labelledby="mediosMaterial">
+      <h2 id="mediosMaterial">Imágenes y archivos del material</h2>
+      {
+        medios.length ? (
+          <div class="galeriaMedios">
+            {medios.map((medio) => (
+              <figure>
+                {medio.type?.startsWith('image/') ? (
+                  <a
+                    href={`${apiBase}/assets/${medio.id}`}
+                    aria-label={`Abrir imagen original: ${medio.title || titulo}`}
+                  >
+                    <img
+                      src={urlImagen(medio.id, {
+                        width: 1400,
+                        height: 1100,
+                        fit: 'inside',
+                        quality: 90,
+                        format: 'webp',
+                      })}
+                      alt={medio.title || titulo}
+                      width="1400"
+                      height="1100"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ) : medio.type?.startsWith('video/') ? (
+                  <video controls preload="metadata" aria-label={medio.title || titulo}>
+                    <source src={`${apiBase}/assets/${medio.id}`} type={medio.type} />
+                    <a href={`${apiBase}/assets/${medio.id}`}>Abrir video</a>
+                  </video>
+                ) : medio.type?.startsWith('audio/') ? (
+                  <audio
+                    controls
+                    preload="metadata"
+                    aria-label={medio.title || titulo}
+                    src={`${apiBase}/assets/${medio.id}`}
+                  />
+                ) : (
+                  <a href={`${apiBase}/assets/${medio.id}`}>Abrir {medio.title || 'archivo'}</a>
+                )}
+                <figcaption>
+                  {medio.title || 'Archivo del material'}
+                  {medio.description && <p>{medio.description}</p>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <p>Aún no hay imágenes ni archivos disponibles para este material.</p>
+        )
+      }
+    </section>
+
+    <FichaImprimible identificador={codigo} titulo={titulo} slug={material.slug} />
+
+    <footer>
+      <p>Registro en construcción. La información se amplía durante el trabajo con el material.</p>
+      {
+        material.fecha_creacion && (
+          <p>
+            Creación del registro:{' '}
+            <time datetime={material.fecha_creacion}>{formatoFecha(material.fecha_creacion)}</time>
+          </p>
+        )
+      }
+      {
+        material.fecha_actualizacion && (
+          <p>
+            Última actualización:{' '}
+            <time datetime={material.fecha_actualizacion}>{formatoFecha(material.fecha_actualizacion)}</time>
+          </p>
+        )
+      }
+      <a href="/archivo-audiovisual/">Explorar otros materiales →</a>
+    </footer>
+  </main>
+</Plantilla>
+
+<style lang="scss">
+  .fichaArchivo {
+    background: #fff;
+  }
+  .botonImprimir {
+    margin-top: 1.5rem;
+    border: 1px solid;
+    padding: 0.8rem 1rem;
+    min-height: 44px;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .botonImprimir:hover {
+    background: #000;
+    color: #fff;
+  }
+  .botonImprimir:focus-visible {
+    outline: 3px solid var(--colorPrincipal);
+    outline-offset: 4px;
+  }
+  header,
+  .cuerpoFicha,
+  .medios,
+  footer {
+    padding: clamp(1.5rem, 5vw, 5rem);
+  }
+  header,
+  .cuerpoFicha,
+  .medios {
+    border-bottom: 2px solid;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    font-size: 0.8rem;
+    margin-bottom: 3rem;
+  }
+  .codigo {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 5rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .descripcion {
+    max-width: 70ch;
+    margin-top: 2rem;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  h2 {
+    padding: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+  }
+  .cuerpoFicha {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ddd;
+    line-height: 1.5;
+    font-size: 0.85rem;
+  }
+  dt {
+    color: #595959;
+  }
+  dd {
+    overflow-wrap: anywhere;
+  }
+  .observaciones {
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+  .contenido :global(p + p) {
+    margin-top: 1rem;
+  }
+  .galeriaMedios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  figure {
+    min-width: 0;
+  }
+  figure img,
+  figure video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 14 / 11;
+    object-fit: contain;
+    background: #f0f0ee;
+  }
+  audio {
+    max-width: 100%;
+  }
+  figcaption {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    padding-top: 0.8rem;
+  }
+  figcaption p {
+    margin-top: 0.5rem;
+  }
+  footer {
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer > a {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+  a:focus-visible {
+    outline: 3px solid var(--colorPrincipal);
+    outline-offset: 4px;
+  }
+  @media (max-width: 767px) {
+    .cuerpoFicha,
+    .galeriaMedios {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 575px) {
+    .fichaArchivo {
+      margin: 40px 12px 20px;
+    }
+  }
+</style>
