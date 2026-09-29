@@ -19,16 +19,31 @@ jobs:
           username: ${{ secrets.USUARIO_AZURE }}
           key: ${{ secrets.LLAVE_SSH }}
           script: |
+            # NVM no es compatible con errexit durante su inicialización.
+            set +e
+            etapa='cargar NVM'
+            trap 'codigo=$?; if [ "$codigo" -ne 0 ]; then printf "Falló la etapa: %s (código %s)\n" "$etapa" "$codigo" >&2; fi' EXIT
+            printf 'Preparando Node para el despliegue SSR\n'
+            export NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh" --no-use || exit $?
+            etapa='entrar al repositorio'
+            cd "${{ secrets.RUTA }}" || exit $?
+            etapa='actualizar el código'
+            git pull origin main || exit $?
+            etapa='instalar Node'
+            nvm install || exit $?
+            etapa='seleccionar Node'
+            nvm use || exit $?
             set -e
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            cd ${{ secrets.RUTA }}
-            git pull origin main
-            nvm install
-            nvm use
+            etapa='activar Corepack'
             corepack enable
+            etapa='instalar dependencias'
             yarn install --immutable
+            etapa='compilar Astro'
             yarn build
+            etapa='reiniciar el servidor SSR'
             yarn server:restart
+            etapa='comprobar el puerto 4001'
             curl --fail --silent --show-error --retry 5 --retry-connrefused --retry-delay 2 http://127.0.0.1:4001/ > /dev/null
+            etapa='guardar los procesos PM2'
             yarn pm2 save
