@@ -35,7 +35,7 @@ const Equipo = gql`
 `;
 const { paginas, equipo } = await obtenerDatos<{ paginas: CamposComunes[]; equipo: PersonaEquipo[] }>(Equipo);
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
-if (!pagina) return Astro.redirect('/404');
+if (!pagina) return Astro.rewrite('/404');
 
 const activos: PersonaEquipo[] = [];
 const inactivos: PersonaEquipo[] = [];

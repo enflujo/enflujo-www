@@ -1,5 +1,5 @@
 import type { Imagen } from '@/tipos';
-import { apiBase, gql, obtenerDatos } from './ayudas';
+import { apiDatos, gql, obtenerDatos } from './ayudas';
 
 export interface MedioArchivo extends Imagen {
   type: string | null;
@@ -24,7 +24,7 @@ export interface FichaAudiovisual extends MaterialAudiovisual {
 
 // Estas relaciones son listas en REST pero están declaradas String en GraphQL.
 // REST permite resolver sus nombres sin perder institución y procedencia.
-export async function obtenerFichas(): Promise<FichaAudiovisual[]> {
+export async function obtenerFichas(slug?: string): Promise<FichaAudiovisual[]> {
   const fichas: FichaAudiovisual[] = [];
   const campos = [
     'id',
@@ -59,13 +59,21 @@ export async function obtenerFichas(): Promise<FichaAudiovisual[]> {
       'deep[persona_remitente][_limit]': '-1',
       'deep[persona_recibe][_limit]': '-1',
     });
-    const respuesta = await fetch(`${apiBase}/items/archivo_audiovisual?${parametros}`);
+    if (slug !== undefined) {
+      parametros.set('filter[slug][_eq]', slug);
+      parametros.set('limit', '1');
+    }
+    const respuesta = await fetch(`${apiDatos}/items/archivo_audiovisual?${parametros}`, {
+      signal: AbortSignal.timeout(10000),
+      cache: 'no-store',
+    });
     const resultado = await respuesta.json();
     if (!respuesta.ok || resultado.errors || !Array.isArray(resultado.data)) {
       throw new Error(`No se pudieron cargar las fichas audiovisuales: ${respuesta.status}`);
     }
     if (!resultado.data.length) break;
     fichas.push(...resultado.data.map((ficha: FichaAudiovisual) => ({ ...ficha, id: String(ficha.id) })));
+    if (slug !== undefined) break;
   }
   const slugs = new Set<string>();
   for (const ficha of fichas) {
@@ -113,7 +121,7 @@ export const normalizarBusqueda = (texto: string) =>
 
 export async function obtenerMateriales(): Promise<MaterialAudiovisual[]> {
   const materiales: MaterialAudiovisual[] = [];
-  // Paginar también durante el build: Directus puede limitar el tamaño de cada respuesta.
+  // Directus puede limitar el tamaño de cada respuesta.
   while (true) {
     const { archivo_audiovisual: pagina } = await obtenerDatos<{ archivo_audiovisual: MaterialAudiovisual[] }>(gql`
       query {

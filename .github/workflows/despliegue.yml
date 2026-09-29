@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
 
-  repository_dispatch:
   workflow_dispatch:
 
 jobs:
@@ -20,6 +19,7 @@ jobs:
           username: ${{ secrets.USUARIO_AZURE }}
           key: ${{ secrets.LLAVE_SSH }}
           script: |
+            set -e
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd ${{ secrets.RUTA }}
@@ -29,3 +29,6 @@ jobs:
             corepack enable
             yarn install --immutable
             yarn build
+            yarn server:restart
+            curl --fail --silent --show-error --retry 5 --retry-connrefused --retry-delay 2 http://127.0.0.1:4001/ > /dev/null
+            yarn pm2 save

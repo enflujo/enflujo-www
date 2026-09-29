@@ -30,22 +30,10 @@ type Linea = {
 
 const marked = new Marked();
 
-export async function getStaticPaths() {
-  const Consulta = gql`
-    query {
-      lineas_trabajo(filter: { estado: { _eq: "publicado" } }) {
-        slug
-      }
-    }
-  `;
-  const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: { slug: string }[] }>(Consulta);
-  return lineas.map(({ slug }) => ({ params: { slug } }));
-}
-
 const { slug } = Astro.params;
 const Consulta = gql`
-  query {
-    lineas_trabajo(filter: { slug: { _eq: "${slug}" }, estado: { _eq: "publicado" } }, limit: 1) {
+  query ($slug: String!) {
+    lineas_trabajo(filter: { slug: { _eq: $slug }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       slug
       descripcion
@@ -81,9 +69,9 @@ const Consulta = gql`
   }
 `;
 
-const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: Linea[] }>(Consulta);
+const { lineas_trabajo: lineas } = await obtenerDatos<{ lineas_trabajo: Linea[] }>(Consulta, { slug });
 const linea = lineas[0];
-if (!linea) return Astro.redirect('/404');
+if (!linea) return Astro.rewrite('/404');
 
 const html = async (texto?: string) => (texto ? marked.parse(texto) : '');
 const idSeccion = (titulo: string) =>

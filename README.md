@@ -7,7 +7,9 @@
 ![Tamaño](https://img.shields.io/github/repo-size/enflujo/enflujo-www?color=%235757f7&label=Tama%C3%B1o%20repo&logo=open-access&logoColor=white)
 ![Licencia](https://img.shields.io/github/license/enflujo/enflujo-www?label=Licencia&logo=open-source-initiative&logoColor=white)
 
-Creado con [Astro](https://astro.build/)
+Creado con [Astro](https://astro.build/), con renderizado en servidor (SSR) y el adaptador oficial de Node.
+
+Las páginas y el sitemap consultan Directus al recibir cada petición. Publicar, editar o retirar contenido se refleja al recargar el sitio, sin reconstrucción ni Flow de GitHub. Solo los cambios de código requieren compilar y desplegar.
 
 ## Instalación
 
@@ -32,15 +34,47 @@ yarn install
 yarn dev
 ```
 
-Inicia un servidor local (con hot-reloading) en [localhost:3000](http://localhost:3000)
+Inicia un servidor local (con hot-reloading) en [localhost:4001](http://localhost:4001)
 
 ## Construir para producción
 
-Exportar aplicación:
+Compilar el código del servidor y los recursos del navegador (no consulta Directus):
 
 ```bash
 yarn build
 ```
+
+Ejecutar el resultado en primer plano:
+
+```bash
+yarn start
+```
+
+Por defecto escucha en `http://127.0.0.1:4001`. Las variables de entorno `HOST` y `PORT` permiten cambiarlo. `DIRECTUS_URL` permite consultar una instancia diferente o la dirección interna del CMS; por defecto es `https://api.enflujo.com`. Esta variable se lee al iniciar el servidor, sin recompilar. Las URLs públicas de imágenes y archivos siguen usando `https://api.enflujo.com`.
+
+En producción las variables deben estar en el entorno del proceso; `yarn start` no carga `.env` automáticamente.
+
+Para mantenerlo activo con PM2 (incluido en las dependencias):
+
+```bash
+yarn server:start
+yarn server:restart
+yarn server:stop
+```
+
+Estos comandos no compilan. `server:restart` inicia el proceso si aún no existe y actualiza sus variables de entorno.
+
+Ver [la guía de despliegue SSR](./docs/despliegue-ssr.md) para la transición del alojamiento estático al proxy de Node.
+
+## Verificación
+
+```bash
+yarn test
+yarn build
+yarn test:ssr
+```
+
+La prueba SSR arranca el servidor compilado contra un CMS simulado local. Verifica cambios de contenido, nuevas rutas, retiros con 404, sitemap paginado y recursos estáticos sin modificar Directus real.
 
 ## Aplicar reglas de estilo al código
 
@@ -62,14 +96,6 @@ En el mensaje del push incluir `[skip ci]`. [Explicación](https://github.blog/c
 
 ## Ejecutar acción de despliegue
 
-Todos los `push` a la rama `main` activan el despliegue. También se puede ejecutar desde el terminal o cualquier comando externo siguiendo la estructura de: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-dispatch-event
+Los `push` a `main` compilan el código y reinician el proceso `enflujo-www` de PM2. También se puede ejecutar manualmente desde GitHub Actions (`workflow_dispatch`).
 
-```bash
-curl \
-  -X POST \
-  -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer <TOKEN_GITHUB_CON_PERMISOS>"\
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/enflujo/enflujo-www/dispatches \
-  -d '{"event_type":"despliegue"}'
-```
+El workflow ya no acepta `repository_dispatch`: Directus no necesita disparar despliegues al cambiar contenido. Después de activar y comprobar SSR en producción, desactivar el antiguo Flow de publicación y retirar su token de GitHub si ningún otro servicio lo usa.

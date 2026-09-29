@@ -48,7 +48,7 @@ const Eventos = gql`
 `;
 const { paginas, eventos } = await obtenerDatos<{ paginas: CamposComunes[]; eventos: Evento[] }>(Eventos);
 const pagina = paginas.length && paginas[0].slug ? paginas[0] : null;
-if (!pagina) return Astro.redirect('/404');
+if (!pagina) return Astro.rewrite('/404');
 
 function partesFecha(fecha: Date) {
   return {

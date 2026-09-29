@@ -6,26 +6,11 @@ import { formatoFecha, gql, obtenerDatos } from '@/utilidades/ayudas';
 import type { PersonaEquipo } from '@/tipos';
 import type { Graph, Person } from 'schema-dts';
 
-export async function getStaticPaths() {
-  const Equipo = gql`
-    query {
-      equipo(filter: { estado: { _eq: "publicado" } }) {
-        slug
-      }
-    }
-  `;
-  const { equipo } = await obtenerDatos<{ equipo: { slug: string }[] }>(Equipo);
-
-  return equipo.map(({ slug }) => {
-    return { params: { slug } };
-  });
-}
-
 const { slug } = Astro.params;
 
 const Persona = gql`
-  query {
-    equipo(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
+  query ($slug: String!) {
+    equipo(filter: { slug: { _eq: $slug }, estado: { _eq: "publicado" } }, limit: 1) {
       nombre
       slug
       rol
@@ -56,7 +41,7 @@ const Persona = gql`
   }
 `;
 
-const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona);
+const { equipo } = await obtenerDatos<{ equipo: PersonaEquipo[] }>(Persona, { slug });
 let persona: PersonaEquipo;
 const urlPagina = new URL(Astro.url.pathname, Astro.site).href;
 const idPagina = new URL('#pagina', urlPagina).href;
@@ -104,7 +89,7 @@ if (equipo && equipo.length) {
     });
   }
 } else {
-  return Astro.redirect('/404');
+  return Astro.rewrite('/404');
 }
 
 const seo: Graph = {

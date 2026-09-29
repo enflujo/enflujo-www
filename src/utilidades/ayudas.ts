@@ -1,19 +1,28 @@
 import type { OpcionesImagenDirectus } from '@/tipos';
 export const apiBase = 'https://api.enflujo.com';
 export const apiGraqhql = `${apiBase}/graphql`;
+// Solo las consultas del servidor pueden usar la dirección interna de Directus.
+// Los archivos públicos siguen usando apiBase.
+export const apiDatos = import.meta.env.SSR ? (process.env.DIRECTUS_URL || apiBase).replace(/\/$/, '') : apiBase;
 
 export const gql = String.raw;
 
-export async function obtenerDatos<Esquema>(query: string, sistema = false) {
-  const peticion = await fetch(`${apiBase}/graphql${sistema ? '/system' : ''}`, {
+export async function obtenerDatos<Esquema>(query: string, variables: Record<string, unknown> = {}, sistema = false) {
+  const respuesta = await fetch(`${apiDatos}/graphql${sistema ? '/system' : ''}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query }),
-  }).then((res) => res.json());
+    body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(10000),
+    cache: 'no-store',
+  });
+
+  if (!respuesta.ok) throw new Error(`Directus respondió HTTP ${respuesta.status}`);
+  const peticion = await respuesta.json();
 
   if (peticion.errors) {
     throw new Error(JSON.stringify(peticion.errors, null, 2));
   }
+  if (!peticion.data) throw new Error('Directus no devolvió datos');
 
   return peticion.data as Esquema;
 }

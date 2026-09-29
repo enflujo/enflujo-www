@@ -5,26 +5,11 @@ import { gql, obtenerDatos, urlImagen } from '@/utilidades/ayudas';
 import { marked } from 'marked';
 import type { Graph, Organization } from 'schema-dts';
 
-export async function getStaticPaths() {
-  const Eventos = gql`
-    query {
-      eventos(filter: { estado: { _eq: "publicado" } }, sort: ["-fecha_inicio"]) {
-        slug
-      }
-    }
-  `;
-  const { eventos } = await obtenerDatos<{ eventos: { slug: string }[] }>(Eventos);
-
-  return eventos.map(({ slug }) => {
-    return { params: { slug } };
-  });
-}
-
 const { slug } = Astro.params;
 
 const Evento = gql`
-  query {
-    eventos(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
+  query ($slug: String!) {
+    eventos(filter: { slug: { _eq: $slug }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       slug
       descripcion
@@ -45,13 +30,13 @@ const Evento = gql`
   }
 `;
 
-const { eventos } = await obtenerDatos<{ eventos: Evento[] }>(Evento);
+const { eventos } = await obtenerDatos<{ eventos: Evento[] }>(Evento, { slug });
 let pagina: Evento;
 
 if (eventos && eventos.length) {
   pagina = eventos[0];
 } else {
-  return Astro.redirect('/404');
+  return Astro.rewrite('/404');
 }
 
 const urlPagina = new URL(Astro.url.pathname, Astro.site).href;

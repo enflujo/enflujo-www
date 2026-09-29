@@ -5,15 +5,10 @@ import { apiBase, formatoFecha, urlImagen } from '@/utilidades/ayudas';
 import { nombreSoporte, obtenerFichas } from '@/utilidades/archivoAudiovisual';
 import type { FichaAudiovisual, MedioArchivo } from '@/utilidades/archivoAudiovisual';
 
-export async function getStaticPaths() {
-  const fichas = await obtenerFichas();
-  return fichas.map((material) => ({ params: { slug: material.slug }, props: { material } }));
-}
-
-interface Props {
-  material: FichaAudiovisual;
-}
-const { material } = Astro.props;
+const { slug } = Astro.params;
+if (!slug) return Astro.rewrite('/404');
+const [material] = await obtenerFichas(slug);
+if (!material) return Astro.rewrite('/404');
 const titulo = material.titulo?.trim() || 'Sin título registrado';
 const codigo = material.identificador || 'Sin identificador';
 const etiquetas: Record<string, string> = {

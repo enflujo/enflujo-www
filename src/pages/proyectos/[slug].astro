@@ -20,30 +20,11 @@ const marked = new Marked(
   })
 );
 
-/**
- * Esto es de Astro específicamente para crear las rutas dinámicamente, se tiene que llamar getStaticPaths()
- * Documentación en: https://docs.astro.build/en/reference/api-reference/#getstaticpaths
- */
-export async function getStaticPaths() {
-  const Proyectos = gql`
-    query {
-      proyectos(filter: { estado: { _eq: "publicado" } }, sort: ["-date_created"]) {
-        slug
-      }
-    }
-  `;
-  const { proyectos } = await obtenerDatos<{ proyectos: { slug: string }[] }>(Proyectos);
-
-  return proyectos.map(({ slug }) => {
-    return { params: { slug } };
-  });
-}
-
 const { slug } = Astro.params;
 
 const Proyecto = gql`
-  query {
-    proyectos(filter: { slug: { _eq: "${slug}" }, estado: {_eq: "publicado"} }, limit: 1) {
+  query ($slug: String!) {
+    proyectos(filter: { slug: { _eq: $slug }, estado: { _eq: "publicado" } }, limit: 1) {
       titulo
       slug
       descripcion
@@ -67,7 +48,7 @@ const Proyecto = gql`
   }
 `;
 
-const { proyectos } = await obtenerDatos<{ proyectos: Proyecto[] }>(Proyecto);
+const { proyectos } = await obtenerDatos<{ proyectos: Proyecto[] }>(Proyecto, { slug });
 let pagina: Proyecto;
 
 if (proyectos && proyectos.length) {
@@ -86,7 +67,7 @@ if (proyectos && proyectos.length) {
     });
   }
 } else {
-  return Astro.redirect('/404');
+  return Astro.rewrite('/404');
 }
 
 const contenidoHtml = pagina.contenido ? await marked.parse(pagina.contenido) : '';

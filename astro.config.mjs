@@ -1,21 +1,15 @@
 import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-import robotsTxt from 'astro-robots-txt';
+import node from '@astrojs/node';
 import { fileURLToPath } from 'node:url';
-// import compress from 'astro-compress';
 
 // https://astro.build/config
 export default defineConfig({
   outDir: './publico',
   publicDir: './recursos',
   site: 'https://enflujo.com',
-  integrations: [
-    sitemap(),
-    robotsTxt(),
-    // compress({
-    //   path: './publico',
-    // }),
-  ],
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+  server: { host: '127.0.0.1', port: 4001 },
   vite: {
     css: {
       preprocessorOptions: {

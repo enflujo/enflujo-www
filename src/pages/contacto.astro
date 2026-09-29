@@ -23,7 +23,7 @@ const { paginas } = await obtenerDatos<{
   paginas: CamposComunes[];
 }>(Pagina);
 const pagina = paginas[0];
-if (!pagina) return Astro.redirect('/404');
+if (!pagina) return Astro.rewrite('/404');
 ---
 
 <Plantilla titulo={pagina.titulo} descripcion={pagina.descripcion} imagen={pagina.imagen}>

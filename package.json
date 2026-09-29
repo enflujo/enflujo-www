@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "dev": "astro dev --host 127.0.0.1 --port 3000",
+    "dev": "astro dev --host 127.0.0.1 --port 4001",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "revisar": "astro check",
@@ -25,29 +25,32 @@
     "serve": "yarn server:start",
     "stop": "yarn server:stop",
     "restart": "yarn server:restart",
-    "server:start": "yarn build && pm2 start ecosystem.config.js",
-    "server:stop": "pm2 stop ecosystem.config.js",
-    "server:restart": "pm2 restart ecosystem.config.js"
+    "server:start": "pm2 start ecosystem.config.cjs",
+    "server:stop": "pm2 stop ecosystem.config.cjs",
+    "server:restart": "pm2 startOrRestart ecosystem.config.cjs --update-env",
+    "start": "node ./publico/server/entry.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:ssr": "node --test tests/ssr.integration.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/node": "11.1.6",
     "@enflujo/alquimia": "^2.0.0",
     "@speed-highlight/core": "^2.1.0",
-    "astro": "7.3.1",
-    "astro-robots-txt": "^1.0.0",
-    "autoprefixer": "^10.5.5",
+    "astro": "7.3.5",
+    "autoprefixer": "^10.6.1",
     "html-to-image": "^1.11.13",
-    "marked": "^18.0.11",
+    "marked": "^18.0.14",
     "marked-highlight": "^2.2.4",
+    "pm2": "^7.0.4",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/qrcode": "^1.5.6",
     "postcss": "^8.5.28",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.9",
     "prettier-plugin-astro": "^0.14.1",
-    "sass": "^1.104.0",
+    "sass": "^1.105.0",
     "schema-dts": "^2.0.0",
     "typescript": "^6.0.3"
   }
